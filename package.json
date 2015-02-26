@@ -1,0 +1,27 @@
+{
+  "name": "metasoft",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "./node_modules/coffee-script/bin/coffee ./bin/www"
+  },
+  "dependencies": {
+    "async": "",
+    "body-parser": "",
+    "coffee-script": "",
+    "cookie-parser": "",
+    "cookie-session": "",
+    "debug": "",
+    "ejs": "",
+    "express": "",
+    "morgan": "",
+    "mysql": "",
+    "knex": "",
+    "serve-favicon": "",
+    "underscore": ""
+  },
+  "devDependencies": {
+    "mocha": "",
+    "should": ""
+  }
+}

@@ -1,0 +1,7 @@
+Adapters
+- create database selection
+- fix specs
+
+Sql
+- create sql script templates
+- auto generate tags

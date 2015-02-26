@@ -1,0 +1,16 @@
+.DS_Store
+Thumbs.db
+
+*.{node,a,o,dylib,d,mk}
+build
+
+*.sublime*
+
+*.log
+*.tmp
+
+config/index.coffee
+specs/config.coffee
+
+misc/debug.pid
+node_modules
