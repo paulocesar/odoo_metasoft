@@ -10,6 +10,10 @@ config = require('./config')
 
 routes = require('./src/routes/index')
 
+{ Context } = require('./src/core/requires')
+
+Context.injectModels()
+
 app = express()
 
 # view engine setup
@@ -28,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'src', 'public')))
 #add db and default in middleware
 app.use((req, res, next) ->
     req.db = require('knex')(config.database)
+    req.ms = new Context(req.db)
 
     req.json = () -> JSON.parse(req.body.data)
 
