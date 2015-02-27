@@ -3,7 +3,7 @@ fs = require('fs')
 class Context
     constructor: (@db) ->
 
-    @injectModels = () ->
+    @injectModels: () ->
         requireDirs = [ 'models' ]
         excludeFiles = [ ]
 

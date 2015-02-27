@@ -4,5 +4,5 @@ module.exports = {
 
     Context: require('./context')
     Model: require('./model')
-    Controller: require('./controller')
+    C: require('./controller')
 }

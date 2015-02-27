@@ -5,10 +5,9 @@ logger = require('morgan')
 bodyParser = require('body-parser')
 cookieParser = require('cookie-parser')
 session = require('cookie-session')
+fs = require('fs')
 
 config = require('./config')
-
-routes = require('./src/routes/index')
 
 { Context } = require('./src/core/requires')
 
@@ -44,7 +43,19 @@ app.use((req, res, next) ->
     next()
 )
 
-app.use('/', routes)
+injectControllers = () ->
+    requireDirs = [ 'controllers' ]
+    excludeFiles = [ ]
+
+    for d in requireDirs
+        fs.readdirSync("#{__dirname}/src/#{d}").forEach((file) ->
+
+            f = file.replace('.coffee','')
+            if (excludeFiles.indexOf(f) == -1)
+                app.use(require("#{__dirname}/src/#{d}/" + f))
+        )
+
+injectControllers()
 
 # catch 404 and forward to error handler
 app.use((req, res, next) ->
