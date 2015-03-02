@@ -1,5 +1,22 @@
 express = require('express')
 _ = require('underscore')
+Context = require('./context')
+config = require('../../config')
+
+helpers = {
+    json: () -> JSON.parse(req.body.data)
+    sendData: (data) -> @res.json({ success: true, data: JSON.stringify(data) })
+    sendError: (err) -> @res.send({ status: false, data: JSON.stringify(err) })
+
+    sendErrorOrData: (err, data) ->
+        return @sendError(err) if err?
+        @sendData(data)
+
+    onSuccess: (cb) ->
+        return (err, data) ->
+            return @sendError(err) if err?
+            cb(data)
+}
 
 class Controller
 
@@ -19,8 +36,11 @@ class Controller
         path = "/#{@name}/#{action}"
 
         @router[method.toLowerCase()](path, (req, res) =>
-            data = { db: req.db, ms: req.ms, req, res }
-            _.bind(cb, _.extend(data, @extra))()
+            db = require('knex')(config.database)
+
+            data = { req, res, db, ms: new Context(db) }
+
+            _.bind(cb, _.extend(data, helpers, @extra))()
         )
 
         console.log("#{method.toUpperCase()} #{path}")

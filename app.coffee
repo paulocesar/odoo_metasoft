@@ -7,10 +7,8 @@ cookieParser = require('cookie-parser')
 session = require('cookie-session')
 fs = require('fs')
 
-config = require('./config')
 
 { Context } = require('./src/core/requires')
-
 Context.injectModels()
 
 app = express()
@@ -29,19 +27,19 @@ app.use(session({ keys: ['kasbsa9da&gd', 'jnasd8yabyb'] }))
 app.use(express.static(path.join(__dirname, 'src', 'public')))
 
 #add db and default in middleware
-app.use((req, res, next) ->
-    req.db = require('knex')(config.database)
-    req.ms = new Context(req.db)
-
-    req.json = () -> JSON.parse(req.body.data)
-
-    res.sendDataOrError = (err, data) ->
-        return res.send({ status: false, data: JSON.stringify(err) }) if err?
-        res.json({ success: true, data: JSON.stringify(data) })
-
-
-    next()
-)
+# app.use((req, res, next) ->
+#     req.db = require('knex')(config.database)
+#     req.ms = new Context(req.db)
+#
+#     req.json = () -> JSON.parse(req.body.data)
+#
+#     res.sendDataOrError = (err, data) ->
+#         return res.send({ status: false, data: JSON.stringify(err) }) if err?
+#         res.json({ success: true, data: JSON.stringify(data) })
+#
+#
+#     next()
+# )
 
 injectControllers = () ->
     requireDirs = [ 'controllers' ]

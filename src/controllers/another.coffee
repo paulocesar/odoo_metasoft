@@ -3,9 +3,9 @@
 module.exports = C('another')
 
 .get "index", () ->
-    @ms.sample().sampleSelect((err, data) =>
+    @ms.sample().sampleSelect(@onSuccess((data) =>
         @renderIndex('Another Sample', data)
-    )
+    ))
 
 .get "another", () -> @renderIndex('Another Another')
 
