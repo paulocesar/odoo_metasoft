@@ -47,6 +47,46 @@
     },
     evalResponse: function(response) {
       return (new Function("return " + response))();
+    },
+    addCss: function(files) {
+      return this.addFile({
+        files: files,
+        appendElement: document.getElementsByTagName("head")[0],
+        type: 'link',
+        extension: 'css',
+        urlField: 'href',
+        data: {
+          type: "text/css",
+          rel: "stylesheet",
+          media: "screen,print"
+        }
+      });
+    },
+    addJs: function(files) {
+      return this.addFile({
+        files: files,
+        appendElement: document.getElementsByTagName("body")[0],
+        type: 'script',
+        extension: 'js',
+        urlField: 'src',
+        data: {
+          type: "text/javascript"
+        }
+      });
+    },
+    addFile: function(options) {
+      var appendElement, data, extension, file, files, link, type, urlField, _i, _len, _results;
+      files = options.files, type = options.type, extension = options.extension, data = options.data, appendElement = options.appendElement, urlField = options.urlField;
+      files = [].concat(files);
+      _results = [];
+      for (_i = 0, _len = files.length; _i < _len; _i++) {
+        file = files[_i];
+        link = document.createElement(type);
+        link[urlField] = "/" + extension + "/" + file + "." + extension;
+        _.extend(link, data);
+        _results.push(appendElement.appendChild(link));
+      }
+      return _results;
     }
   };
 
