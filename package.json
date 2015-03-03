@@ -14,9 +14,9 @@
     "debug": "",
     "ejs": "",
     "express": "",
+    "knex": "",
     "morgan": "",
     "mysql": "",
-    "knex": "",
     "serve-favicon": "",
     "underscore": ""
   },
