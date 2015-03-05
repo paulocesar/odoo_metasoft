@@ -26,11 +26,19 @@ class Controller
 
     done: () -> return @router
 
-    get: (action, cb) -> @_addEndpoint('get', action, cb)
-
-    post: (action, cb) -> @_addEndpoint('post', action, cb)
-
     helpers: (@extra) -> @
+
+    requireLogin: (roles) ->
+        ###
+        router.use((req, res, next) ->
+          # login stuff
+          next()
+        })
+        ###
+        return @
+
+    get: (action, cb) -> @_addEndpoint('get', action, cb)
+    post: (action, cb) -> @_addEndpoint('post', action, cb)
 
     _addEndpoint: (method, action, cb) ->
         path = "/#{@name}/#{action}"
@@ -44,15 +52,6 @@ class Controller
         )
 
         console.log("#{method.toUpperCase()} #{path}")
-        return @
-
-    requireLogin: (roles) ->
-        ###
-        router.use((req, res, next) ->
-          # login stuff
-          next()
-        })
-        ###
         return @
 
 module.exports = (name) -> new Controller(name)
