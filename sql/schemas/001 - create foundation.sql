@@ -52,6 +52,9 @@ CREATE TABLE account (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     businessId INT UNSIGNED NOT NULL,
     balance DECIMAL(10,2) NOT NULL,
+    bank VARCHAR(10) NOT NULL,
+    number VARCHAR(20) NOT NULL,
+    name VARCHAR(40) NOT NULL,
     FOREIGN KEY (businessId) REFERENCES business(id)
 );
 
