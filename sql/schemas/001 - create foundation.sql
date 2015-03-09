@@ -101,6 +101,8 @@ CREATE TABLE put (
     amount DECIMAL(10,2) NOT NULL
 );
 
+/* INVOICE (maybe remove for now) */
+
 CREATE TABLE invoice (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
     -- adicionar taxas de notas fiscais
