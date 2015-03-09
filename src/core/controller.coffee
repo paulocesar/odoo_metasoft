@@ -18,15 +18,20 @@ helpers = {
             cb(data)
 }
 
+rgxHttpMethod = /^(get|post)_[a-zA-Z]+/
+
 class Controller
 
-    constructor: (@name) ->
+    constructor: (@name, @content) ->
         @router = express.Router()
-        @extra = {}
+
+        for name, func of @content when rgxHttpMethod.test(name)
+            httpMethod = name.split('_')
+            @_addEndpoint(httpMethod[0], httpMethod[1], func)
+
+        return @router
 
     done: () -> return @router
-
-    helpers: (@extra) -> @
 
     requireLogin: (roles) ->
         ###
@@ -37,9 +42,6 @@ class Controller
         ###
         return @
 
-    get: (action, cb) -> @_addEndpoint('get', action, cb)
-    post: (action, cb) -> @_addEndpoint('post', action, cb)
-
     _addEndpoint: (method, action, cb) ->
         path = "/#{@name}/#{action}"
 
@@ -48,10 +50,10 @@ class Controller
 
             data = { req, res, db, ms: new Context(db) }
 
-            _.bind(cb, _.extend(data, helpers, @extra))()
+            _.bind(cb, _.extend(data, @content))()
         )
 
         console.log("#{method.toUpperCase()} #{path}")
         return @
 
-module.exports = (name) -> new Controller(name)
+module.exports = (name, content) -> new Controller(name, content)
