@@ -1,120 +1,432 @@
-USE metasoft;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-/* BASE */
+CREATE SCHEMA IF NOT EXISTS `metasoft` ;
+USE `metasoft` ;
 
-CREATE TABLE login (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    login VARCHAR(20) NOT NULL,
-    password VARCHAR(20) NOT NULL,
-    name VARCHAR(45) NOT NULL
-);
+-- -----------------------------------------------------
+-- Table `metasoft`.`empresa`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`empresa` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `cnpj` VARCHAR(30) NULL DEFAULT NULL,
+  `nome` VARCHAR(255) NOT NULL,
+  `nomeFantasia` VARCHAR(255) NOT NULL,
+  `estado` VARCHAR(2) NOT NULL,
+  `cidade` VARCHAR(50) NOT NULL,
+  `endereco` VARCHAR(255) NOT NULL,
+  `cep` VARCHAR(20) NULL,
+  PRIMARY KEY (`id`));
 
-CREATE TABLE business (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    businessIdentifier VARCHAR(30), -- CNPJ
-    company VARCHAR(255) NOT NULL,
-    tradingName VARCHAR(255) NOT NULL,
-    stateId INT NOT NULL,
-    city VARCHAR(50) NOT NULL,
-    address VARCHAR(255) NOT NULL,
 
-    defaultAccountId INT UNSIGNED
-);
+-- -----------------------------------------------------
+-- Table `metasoft`.`login`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`login` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `login` VARCHAR(20) NOT NULL,
+  `senha` VARCHAR(20) NOT NULL,
+  `nome` VARCHAR(45) NOT NULL,
+  `papel` VARCHAR(45) NOT NULL,
+  `empresaId` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_login_empresa1_idx` (`empresaId` ASC),
+  CONSTRAINT `fk_login_empresa1`
+    FOREIGN KEY (`empresaId`)
+    REFERENCES `metasoft`.`empresa` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
 
-CREATE TABLE businessCenter (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    businessId INT UNSIGNED NOT NULL,
-    name VARCHAR(128) NOT NULL,
-    FOREIGN KEY (businessId) REFERENCES business(id),
 
-    defaultAccountId INT UNSIGNED
-);
+-- -----------------------------------------------------
+-- Table `metasoft`.`centroCusto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`centroCusto` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `empresaId` INT UNSIGNED NOT NULL,
+  `nome` VARCHAR(128) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_0a92a23a-c6a2-11e4-844e-9439e5f3523b` (`empresaId` ASC),
+  CONSTRAINT `fk_0a92a23a-c6a2-11e4-844e-9439e5f3523b`
+    FOREIGN KEY (`empresaId`)
+    REFERENCES `metasoft`.`empresa` (`id`));
 
-CREATE TABLE loginInBusiness (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    businessId INT UNSIGNED NOT NULL,
-    loginId INT UNSIGNED NOT NULL,
-    FOREIGN KEY (businessId) REFERENCES business(id),
-    FOREIGN KEY (loginId) REFERENCES login(id)
-);
 
-CREATE TABLE client (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    businessId INT UNSIGNED NOT NULL,
-    name VARCHAR(45) NOT NULL,
-    typeId TINYINT(1) NOT NULL,
-    FOREIGN KEY (businessId) REFERENCES business(id)
-);
+-- -----------------------------------------------------
+-- Table `metasoft`.`parceiro`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`parceiro` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `empresaId` INT UNSIGNED NOT NULL,
+  `nome` VARCHAR(45) NOT NULL,
+  `cliente` TINYINT(1) NOT NULL,
+  `fornecedor` TINYINT(1) NOT NULL,
+  `email` VARCHAR(45) NULL,
+  `telefone` VARCHAR(45) NULL,
+  `endereco` VARCHAR(45) NULL,
+  `cep` VARCHAR(45) NULL,
+  `cnpj` VARCHAR(45) NULL,
+  `cpf` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_0a92f17c-c6a2-11e4-844e-9439e5f3523b` (`empresaId` ASC),
+  CONSTRAINT `fk_0a92f17c-c6a2-11e4-844e-9439e5f3523b`
+    FOREIGN KEY (`empresaId`)
+    REFERENCES `metasoft`.`empresa` (`id`));
 
-/* FINANCEIRO */
 
-CREATE TABLE account (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    businessId INT UNSIGNED NOT NULL,
-    balance DECIMAL(10,2) NOT NULL,
-    bank VARCHAR(10) NOT NULL,
-    number VARCHAR(20) NOT NULL,
-    name VARCHAR(40) NOT NULL,
-    FOREIGN KEY (businessId) REFERENCES business(id)
-);
+-- -----------------------------------------------------
+-- Table `metasoft`.`contaBancaria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`contaBancaria` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `empresaId` INT UNSIGNED NOT NULL,
+  `saldo` DECIMAL(10,2) NOT NULL,
+  `banco` VARCHAR(10) NOT NULL,
+  `agencia` VARCHAR(20) NOT NULL,
+  `conta` VARCHAR(40) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_0a93275a-c6a2-11e4-844e-9439e5f3523b` (`empresaId` ASC),
+  CONSTRAINT `fk_0a93275a-c6a2-11e4-844e-9439e5f3523b`
+    FOREIGN KEY (`empresaId`)
+    REFERENCES `metasoft`.`empresa` (`id`));
 
-CREATE TABLE financeCategory (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(45) NOT NULL
-);
 
-/*
-    um lancamento (entry) nunca pode ser apagado.
-    se houver algum erro, deve ser criado um novo lancamento
-    com informacoes da retificacao no campo de description
-    deve-se armazenar 'RET-(entryId)'.
-    apenas administradores devem poder apagar a entrada
-*/
-CREATE TABLE entry (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    businessId INT UNSIGNED NOT NULL,
-    loginId INT UNSIGNED NOT NULL,
-    isIncome BOOLEAN NOT NULL,
-    paymentMethodId TINYINT(1) UNSIGNED NOT NULL,
-    invoiceId INT UNSIGNED DEFAULT NULL,
-    financeCategory INT NOT NULL,
-    createdOn DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    description VARCHAR(255),
-    FOREIGN KEY (businessId) REFERENCES business(id),
-    FOREIGN KEY (loginId) REFERENCES login(id)
-);
+-- -----------------------------------------------------
+-- Table `metasoft`.`financeCategory`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`financeCategory` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`));
 
-CREATE TABLE periodicEntry (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    businessId INT UNSIGNED NOT NULL,
-    entryId INT UNSIGNED NOT NULL,
-    periodicityId TINYINT(1) UNSIGNED,
-    createdOn DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (businessId) REFERENCES business(id),
-    FOREIGN KEY (entryId) REFERENCES entry(id)
-);
 
-CREATE TABLE put (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    entryId INT UNSIGNED NOT NULL,
-    delivery DATE NOT NULL,
-    amount DECIMAL(10,2) NOT NULL
-);
+-- -----------------------------------------------------
+-- Table `metasoft`.`metodoPagamento`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`metodoPagamento` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(45) NOT NULL,
+  `empresaId` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_metodoPagamento_empresa1_idx` (`empresaId` ASC),
+  CONSTRAINT `fk_metodoPagamento_empresa1`
+    FOREIGN KEY (`empresaId`)
+    REFERENCES `metasoft`.`empresa` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
-/* INVOICE (maybe remove for now) */
 
-CREATE TABLE invoice (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
-    -- adicionar taxas de notas fiscais
-);
+-- -----------------------------------------------------
+-- Table `metasoft`.`conta`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`conta` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `empresaId` INT UNSIGNED NOT NULL,
+  `loginId` INT UNSIGNED NOT NULL,
+  `aReceber` TINYINT(1) NOT NULL,
+  `criadoEm` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `descricao` VARCHAR(255) NULL DEFAULT NULL,
+  `centroCustoId` INT UNSIGNED NOT NULL,
+  `metodoPagamentoId` INT UNSIGNED NOT NULL,
+  `valorBruto` DECIMAL(10,2) NOT NULL,
+  `valorLiquido` DECIMAL(10,2) NOT NULL,
+  `parceiroId` INT UNSIGNED NULL,
+  `contaBancariaId` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_0a936f08-c6a2-11e4-844e-9439e5f3523b` (`empresaId` ASC),
+  INDEX `fk_0a9370d4-c6a2-11e4-844e-9439e5f3523b` (`loginId` ASC),
+  INDEX `fk_conta_centroCusto1_idx` (`centroCustoId` ASC),
+  INDEX `fk_conta_metodoPagamento1_idx` (`metodoPagamentoId` ASC),
+  INDEX `fk_conta_parceiro1_idx` (`parceiroId` ASC),
+  INDEX `fk_conta_contaBancaria1_idx` (`contaBancariaId` ASC),
+  CONSTRAINT `fk_0a936f08-c6a2-11e4-844e-9439e5f3523b`
+    FOREIGN KEY (`empresaId`)
+    REFERENCES `metasoft`.`empresa` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fk_0a9370d4-c6a2-11e4-844e-9439e5f3523b`
+    FOREIGN KEY (`loginId`)
+    REFERENCES `metasoft`.`login` (`id`),
+  CONSTRAINT `fk_conta_centroCusto1`
+    FOREIGN KEY (`centroCustoId`)
+    REFERENCES `metasoft`.`centroCusto` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_conta_metodoPagamento1`
+    FOREIGN KEY (`metodoPagamentoId`)
+    REFERENCES `metasoft`.`metodoPagamento` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_conta_parceiro1`
+    FOREIGN KEY (`parceiroId`)
+    REFERENCES `metasoft`.`parceiro` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_conta_contaBancaria1`
+    FOREIGN KEY (`contaBancariaId`)
+    REFERENCES `metasoft`.`contaBancaria` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
 
-CREATE TABLE defaultInvoiceTax (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    loginId INT UNSIGNED NOT NULL,
-    businessId INT UNSIGNED NOT NULL,
-    createdOn DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (businessId) REFERENCES business(id),
-    FOREIGN KEY (loginId) REFERENCES login(id)
-);
 
-/* CONTABILIDADE */
+-- -----------------------------------------------------
+-- Table `metasoft`.`impostoNotaFiscal`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`impostoNotaFiscal` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `loginId` INT UNSIGNED NOT NULL,
+  `empresaId` INT UNSIGNED NOT NULL,
+  `criadoEm` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `imposto` VARCHAR(45) NOT NULL,
+  `taxa` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_0a93bc9c-c6a2-11e4-844e-9439e5f3523b` (`empresaId` ASC),
+  INDEX `fk_0a93be5e-c6a2-11e4-844e-9439e5f3523b` (`loginId` ASC),
+  CONSTRAINT `fk_0a93bc9c-c6a2-11e4-844e-9439e5f3523b`
+    FOREIGN KEY (`empresaId`)
+    REFERENCES `metasoft`.`empresa` (`id`),
+  CONSTRAINT `fk_0a93be5e-c6a2-11e4-844e-9439e5f3523b`
+    FOREIGN KEY (`loginId`)
+    REFERENCES `metasoft`.`login` (`id`));
+
+
+-- -----------------------------------------------------
+-- Table `metasoft`.`parcela`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`parcela` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `dataVencimento` DATE NOT NULL,
+  `valor` DECIMAL(10,2) NOT NULL,
+  `contaId` INT UNSIGNED NOT NULL,
+  `pago` TINYINT(1) NOT NULL,
+  `empresaId` INT UNSIGNED NOT NULL,
+  `impostoNotaFiscalId` INT UNSIGNED NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_put_entry1_idx` (`contaId` ASC),
+  INDEX `fk_parcela_empresa1_idx` (`empresaId` ASC),
+  INDEX `fk_parcela_impostoNotaFiscal1_idx` (`impostoNotaFiscalId` ASC),
+  CONSTRAINT `fk_put_entry1`
+    FOREIGN KEY (`contaId`)
+    REFERENCES `metasoft`.`conta` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_parcela_empresa1`
+    FOREIGN KEY (`empresaId`)
+    REFERENCES `metasoft`.`empresa` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_parcela_impostoNotaFiscal1`
+    FOREIGN KEY (`impostoNotaFiscalId`)
+    REFERENCES `metasoft`.`impostoNotaFiscal` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `metasoft`.`transferencia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`transferencia` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `contaBancariaOrigemId` INT UNSIGNED NOT NULL,
+  `contaBancariaDestinoId` INT UNSIGNED NOT NULL,
+  `valor` DECIMAL(10,2) NOT NULL,
+  `data` DATETIME NOT NULL,
+  `loginId` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_transferencia_contaBancaria1_idx` (`contaBancariaOrigemId` ASC),
+  INDEX `fk_transferencia_contaBancaria2_idx` (`contaBancariaDestinoId` ASC),
+  INDEX `fk_transferencia_login1_idx` (`loginId` ASC),
+  CONSTRAINT `fk_transferencia_contaBancaria1`
+    FOREIGN KEY (`contaBancariaOrigemId`)
+    REFERENCES `metasoft`.`contaBancaria` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transferencia_contaBancaria2`
+    FOREIGN KEY (`contaBancariaDestinoId`)
+    REFERENCES `metasoft`.`contaBancaria` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transferencia_login1`
+    FOREIGN KEY (`loginId`)
+    REFERENCES `metasoft`.`login` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `metasoft`.`contrato`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`contrato` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(45) NOT NULL,
+  `descritivo` TEXT NULL,
+  `statusId` INT NOT NULL,
+  `dataAssinatura` DATE NOT NULL,
+  `pdf` VARCHAR(255) NULL,
+  `contaId` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_contrato_conta1_idx` (`contaId` ASC),
+  CONSTRAINT `fk_contrato_conta1`
+    FOREIGN KEY (`contaId`)
+    REFERENCES `metasoft`.`conta` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+COMMENT = 'status - aprovando orcamento, em desenvolvimento, finalizado /* comment truncated */ /*, cancelado, suspenso*/';
+
+
+-- -----------------------------------------------------
+-- Table `metasoft`.`colaborador`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`colaborador` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  `cep` VARCHAR(20) NULL,
+  `endereco` VARCHAR(255) NULL,
+  `telefone` VARCHAR(45) NULL,
+  `salario` DECIMAL(10,2) NOT NULL,
+  `dataContratacao` DATE NOT NULL,
+  `cpf` VARCHAR(20) NOT NULL,
+  `email` VARCHAR(100) NULL,
+  `sexo` VARCHAR(1) NOT NULL,
+  `dataNascimento` DATE NULL,
+  `rg` VARCHAR(20) NULL,
+  `orgaoExpedidor` VARCHAR(10) NULL,
+  `pis` VARCHAR(45) NULL,
+  `carteiraProfissional` VARCHAR(45) NULL,
+  `observacao` TEXT NULL,
+  `inss` DECIMAL(10,2) NULL,
+  `impostoRetido` DECIMAL(10,2) NULL,
+  `empresa_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_colaborador_empresa1_idx` (`empresa_id` ASC),
+  CONSTRAINT `fk_colaborador_empresa1`
+    FOREIGN KEY (`empresa_id`)
+    REFERENCES `metasoft`.`empresa` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `metasoft`.`folhaPagamento`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`folhaPagamento` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `colaboradorId` INT UNSIGNED NOT NULL,
+  `contaId` INT UNSIGNED NOT NULL,
+  `mes` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_colaborador_has_conta_conta1_idx` (`contaId` ASC),
+  INDEX `fk_colaborador_has_conta_colaborador1_idx` (`colaboradorId` ASC),
+  CONSTRAINT `fk_colaborador_has_conta_colaborador1`
+    FOREIGN KEY (`colaboradorId`)
+    REFERENCES `metasoft`.`colaborador` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_colaborador_has_conta_conta1`
+    FOREIGN KEY (`contaId`)
+    REFERENCES `metasoft`.`conta` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `metasoft`.`item`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`item` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(45) NOT NULL,
+  `unidade` VARCHAR(45) NULL,
+  `patrimonio` TINYINT(1) NOT NULL,
+  `taxaDepreciacao` DECIMAL(3,2) NULL,
+  `empresaId` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_item_empresa1_idx` (`empresaId` ASC),
+  CONSTRAINT `fk_item_empresa1`
+    FOREIGN KEY (`empresaId`)
+    REFERENCES `metasoft`.`empresa` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `metasoft`.`estoque`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`estoque` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `itemId` INT UNSIGNED NOT NULL,
+  `quantidade` DECIMAL(10,3) NULL,
+  `valorUnitario` DECIMAL(10,2) NULL,
+  `centroCustoId` INT UNSIGNED NOT NULL,
+  `dataAquisicao` DATETIME NOT NULL,
+  `loginId` INT UNSIGNED NOT NULL,
+  `parceiroId` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_estoque_item1_idx` (`itemId` ASC),
+  INDEX `fk_estoque_centroCusto1_idx` (`centroCustoId` ASC),
+  INDEX `fk_estoque_login1_idx` (`loginId` ASC),
+  INDEX `fk_estoque_parceiro1_idx` (`parceiroId` ASC),
+  CONSTRAINT `fk_estoque_item1`
+    FOREIGN KEY (`itemId`)
+    REFERENCES `metasoft`.`item` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_estoque_centroCusto1`
+    FOREIGN KEY (`centroCustoId`)
+    REFERENCES `metasoft`.`centroCusto` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_estoque_login1`
+    FOREIGN KEY (`loginId`)
+    REFERENCES `metasoft`.`login` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_estoque_parceiro1`
+    FOREIGN KEY (`parceiroId`)
+    REFERENCES `metasoft`.`parceiro` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `metasoft`.`transferenciaEstoque`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`transferenciaEstoque` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `estoqueSaidaId` INT UNSIGNED NOT NULL,
+  `estoqueEntradaId` INT UNSIGNED NOT NULL,
+  `quantidade` DECIMAL(10,3) NOT NULL,
+  `dataTransferencia` DATETIME NOT NULL,
+  `loginId` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_transferenciaEstoque_estoque1_idx` (`estoqueSaidaId` ASC),
+  INDEX `fk_transferenciaEstoque_estoque2_idx` (`estoqueEntradaId` ASC),
+  INDEX `fk_transferenciaEstoque_login1_idx` (`loginId` ASC),
+  CONSTRAINT `fk_transferenciaEstoque_estoque1`
+    FOREIGN KEY (`estoqueSaidaId`)
+    REFERENCES `metasoft`.`estoque` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transferenciaEstoque_estoque2`
+    FOREIGN KEY (`estoqueEntradaId`)
+    REFERENCES `metasoft`.`estoque` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transferenciaEstoque_login1`
+    FOREIGN KEY (`loginId`)
+    REFERENCES `metasoft`.`login` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
