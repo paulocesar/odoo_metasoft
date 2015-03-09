@@ -11,9 +11,10 @@ else
 
 _.extend(identifiers, {
     paymentMethods: {
-        1: 'Cartão'
+        1: 'Cheque'
         3: 'Crédito'
         5: 'Débito'
         7: 'Espécie'
+        9: 'Transferência'
     }
 })
