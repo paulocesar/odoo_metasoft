@@ -2,6 +2,7 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
+DROP SCHEMA IF EXISTS `metasoft` ;
 CREATE SCHEMA IF NOT EXISTS `metasoft` ;
 USE `metasoft` ;
 
@@ -29,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`login` (
   `senha` VARCHAR(20) NOT NULL,
   `nome` VARCHAR(45) NOT NULL,
   `papel` VARCHAR(45) NOT NULL,
-  `empresaId` INT NOT NULL,
+  `empresaId` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_login_empresa1_idx` (`empresaId` ASC),
   CONSTRAINT `fk_login_empresa1`
@@ -275,7 +276,7 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`contrato` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'status - aprovando orcamento, em desenvolvimento, finalizado /* comment truncated */ /*, cancelado, suspenso*/';
+COMMENT = 'status - aprovando orcamento, em desenvolvimento, finalizado, cancelado, suspenso';
 
 
 -- -----------------------------------------------------
@@ -430,3 +431,23 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- Data for table `metasoft`.`empresa`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `metasoft`;
+INSERT INTO `metasoft`.`empresa` (`id`, `cnpj`, `nome`, `nomeFantasia`, `estado`, `cidade`, `endereco`, `cep`) VALUES (1, '000000000000000', 'System', 'System', 'None', 'None', 'None', '000000000');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `metasoft`.`login`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `metasoft`;
+INSERT INTO `metasoft`.`login` (`id`, `login`, `senha`, `nome`, `papel`, `empresaId`) VALUES (1, 'admin', 'admin', 'Admin', 'admin', 1);
+
+COMMIT;
+
