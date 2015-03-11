@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
     <meta>
         <title><%= title %></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,7 +8,12 @@
     </meta>
 
     <body>
+        <% include financeiro/layout %>
         <% include financeiro/contaBancaria %>
+
+        <script src='/js/components/display.js'></script>
+        <script src='/js/metasoft/displays/conta-bancaria.js'></script>
+
         <script src='/js/metasoft/index.js'></script>
     </body>
 </html>

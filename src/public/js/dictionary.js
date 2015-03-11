@@ -14,13 +14,6 @@
     jsRoot.identifiers = identifiers;
   }
 
-  _.extend(identifiers, {
-    paymentMethods: {
-      1: 'Cartão',
-      3: 'Crédito',
-      5: 'Débito',
-      7: 'Espécie'
-    }
-  });
+  _.extend(identifiers, {});
 
 }).call(this);
