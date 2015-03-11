@@ -12,7 +12,6 @@
     __extends(ContaBancaria, _super);
 
     function ContaBancaria(opts) {
-      this.name = 'contaBancaria';
       this.category = 'Financeiro';
       this.subCategory = 'Conta Bancaria';
       ContaBancaria.__super__.constructor.apply(this, arguments);

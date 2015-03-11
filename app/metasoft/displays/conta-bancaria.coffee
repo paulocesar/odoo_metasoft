@@ -5,7 +5,6 @@ jsRoot = @
 
 class ContaBancaria extends Metasoft.components.Display
     constructor: (opts) ->
-        @name = 'contaBancaria'
         @category = 'Financeiro'
         @subCategory = 'Conta Bancaria'
 

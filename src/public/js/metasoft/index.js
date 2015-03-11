@@ -76,4 +76,6 @@
 
   metasoftRouter.navigate('page/home');
 
+  metasoftRouter.goToPage('home');
+
 }).call(this);

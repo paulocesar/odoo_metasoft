@@ -52,3 +52,4 @@ app.metasoftRouter = metasoftRouter
 
 Backbone.history.start()
 metasoftRouter.navigate('page/home')
+metasoftRouter.goToPage('home')
