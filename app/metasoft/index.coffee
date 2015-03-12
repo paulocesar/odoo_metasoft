@@ -9,10 +9,9 @@ Metasoft.render("layout", { title: 'Metasoft' })
 displayHtml = (name) -> "<div id='display-#{name}' class='display'></div>"
 menuHtml = (display) ->
     { name, category, subCategory } = display
-    "<a href='#page/#{name}' class='list-group-item page-#{name}'>#{category}</a>"
+    "<a href='#page/#{name}' class='list-group-item page-#{name}'>#{subCategory}</a>"
 
 firstToLower = (str) -> str.charAt(0).toLowerCase() + str.slice(1)
-
 
 class Application
     constructor: () ->
@@ -51,5 +50,7 @@ metasoftRouter = new MetasoftRouter()
 app.metasoftRouter = metasoftRouter
 
 Backbone.history.start()
-metasoftRouter.navigate('page/home')
-metasoftRouter.goToPage('home')
+metasoftRouter.navigate('page/contas')
+metasoftRouter.goToPage('contas')
+
+Metasoft.components.fieldValidator.apply($('body'))

@@ -21,7 +21,7 @@
   menuHtml = function(display) {
     var category, name, subCategory;
     name = display.name, category = display.category, subCategory = display.subCategory;
-    return "<a href='#page/" + name + "' class='list-group-item page-" + name + "'>" + category + "</a>";
+    return "<a href='#page/" + name + "' class='list-group-item page-" + name + "'>" + subCategory + "</a>";
   };
 
   firstToLower = function(str) {
@@ -74,8 +74,10 @@
 
   Backbone.history.start();
 
-  metasoftRouter.navigate('page/home');
+  metasoftRouter.navigate('page/contas');
 
-  metasoftRouter.goToPage('home');
+  metasoftRouter.goToPage('contas');
+
+  Metasoft.components.fieldValidator.apply($('body'));
 
 }).call(this);
