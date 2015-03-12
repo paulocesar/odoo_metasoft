@@ -2,13 +2,23 @@ jsRoot = @
 
 { _, Metasoft } = jsRoot
 
+inputBackgroundColor = '#FFF9F4'
+devaultMaskMoneyVal = 'R$ 0,00'
+
 errorLabel = {
     apply: (f, msg) ->
         if f.next().hasClass('error-message')
             return
 
-        f.css('background-color', '#FFE8E8')
-        f.after("<div class='error-message'>#{msg}</div>")
+        f.css('background-color', inputBackgroundColor)
+
+        if msg
+            f.after("""
+                <div class='error-message'>
+                    <span class='glyphicon glyphicon-warning-sign'></span>
+                    #{msg}
+                </div>
+            """)
 
     remove: (f) ->
         errEl = f.next()
@@ -24,12 +34,12 @@ errorLabel = {
 
 validators = {
     'not-empty': {
-        test: (v) -> v != ''
+        test: (v) -> $.trim(v) != ''
         message: 'Não pode ser vazio'
     }
 
     'not-zero': {
-        test: (v) -> v not in [ '', 0, '0', 'R$ 0.00' ]
+        test: (v) -> $.trim(v) not in [ '', 0, '0', 'R$ 0.00' ]
         message: 'Não pode ser zero'
     }
 }
@@ -42,6 +52,8 @@ masks = {
             decimals: ','
             allowZero: true
         })
+
+        $el.val(devaultMaskMoneyVal)
 }
 
 buildValidatorFunc = (v) ->
@@ -56,19 +68,30 @@ buildValidatorFunc = (v) ->
 
 fieldValidator = {
     apply: (el) ->
-        $el = $(el)
+        @applyValidators(el, validators)
+        @applyMasks(el, masks)
 
-        for cls, data of validators
+    reset: (el) ->
+        $(el).find('input, textarea').css('background-color', 'white')
+        $(el).find('.error-message').remove()
+        $(el).find('.mask-money').val(devaultMaskMoneyVal)
+        return
+
+    applyValidators: (el, valids) ->
+        for cls, data of valids
             func = buildValidatorFunc(data)
-            $el.find(".#{cls}").on('change',func).on('focusout',func).on('keyup',func)
+            $(el).find(".#{cls}").on('change',func).on('focusout',func).on('keyup',func)
 
-        for cls, applyFunc of masks
-            applyFunc($el.find(".#{cls}"))
+        return
+
+    applyMasks: (el, mks) ->
+        for cls, applyFunc of mks
+            applyFunc($(el).find(".#{cls}"))
+
+        return
 
     isValid: (el, highlightInvalid = false) ->
         $el = $(el)
-        if $el.find('error-message').length > 0
-            return true
 
         isValid = true
 

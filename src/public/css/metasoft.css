@@ -4,4 +4,6 @@ body {
 #metasoft {
 }
 
-.mask-money { text-align: right }
+.error-message { color: #E80808; }
+
+.mask-money { text-align: right; }
