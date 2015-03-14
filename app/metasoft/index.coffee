@@ -46,4 +46,4 @@ Backbone.history.start()
 metasoftRouter.navigate('page/contaBancaria')
 metasoftRouter.goToPage('contaBancaria')
 
-Metasoft.components.fieldValidator.apply($('body'))
+Metasoft.fieldValidator.apply($('body'))

@@ -2,7 +2,7 @@ jsRoot = @
 
 { _, ace, Backbone, Metasoft } = jsRoot
 
-{ fieldValidator } = Metasoft.components
+{ fieldValidator } = Metasoft
 
 class Display extends Backbone.View
     constructor: (opts) ->
@@ -26,4 +26,4 @@ class Display extends Backbone.View
     get: (args...) -> Metasoft.post(args...)
     post: (args...) -> Metasoft.post(args...)
 
-Metasoft.components.Display = Display
+Metasoft.Display = Display

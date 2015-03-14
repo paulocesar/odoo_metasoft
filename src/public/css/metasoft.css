@@ -7,3 +7,13 @@ body {
 .error-message { color: #E80808; }
 
 .mask-money { text-align: right; }
+
+.list-container {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #E8E8E8;
+}
+
+.list-container tr.clickable {
+    cursor: pointer;
+}

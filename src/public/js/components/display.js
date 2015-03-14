@@ -9,7 +9,7 @@
 
   _ = jsRoot._, ace = jsRoot.ace, Backbone = jsRoot.Backbone, Metasoft = jsRoot.Metasoft;
 
-  fieldValidator = Metasoft.components.fieldValidator;
+  fieldValidator = Metasoft.fieldValidator;
 
   Display = (function(_super) {
     __extends(Display, _super);
@@ -55,6 +55,6 @@
 
   })(Backbone.View);
 
-  Metasoft.components.Display = Display;
+  Metasoft.Display = Display;
 
 }).call(this);

@@ -15,7 +15,7 @@
 
     return Contas;
 
-  })(Metasoft.components.Display);
+  })(Metasoft.Display);
 
   Metasoft.displays.Contas = Contas;
 

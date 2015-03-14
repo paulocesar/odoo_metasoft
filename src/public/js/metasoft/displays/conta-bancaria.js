@@ -12,12 +12,40 @@
     __extends(ContaBancaria, _super);
 
     function ContaBancaria(opts) {
+      this.events = {
+        'click .conta-banco-list tr': 'showBankAccount'
+      };
+      this.tpls = {
+        bankList: _.template($('#tpl-display-contaBancaria-itemConta').html())
+      };
       ContaBancaria.__super__.constructor.apply(this, arguments);
+      this.renderAccounts();
     }
+
+    ContaBancaria.prototype.renderAccounts = function(accounts) {
+      var id, _i;
+      accounts = [];
+      for (id = _i = 1; _i <= 100; id = ++_i) {
+        accounts.push({
+          id: id,
+          agencia: '1234-x',
+          conta: '12345-6',
+          banco: '123 - Bradesco',
+          saldo: 100
+        });
+      }
+      return this.$el.find('.conta-banco-list').html(this.tpls.bankList({
+        contas: accounts
+      }));
+    };
+
+    ContaBancaria.prototype.showBankAccount = function(ev) {
+      return console.log($(ev.currentTarget).data('rowid'));
+    };
 
     return ContaBancaria;
 
-  })(Metasoft.components.Display);
+  })(Metasoft.Display);
 
   Metasoft.displays.ContaBancaria = ContaBancaria;
 

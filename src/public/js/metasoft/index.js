@@ -67,6 +67,6 @@
 
   metasoftRouter.goToPage('contaBancaria');
 
-  Metasoft.components.fieldValidator.apply($('body'));
+  Metasoft.fieldValidator.apply($('body'));
 
 }).call(this);
