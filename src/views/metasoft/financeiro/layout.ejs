@@ -20,17 +20,25 @@
         </div>
     </nav>
 
+    <div role="tabpanel">
 
-    <div class="row">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#inicio" aria-controls="home" role="tab" data-toggle="tab">Início</a></li>
+        <li role="presentation"><a href="#financeiro" aria-controls="profile" role="tab" data-toggle="tab">Financeiro</a></li>
+        <li role="presentation"><a href="#contabilidade" aria-controls="messages" role="tab" data-toggle="tab">Contábil</a></li>
+        <li role="presentation"><a href="#configuracoes" aria-controls="settings" role="tab" data-toggle="tab">Configurações</a></li>
+    </ul>
 
-        <div class="col-md-3">
-            <div class="list-group" id="menu">
-            </div>
-        </div>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="inicio"></div>
+        <div role="tabpanel" class="tab-pane" id="financeiro"><a href='#/page/contas'>Contas</a> &nbsp; <a href='#/page/contaBancaria'>Contas Bancárias</a></div>
+        <div role="tabpanel" class="tab-pane" id="contabilidade">...</div>
+        <div role="tabpanel" class="tab-pane" id="configuracoes">...</div>
+    </div>
 
-        <div class="col-md-9" id="displayContainer">
-        </div>
+    </div>
 
+    <div class="col-md-12" id="displayContainer">
     </div>
 
 </div>

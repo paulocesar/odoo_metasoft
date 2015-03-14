@@ -44,4 +44,9 @@ Metasoft = {
     evalResponse: (response) -> ( new Function("return #{response}") )()
 }
 
+
+Metasoft.utils = {
+    firstToLower: (str) -> str.charAt(0).toLowerCase() + str.slice(1)
+}
+
 jsRoot.Metasoft = Metasoft

@@ -11,11 +11,7 @@
   Contas = (function(_super) {
     __extends(Contas, _super);
 
-    function Contas(opts) {
-      this.category = 'Financeiro';
-      this.subCategory = 'Início';
-      Contas.__super__.constructor.apply(this, arguments);
-    }
+    function Contas(opts) {}
 
     return Contas;
 

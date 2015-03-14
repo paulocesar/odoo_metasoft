@@ -44,16 +44,30 @@ validators = {
     }
 }
 
-masks = {
-    'mask-money': ($el) ->
-        $el.maskMoney({
-            prefix: 'R$ '
-            thousands: '.'
-            decimals: ','
-            allowZero: true
-        })
 
-        $el.val(devaultMaskMoneyVal)
+configureMaskMoney = ($el, config = {}) ->
+    _.defaults(config, {
+        prefix: 'R$ '
+        thousands: '.'
+        decimal: ','
+        allowZero: true
+        allowNegative: true
+    })
+
+    $el.maskMoney(config)
+    $el.val(devaultMaskMoneyVal)
+    $el.on('keyup', () ->
+        value = $(@).maskMoney('unmasked')[0]
+
+        color = if value > 0 then '#35BA00' else 'black'
+        color = 'red' if value < 0
+
+        $(@).css('color', color)
+    )
+
+masks = {
+    'mask-money': ($el) -> configureMaskMoney($el)
+    'mask-money-positive': ($el) -> configureMaskMoney($el, { allowNegative: false })
 }
 
 buildValidatorFunc = (v) ->

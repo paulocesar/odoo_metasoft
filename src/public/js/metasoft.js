@@ -51,6 +51,12 @@
     }
   };
 
+  Metasoft.utils = {
+    firstToLower: function(str) {
+      return str.charAt(0).toLowerCase() + str.slice(1);
+    }
+  };
+
   jsRoot.Metasoft = Metasoft;
 
 }).call(this);

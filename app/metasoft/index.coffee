@@ -11,8 +11,6 @@ menuHtml = (display) ->
     { name, category, subCategory } = display
     "<a href='#page/#{name}' class='list-group-item page-#{name}'>#{subCategory}</a>"
 
-firstToLower = (str) -> str.charAt(0).toLowerCase() + str.slice(1)
-
 class Application
     constructor: () ->
         @displaysById = {}
@@ -20,17 +18,12 @@ class Application
         @displaysContainer = Metasoft.container.find('#displayContainer')
 
         _.each(Metasoft.displays, (method, name) =>
-            name = firstToLower(name)
+            name = Metasoft.utils.firstToLower(name)
             @displaysContainer.append(displayHtml(name))
 
             display = new method({ name })
             @displaysById[name] = display
-            @addDisplayToMenu(display)
         )
-
-    addDisplayToMenu: (display) ->
-        if display.addToGrid()
-            Metasoft.container.find('#menu').append(menuHtml(display))
 
 app = window.app = new Application()
 
@@ -50,7 +43,7 @@ metasoftRouter = new MetasoftRouter()
 app.metasoftRouter = metasoftRouter
 
 Backbone.history.start()
-metasoftRouter.navigate('page/contas')
-metasoftRouter.goToPage('contas')
+metasoftRouter.navigate('page/contaBancaria')
+metasoftRouter.goToPage('contaBancaria')
 
 Metasoft.components.fieldValidator.apply($('body'))
