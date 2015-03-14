@@ -20,7 +20,6 @@
       this.template = _.template($("#tpl-display-" + this.name).html());
       Display.__super__.constructor.apply(this, arguments);
       this.render();
-      debugger;
       fieldValidator.apply(this.$el);
     }
 
