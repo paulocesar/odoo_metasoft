@@ -79,7 +79,7 @@ fieldValidator = {
         $(el).find('input, textarea').css('background-color', 'white')
         $(el).find('.error-message').remove()
         $(el).find('input, textarea').val('')
-        $(el).find('.mask-money').val(money.defaultVal)
+        $(el).find('.mask-money').val(money.defaultVal).css('color', 'black')
 
     fill: (el, data) ->
         $el = $(el)

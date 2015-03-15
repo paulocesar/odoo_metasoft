@@ -96,7 +96,7 @@
       $(el).find('input, textarea').css('background-color', 'white');
       $(el).find('.error-message').remove();
       $(el).find('input, textarea').val('');
-      return $(el).find('.mask-money').val(money.defaultVal);
+      return $(el).find('.mask-money').val(money.defaultVal).css('color', 'black');
     },
     fill: function(el, data) {
       var $el, f, name, value;
