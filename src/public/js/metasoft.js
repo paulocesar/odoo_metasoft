@@ -40,9 +40,10 @@
           var res;
           res = _this.evalResponse(raw.data);
           if (!raw.success) {
+            alert(raw.data);
             return callback(res);
           }
-          return callback(null, res);
+          return callback(res);
         };
       })(this));
     },

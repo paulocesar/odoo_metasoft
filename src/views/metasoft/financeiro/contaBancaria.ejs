@@ -43,7 +43,7 @@
         {% _.each(contas, function (c) { %}
             <tr data-rowid='{%= c.id %}' class='clickable'>
                 <td>{%= c.agencia %} / {%= c.conta %}</td>
-                <td class='money'>{%= Metasoft.money.format(c.saldo) %}</td>
+                <td class='money'>{%= Metasoft.money.html(c.saldo) %}</td>
                 <td>{%= c.banco %}</td>
             </tr>
         {% }) %}

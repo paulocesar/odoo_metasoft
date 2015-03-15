@@ -69,6 +69,18 @@ fieldValidator = {
         $(el).find('input, textarea').css('background-color', 'white')
         $(el).find('.error-message').remove()
         $(el).find('.mask-money').val(money.defaultVal)
+
+    fill: (el, data) ->
+        $el = $(el)
+        for name, value of data
+            f = $el.find("[name='#{name}']")
+
+            if f.hasClass('mask-money') || f.hasClass('mask-money-positive')
+                f.css('color', money.getColor(value))
+                value = money.format(value)
+
+            f.val(value)
+
         return
 
     applyValidators: (el, valids) ->

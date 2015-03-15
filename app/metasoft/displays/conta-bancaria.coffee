@@ -2,6 +2,8 @@ jsRoot = @
 
 { _, Metasoft } = jsRoot
 
+{ fieldValidator } = Metasoft
+
 class ContaBancaria extends Metasoft.Display
     constructor: (opts) ->
         @events = {
@@ -14,17 +16,14 @@ class ContaBancaria extends Metasoft.Display
 
         super
 
-        @renderAccounts()
+        @post('financeiro/listaContaBancaria', { empresaId: 1 }, @renderAccounts)
 
-
-    renderAccounts: (accounts) ->
-        accounts = []
-        for id in [1..100]
-            accounts.push({ id, agencia: '1234-x', conta: '12345-6', banco: '123 - Bradesco', saldo: 100 })
-
-        @$el.find('.conta-banco-list').html(@tpls.bankList({ contas: accounts }))
+    renderAccounts: (@accounts) =>
+        @$el.find('.conta-banco-list').html(@tpls.bankList({ contas: @accounts }))
 
     showBankAccount: (ev) ->
-        console.log($(ev.currentTarget).data('rowid'))
+        id = $(ev.currentTarget).data('rowid')
+        account = _.findWhere(@accounts, { id })
+        fieldValidator.fill(@$el, account)
 
 Metasoft.displays.ContaBancaria = ContaBancaria

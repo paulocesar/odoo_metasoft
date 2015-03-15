@@ -79,7 +79,20 @@
     reset: function(el) {
       $(el).find('input, textarea').css('background-color', 'white');
       $(el).find('.error-message').remove();
-      $(el).find('.mask-money').val(money.defaultVal);
+      return $(el).find('.mask-money').val(money.defaultVal);
+    },
+    fill: function(el, data) {
+      var $el, f, name, value;
+      $el = $(el);
+      for (name in data) {
+        value = data[name];
+        f = $el.find("[name='" + name + "']");
+        if (f.hasClass('mask-money') || f.hasClass('mask-money-positive')) {
+          f.css('color', money.getColor(value));
+          value = money.format(value);
+        }
+        f.val(value);
+      }
     },
     applyValidators: function(el, valids) {
       var cls, data, func;

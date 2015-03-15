@@ -21,7 +21,7 @@ money = {
         $el.on('keyup', () ->
             value = $(@).maskMoney('unmasked')[0]
 
-            $(@).css('color', @getColor(value))
+            $(@).css('color', money.getColor(value))
         )
 
     getColor: (value) ->
@@ -41,6 +41,8 @@ money = {
             r = Math.round(n)
 
         return if d then r / m else r
+
+    html: (num) -> "<font color='#{ @getColor(num) }'>#{ @format(num) }</font>"
 
     # http://stackoverflow.com/questions/149055/how-can-i-format-numbers-as-money-in-javascript?answertab=votes#tab-top
     format: (num) ->

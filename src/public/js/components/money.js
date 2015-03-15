@@ -23,7 +23,7 @@
       return $el.on('keyup', function() {
         var value;
         value = $(this).maskMoney('unmasked')[0];
-        return $(this).css('color', this.getColor(value));
+        return $(this).css('color', money.getColor(value));
       });
     },
     getColor: function(value) {
@@ -54,6 +54,9 @@
       } else {
         return r;
       }
+    },
+    html: function(num) {
+      return "<font color='" + (this.getColor(num)) + "'>" + (this.format(num)) + "</font>";
     },
     format: function(num) {
       var c, d, i, j, s, t;

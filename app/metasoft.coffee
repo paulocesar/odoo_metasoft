@@ -37,9 +37,10 @@ Metasoft = {
             res = @evalResponse(raw.data)
 
             unless raw.success
+                alert(raw.data)
                 return callback(res)
 
-            callback(null, res)
+            callback(res)
 
     evalResponse: (response) -> ( new Function("return #{response}") )()
 }

@@ -3,21 +3,6 @@ _ = require('underscore')
 Context = require('./context')
 config = require('../../config')
 
-helpers = {
-    json: () -> JSON.parse(req.body.data)
-    sendData: (data) -> @res.json({ success: true, data: JSON.stringify(data) })
-    sendError: (err) -> @res.send({ status: false, data: JSON.stringify(err) })
-
-    sendErrorOrData: (err, data) ->
-        return @sendError(err) if err?
-        @sendData(data)
-
-    onSuccess: (cb) ->
-        return (err, data) ->
-            return @sendError(err) if err?
-            cb(data)
-}
-
 rgxHttpMethod = /^(get|post)_[a-zA-Z]+/
 
 class Controller
@@ -48,7 +33,20 @@ class Controller
         @router[method.toLowerCase()](path, (req, res) =>
             db = require('knex')(config.database)
 
-            data = { req, res, db, ms: new Context(db) }
+            data = {
+                req
+                res
+                db
+                ms: new Context(db)
+
+                json: () -> JSON.parse(req.body.data)
+                sendData: (data) => res.json({ success: true, data: JSON.stringify(data) })
+                sendError: (err) => res.send({ status: false, data: JSON.stringify(err) })
+                sendErrorOrData: (err, data) =>
+                    if err?
+                        return res.send({ status: false, data: JSON.stringify(err) })
+                    res.json({ success: true, data: JSON.stringify(data) })
+            }
 
             _.bind(cb, _.extend(data, @content))()
         )
