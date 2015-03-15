@@ -15,11 +15,13 @@
     __extends(ContaBancaria, _super);
 
     function ContaBancaria(opts) {
+      this.filterTerms = __bind(this.filterTerms, this);
       this.renderAccounts = __bind(this.renderAccounts, this);
       this.events = {
         'click .conta-banco-list tr': 'showBankAccount',
         'click .save': 'onClickSave',
-        'click .new': 'onClickReset'
+        'click .new': 'onClickReset',
+        'keyup .conta-banco-busca': 'filterTerms'
       };
       this.tpls = {
         bankList: _.template($('#tpl-display-contaBancaria-itemConta').html())
@@ -49,9 +51,16 @@
 
     ContaBancaria.prototype.renderAccounts = function(_at_accounts) {
       this.accounts = _at_accounts;
-      return this.$el.find('.conta-banco-list').html(this.tpls.bankList({
+      this.$el.find('.conta-banco-list').html(this.tpls.bankList({
         contas: this.accounts
       }));
+      return this.filterTerms();
+    };
+
+    ContaBancaria.prototype.filterTerms = function() {
+      var query;
+      query = this.$el.find('.conta-banco-busca').val();
+      return Metasoft.filter(this.$el.find('.conta-banco-list'), query);
     };
 
     ContaBancaria.prototype.showBankAccount = function(ev) {

@@ -10,6 +10,7 @@ class ContaBancaria extends Metasoft.Display
             'click .conta-banco-list tr': 'showBankAccount'
             'click .save': 'onClickSave'
             'click .new': 'onClickReset'
+            'keyup .conta-banco-busca': 'filterTerms'
         }
 
         @tpls = {
@@ -36,6 +37,11 @@ class ContaBancaria extends Metasoft.Display
 
     renderAccounts: (@accounts) =>
         @$el.find('.conta-banco-list').html(@tpls.bankList({ contas: @accounts }))
+        @filterTerms()
+
+    filterTerms: () =>
+        query = @$el.find('.conta-banco-busca').val()
+        Metasoft.filter(@$el.find('.conta-banco-list'), query)
 
     showBankAccount: (ev) ->
         @id = $(ev.currentTarget).data('rowid')

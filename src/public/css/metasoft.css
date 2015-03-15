@@ -18,3 +18,11 @@
 .list-container tr.clickable {
     cursor: pointer;
 }
+
+.list-container tr:last-child {
+    border-bottom: 1px solid #ddd;
+}
+
+.conta-banco-busca {
+    margin-bottom: 5px;
+}
