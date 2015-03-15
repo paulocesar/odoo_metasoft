@@ -60,6 +60,16 @@ buildValidatorFunc = (v) ->
 
         errorLabel.apply(f, v.message)
 
+hasClasses = (el, arr) ->
+    arr = [].concat(arr)
+
+    for cls in arr
+        return true if $(el).hasClass(cls)
+
+    return false
+
+hasMoneyClass = (el) -> hasClasses(el, ['mask-money', 'mask-money-positive'])
+
 fieldValidator = {
     apply: (el) ->
         @applyValidators(el, validators)
@@ -68,6 +78,7 @@ fieldValidator = {
     reset: (el) ->
         $(el).find('input, textarea').css('background-color', 'white')
         $(el).find('.error-message').remove()
+        $(el).find('input, textarea').val('')
         $(el).find('.mask-money').val(money.defaultVal)
 
     fill: (el, data) ->
@@ -75,7 +86,7 @@ fieldValidator = {
         for name, value of data
             f = $el.find("[name='#{name}']")
 
-            if f.hasClass('mask-money') || f.hasClass('mask-money-positive')
+            if hasMoneyClass(f)
                 f.css('color', money.getColor(value))
                 value = money.format(value)
 
@@ -86,7 +97,11 @@ fieldValidator = {
     applyValidators: (el, valids) ->
         for cls, data of valids
             func = buildValidatorFunc(data)
-            $(el).find(".#{cls}").on('change',func).on('focusout',func).on('keyup',func)
+
+            $(el).find(".#{cls}")
+                .on('change',func)
+                .on('focusout',func)
+                .on('keyup',func)
 
         return
 
@@ -114,6 +129,17 @@ fieldValidator = {
             )
 
         return isValid
+
+    getValues: (el) ->
+        data = {}
+
+        $(el).find('input, textarea').each(() ->
+            f = $(@)
+            val = if hasMoneyClass(f) then f.maskMoney('unmasked')[0] else f.val()
+            data[f.attr('name')] = val
+        )
+
+        return data
 }
 
 

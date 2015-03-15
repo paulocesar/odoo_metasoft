@@ -1,8 +1,6 @@
-body {
-}
-
-#metasoft {
-}
+.left { float: left; }
+.right { float: right; }
+.hidden { display: none; }
 
 .error-message { color: #E80808; }
 

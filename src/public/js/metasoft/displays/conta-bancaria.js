@@ -17,16 +17,35 @@
     function ContaBancaria(opts) {
       this.renderAccounts = __bind(this.renderAccounts, this);
       this.events = {
-        'click .conta-banco-list tr': 'showBankAccount'
+        'click .conta-banco-list tr': 'showBankAccount',
+        'click .save': 'onClickSave',
+        'click .new': 'onClickReset'
       };
       this.tpls = {
         bankList: _.template($('#tpl-display-contaBancaria-itemConta').html())
       };
+      this.accounts = [];
       ContaBancaria.__super__.constructor.apply(this, arguments);
       this.post('financeiro/listaContaBancaria', {
         empresaId: 1
       }, this.renderAccounts);
     }
+
+    ContaBancaria.prototype.onClickReset = function() {
+      fieldValidator.reset(this.$el);
+      this.id = null;
+      return this.updateButtonsDom();
+    };
+
+    ContaBancaria.prototype.onClickSave = function() {
+      var data;
+      data = fieldValidator.getValues(this.$el);
+      if (this.id != null) {
+        data.id = this.id;
+      }
+      data.empresaId = 1;
+      return this.post('financeiro/upsertContaBancaria', data, this.renderAccounts);
+    };
 
     ContaBancaria.prototype.renderAccounts = function(_at_accounts) {
       this.accounts = _at_accounts;
@@ -36,12 +55,18 @@
     };
 
     ContaBancaria.prototype.showBankAccount = function(ev) {
-      var account, id;
-      id = $(ev.currentTarget).data('rowid');
+      var account;
+      this.id = $(ev.currentTarget).data('rowid');
       account = _.findWhere(this.accounts, {
-        id: id
+        id: this.id
       });
-      return fieldValidator.fill(this.$el, account);
+      fieldValidator.fill(this.$el, account);
+      return this.updateButtonsDom();
+    };
+
+    ContaBancaria.prototype.updateButtonsDom = function() {
+      this.$el.find('.new').toggleClass('hidden', this.id == null);
+      return this.$el.find('.remove').show('hidden', this.id != null);
     };
 
     return ContaBancaria;
