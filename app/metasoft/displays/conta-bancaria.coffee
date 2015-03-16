@@ -24,13 +24,17 @@ class ContaBancaria extends Metasoft.Display
         @post('financeiro/listaContaBancaria', { empresaId: 1 }, @renderAccounts)
 
     onClickReset: () ->
-        fieldValidator.reset(@$el)
+        fieldValidator.reset(@$el.find('.form-conta-banco'))
         @id = null
 
         @updateButtonsDom()
 
-    onClickSave: () ->
-        data = fieldValidator.getValues(@$el)
+    onClickSave: () =>
+        form = @$el.find('.form-conta-banco')
+        unless fieldValidator.isValid(form, true)
+            return
+
+        data = fieldValidator.getValues(form)
         data.id = @id if @id?
         data.empresaId = 1
         @post('financeiro/upsertContaBancaria', data, @renderAccounts)
@@ -46,12 +50,14 @@ class ContaBancaria extends Metasoft.Display
     showBankAccount: (ev) ->
         @id = $(ev.currentTarget).data('rowid')
         account = _.findWhere(@accounts, { @id })
-        fieldValidator.fill(@$el, account)
+
+        form = @$el.find('.form-conta-banco')
+        fieldValidator.fill(form, account)
 
         @updateButtonsDom()
 
     updateButtonsDom: () ->
         @$el.find('.new').toggleClass('hidden', !@id?)
-        @$el.find('.remove').show('hidden', @id?)
+        @$el.find('.remove').toggleClass('hidden', !@id?)
 
 Metasoft.displays.ContaBancaria = ContaBancaria

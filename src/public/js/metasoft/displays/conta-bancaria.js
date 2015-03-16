@@ -17,6 +17,7 @@
     function ContaBancaria(opts) {
       this.filterTerms = __bind(this.filterTerms, this);
       this.renderAccounts = __bind(this.renderAccounts, this);
+      this.onClickSave = __bind(this.onClickSave, this);
       this.events = {
         'click .conta-banco-list tr': 'showBankAccount',
         'click .save': 'onClickSave',
@@ -34,14 +35,18 @@
     }
 
     ContaBancaria.prototype.onClickReset = function() {
-      fieldValidator.reset(this.$el);
+      fieldValidator.reset(this.$el.find('.form-conta-banco'));
       this.id = null;
       return this.updateButtonsDom();
     };
 
     ContaBancaria.prototype.onClickSave = function() {
-      var data;
-      data = fieldValidator.getValues(this.$el);
+      var data, form;
+      form = this.$el.find('.form-conta-banco');
+      if (!fieldValidator.isValid(form, true)) {
+        return;
+      }
+      data = fieldValidator.getValues(form);
       if (this.id != null) {
         data.id = this.id;
       }
@@ -64,18 +69,19 @@
     };
 
     ContaBancaria.prototype.showBankAccount = function(ev) {
-      var account;
+      var account, form;
       this.id = $(ev.currentTarget).data('rowid');
       account = _.findWhere(this.accounts, {
         id: this.id
       });
-      fieldValidator.fill(this.$el, account);
+      form = this.$el.find('.form-conta-banco');
+      fieldValidator.fill(form, account);
       return this.updateButtonsDom();
     };
 
     ContaBancaria.prototype.updateButtonsDom = function() {
       this.$el.find('.new').toggleClass('hidden', this.id == null);
-      return this.$el.find('.remove').show('hidden', this.id != null);
+      return this.$el.find('.remove').toggleClass('hidden', this.id == null);
     };
 
     return ContaBancaria;

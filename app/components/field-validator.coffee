@@ -1,8 +1,9 @@
 jsRoot = @
 
 { _, Metasoft } = jsRoot
-
 { money } = Metasoft
+
+rgxNotDigit = /[^\d]/g
 
 inputBackgroundColor = '#FFF9F4'
 
@@ -48,6 +49,20 @@ validators = {
 masks = {
     'mask-money': ($el) -> money.applyMask($el)
     'mask-money-positive': ($el) -> money.applyMask($el, { allowNegative: false })
+    'mask-number-bank': ($el) ->
+        func = () ->
+            f = $(@)
+            val = f.val()
+
+            val = val.replace(rgxNotDigit, '')
+
+            if val.length > 3
+                l = val.length - 1
+                val = val.slice(0, -1) + - + val.slice(l, l+1)
+
+            f.val(val)
+
+        $el.on('keyup', func).on('change', func).on('focusout', func)
 }
 
 buildValidatorFunc = (v) ->
@@ -82,7 +97,9 @@ fieldValidator = {
         $(el).find('.mask-money').val(money.defaultVal).css('color', 'black')
 
     fill: (el, data) ->
+        @reset(el)
         $el = $(el)
+
         for name, value of data
             f = $el.find("[name='#{name}']")
 
@@ -101,7 +118,6 @@ fieldValidator = {
             $(el).find(".#{cls}")
                 .on('change',func)
                 .on('focusout',func)
-                .on('keyup',func)
 
         return
 

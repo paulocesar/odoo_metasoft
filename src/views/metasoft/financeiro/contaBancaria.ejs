@@ -11,18 +11,18 @@
         </div>
 
         <div class="col-md-6">
-            <div class="form-horizontal">
+            <div class="form-horizontal form-conta-banco">
                 <div class="form-group">
                     <label for="banco" class="col-sm-2 control-label">Banco</label>
                     <div class="col-sm-10"><input type="text" name="banco" class="form-control not-empty"></div>
                 </div>
                 <div class="form-group">
                     <label for="agencia" class="col-sm-2 control-label">Agência</label>
-                    <div class="col-sm-10"><input type="text" name="agencia" class="form-control not-empty"></div>
+                    <div class="col-sm-10"><input type="text" name="agencia" class="form-control not-empty mask-number-bank"></div>
                 </div>
                 <div class="form-group">
                     <label for="conta" class="col-sm-2 control-label">Conta</label>
-                    <div class="col-sm-10"><input type="text" name="conta" class="form-control not-empty"></div>
+                    <div class="col-sm-10"><input type="text" name="conta" class="form-control not-empty mask-number-bank"></div>
                 </div>
 
                 <div class="form-group">
@@ -33,7 +33,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button class="btn btn-success save left margin-right">Salvar</button>
-                        <button class="btn btn-default remove left">Excluir</button>
+                        <button class="btn btn-default remove hidden left">Excluir</button>
                         <button class="btn btn-info new hidden right">Novo</button>
                     </div>
                 </div>
