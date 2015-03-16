@@ -11,7 +11,9 @@
   Contas = (function(_super) {
     __extends(Contas, _super);
 
-    function Contas(opts) {}
+    function Contas(opts) {
+      Contas.__super__.constructor.apply(this, arguments);
+    }
 
     return Contas;
 

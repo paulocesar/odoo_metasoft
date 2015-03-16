@@ -9,6 +9,10 @@
 
 .mask-money { text-align: right; }
 
+.subcategory { margin: 5px; }
+
+.display-title { margin-top: 0px; }
+
 .list-container {
     height: 300px;
     overflow-y: scroll;
