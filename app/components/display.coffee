@@ -23,6 +23,10 @@ class Display extends Backbone.View
 
     hide: () -> @$el.hide()
 
+    onShow: () ->
+
+    onHide: () ->
+
     get: (args...) -> Metasoft.post(args...)
     post: (args...) -> Metasoft.post(args...)
 

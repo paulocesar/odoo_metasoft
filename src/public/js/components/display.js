@@ -39,6 +39,10 @@
       return this.$el.hide();
     };
 
+    Display.prototype.onShow = function() {};
+
+    Display.prototype.onHide = function() {};
+
     Display.prototype.get = function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];

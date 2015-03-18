@@ -33,22 +33,3 @@
 .conta-banco-busca {
     margin-bottom: 5px;
 }
-
-/*********
-CONTA BANCARIA
-*********/
-
-#display-contaBancaria .fix-header .banco,
-#display-contaBancaria .list-container .table td.banco {
-    width: 33.3%;
-}
-
-#display-contaBancaria .fix-header .conta,
-#display-contaBancaria .list-container .table td.conta {
-    width: 33.3%;
-}
-
-#display-contaBancaria .fix-header .saldo,
-#display-contaBancaria .list-container .table td.saldo {
-    width: 33.3%;
-}

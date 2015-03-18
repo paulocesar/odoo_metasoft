@@ -34,8 +34,16 @@ MetasoftRouter = Backbone.Router.extend({
     }
 
     goToPage: (name) ->
+        @previousPage ?= ''
+
+        app.displaysById[@previousPage]?.onHide()
+
+
         $('.display').hide()
         $("#display-#{name}").show()
+
+        @previousPage = name
+        app.displaysById[name]?.onShow()
 })
 
 

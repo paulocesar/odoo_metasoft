@@ -52,8 +52,17 @@
       "page/:name": "goToPage"
     },
     goToPage: function(name) {
+      var _ref, _ref1;
+      if (this.previousPage == null) {
+        this.previousPage = '';
+      }
+      if ((_ref = app.displaysById[this.previousPage]) != null) {
+        _ref.onHide();
+      }
       $('.display').hide();
-      return $("#display-" + name).show();
+      $("#display-" + name).show();
+      this.previousPage = name;
+      return (_ref1 = app.displaysById[name]) != null ? _ref1.onShow() : void 0;
     }
   });
 

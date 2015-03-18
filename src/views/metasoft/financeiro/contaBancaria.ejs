@@ -51,9 +51,9 @@
     <tbody>
         {% _.each(items, function (c) { %}
             <tr data-rowid='{%= c.id %}' class='clickable'>
-                <td class='banco'>{%= c.banco %}</td>
-                <td class='conta'>{%= c.agencia %} / {%= c.conta %}</td>
-                <td class='money saldo'>{%= Metasoft.money.html(c.saldo) %}</td>
+                <td class='col-md-4 banco'>{%= c.banco %}</td>
+                <td class='col-md-4 conta'>{%= c.agencia %} / {%= c.conta %}</td>
+                <td class='col-md-4 money saldo'>{%= Metasoft.money.html(c.saldo) %}</td>
             </tr>
         {% }) %}
     </tbody>

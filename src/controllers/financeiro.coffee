@@ -9,7 +9,7 @@ module.exports = C('financeiro', {
     post_upsertContaBancaria: () ->
         data = @json()
         q = @db('contaBancaria')
-        conta = _.omit(data, 'id', 'empresaIs')
+        conta = _.omit(data, 'id')
         tasks = []
 
         if data.id
