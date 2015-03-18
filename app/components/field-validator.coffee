@@ -156,6 +156,31 @@ fieldValidator = {
         )
 
         return data
+
+    isValidAndUnique: (el, items, id, highlightInvalid = false) ->
+        valid = @isValid(el, highlightInvalid)
+
+        form = $(el)
+        unique = true
+
+        if id
+            items = _.filter(items, (i) -> i.id != id)
+
+        form.find('.unique').each(() ->
+            f = $(@)
+            name = f.attr('name')
+            val = $.trim(f.val()).toLowerCase()
+
+            sameVal = (d) -> $.trim("#{d[name]}").toLowerCase() == val
+
+            unless _.isEmpty(_.filter(items, sameVal))
+                unique = false
+
+                errorLabel.apply(f, "Valor já existe") if highlightInvalid
+                return
+        )
+
+        return unique && valid
 }
 
 

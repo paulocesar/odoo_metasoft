@@ -52,7 +52,7 @@
     CrudDisplay.prototype.onClickSave = function() {
       var data, form;
       form = this.$el.find('.form-crud');
-      if (!fieldValidator.isValid(form, true)) {
+      if (!fieldValidator.isValidAndUnique(form, this.crudItems, this.id, true)) {
         return;
       }
       data = fieldValidator.getValues(form);

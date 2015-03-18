@@ -33,7 +33,7 @@ class CrudDisplay extends Metasoft.Display
 
     onClickSave: () =>
         form = @$el.find('.form-crud')
-        unless fieldValidator.isValid(form, true)
+        unless fieldValidator.isValidAndUnique(form, @crudItems, @id, true)
             return
 
         data = fieldValidator.getValues(form)

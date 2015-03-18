@@ -178,6 +178,36 @@
         return data[f.attr('name')] = val;
       });
       return data;
+    },
+    isValidAndUnique: function(el, items, id, highlightInvalid) {
+      var form, unique, valid;
+      if (highlightInvalid == null) {
+        highlightInvalid = false;
+      }
+      valid = this.isValid(el, highlightInvalid);
+      form = $(el);
+      unique = true;
+      if (id) {
+        items = _.filter(items, function(i) {
+          return i.id !== id;
+        });
+      }
+      form.find('.unique').each(function() {
+        var f, name, sameVal, val;
+        f = $(this);
+        name = f.attr('name');
+        val = $.trim(f.val()).toLowerCase();
+        sameVal = function(d) {
+          return $.trim("" + d[name]).toLowerCase() === val;
+        };
+        if (!_.isEmpty(_.filter(items, sameVal))) {
+          unique = false;
+          if (highlightInvalid) {
+            errorLabel.apply(f, "Valor já existe");
+          }
+        }
+      });
+      return unique && valid;
     }
   };
 
