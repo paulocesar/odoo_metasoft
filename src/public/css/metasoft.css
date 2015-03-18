@@ -7,11 +7,14 @@
 
 .error-message { color: #E80808; }
 
-.mask-money { text-align: right; }
+.mask-money, .money { text-align: right; }
 
 .subcategory { margin: 5px; }
 
 .display-title { margin-top: 0px; }
+
+.fix-header { padding: 5px 15px; }
+.fix-header div { padding: 0px; }
 
 .list-container {
     height: 300px;
@@ -29,4 +32,23 @@
 
 .conta-banco-busca {
     margin-bottom: 5px;
+}
+
+/*********
+CONTA BANCARIA
+*********/
+
+#display-contaBancaria .fix-header .banco,
+#display-contaBancaria .list-container .table td.banco {
+    width: 33.3%;
+}
+
+#display-contaBancaria .fix-header .conta,
+#display-contaBancaria .list-container .table td.conta {
+    width: 33.3%;
+}
+
+#display-contaBancaria .fix-header .saldo,
+#display-contaBancaria .list-container .table td.saldo {
+    width: 33.3%;
 }
