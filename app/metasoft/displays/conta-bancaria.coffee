@@ -18,4 +18,6 @@ class ContaBancaria extends Metasoft.CrudDisplay
 
         super
 
+    isValid: () ->
+
 Metasoft.displays.ContaBancaria = ContaBancaria

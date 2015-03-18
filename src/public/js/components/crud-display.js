@@ -43,6 +43,8 @@
       }, this.renderItemlist);
     };
 
+    CrudDisplay.prototype.isValid = function() {};
+
     CrudDisplay.prototype.onClickReset = function() {
       fieldValidator.reset(this.$el.find('.form-crud'));
       this.id = null;
@@ -50,9 +52,10 @@
     };
 
     CrudDisplay.prototype.onClickSave = function() {
-      var data, form;
+      var data, form, valid;
       form = this.$el.find('.form-crud');
-      if (!fieldValidator.isValidAndUnique(form, this.crudItems, this.id, true)) {
+      valid = fieldValidator.isValidAndUnique(form, this.crudItems, this.id, true);
+      if (!(valid && this.isValid())) {
         return;
       }
       data = fieldValidator.getValues(form);

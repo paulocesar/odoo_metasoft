@@ -25,6 +25,8 @@ class CrudDisplay extends Metasoft.Display
         #TODO: remove empresaId from here
         @post(@urls.list, { empresaId: 1 }, @renderItemlist)
 
+    isValid: () ->
+
     onClickReset: () ->
         fieldValidator.reset(@$el.find('.form-crud'))
         @id = null
@@ -33,11 +35,14 @@ class CrudDisplay extends Metasoft.Display
 
     onClickSave: () =>
         form = @$el.find('.form-crud')
-        unless fieldValidator.isValidAndUnique(form, @crudItems, @id, true)
+
+        valid = fieldValidator.isValidAndUnique(form, @crudItems, @id, true)
+        unless valid && @isValid()
             return
 
         data = fieldValidator.getValues(form)
         data.id = @id if @id?
+        #TODO: remove empresaId from here
         data.empresaId = 1
         @post(@urls.upsert, data, @renderItemlist)
 

@@ -18,4 +18,6 @@ class Logins extends Metasoft.CrudDisplay
 
         super
 
+    isValid: () ->
+
 Metasoft.displays.Logins = Logins

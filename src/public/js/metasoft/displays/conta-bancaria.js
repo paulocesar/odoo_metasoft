@@ -24,6 +24,8 @@
       ContaBancaria.__super__.constructor.apply(this, arguments);
     }
 
+    ContaBancaria.prototype.isValid = function() {};
+
     return ContaBancaria;
 
   })(Metasoft.CrudDisplay);

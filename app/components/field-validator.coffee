@@ -157,6 +157,10 @@ fieldValidator = {
 
         return data
 
+    removeError: (input, message) -> errorLabel.remove($(input))
+    addError: (input, message) -> errorLabel.apply($(input), message)
+
+
     isValidAndUnique: (el, items, id, highlightInvalid = false) ->
         valid = @isValid(el, highlightInvalid)
 

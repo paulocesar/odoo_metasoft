@@ -24,6 +24,8 @@
       Logins.__super__.constructor.apply(this, arguments);
     }
 
+    Logins.prototype.isValid = function() {};
+
     return Logins;
 
   })(Metasoft.CrudDisplay);

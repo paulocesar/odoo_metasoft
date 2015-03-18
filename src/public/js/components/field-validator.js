@@ -179,6 +179,12 @@
       });
       return data;
     },
+    removeError: function(input, message) {
+      return errorLabel.remove($(input));
+    },
+    addError: function(input, message) {
+      return errorLabel.apply($(input), message);
+    },
     isValidAndUnique: function(el, items, id, highlightInvalid) {
       var form, unique, valid;
       if (highlightInvalid == null) {
