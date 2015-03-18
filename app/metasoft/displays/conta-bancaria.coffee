@@ -4,60 +4,18 @@ jsRoot = @
 
 { fieldValidator } = Metasoft
 
-class ContaBancaria extends Metasoft.Display
+class ContaBancaria extends Metasoft.CrudDisplay
     constructor: (opts) ->
-        @events = {
-            'click .conta-banco-list tr': 'showBankAccount'
-            'click .save': 'onClickSave'
-            'click .new': 'onClickReset'
-            'keyup .conta-banco-busca': 'filterTerms'
+
+        @urls = {
+            list: 'financeiro/listaContaBancaria'
+            upsert: 'financeiro/upsertContaBancaria'
         }
 
         @tpls = {
-            bankList: _.template($('#tpl-display-contaBancaria-itemConta').html())
+            crudList: _.template($('#tpl-display-contaBancariaListItem').html())
         }
 
-        @accounts = []
-
         super
-
-        @post('financeiro/listaContaBancaria', { empresaId: 1 }, @renderAccounts)
-
-    onClickReset: () ->
-        fieldValidator.reset(@$el.find('.form-conta-banco'))
-        @id = null
-
-        @updateButtonsDom()
-
-    onClickSave: () =>
-        form = @$el.find('.form-conta-banco')
-        unless fieldValidator.isValid(form, true)
-            return
-
-        data = fieldValidator.getValues(form)
-        data.id = @id if @id?
-        data.empresaId = 1
-        @post('financeiro/upsertContaBancaria', data, @renderAccounts)
-
-    renderAccounts: (@accounts) =>
-        @$el.find('.conta-banco-list').html(@tpls.bankList({ contas: @accounts }))
-        @filterTerms()
-
-    filterTerms: () =>
-        query = @$el.find('.conta-banco-busca').val()
-        Metasoft.filter(@$el.find('.conta-banco-list'), query)
-
-    showBankAccount: (ev) ->
-        @id = $(ev.currentTarget).data('rowid')
-        account = _.findWhere(@accounts, { @id })
-
-        form = @$el.find('.form-conta-banco')
-        fieldValidator.fill(form, account)
-
-        @updateButtonsDom()
-
-    updateButtonsDom: () ->
-        @$el.find('.new').toggleClass('hidden', !@id?)
-        @$el.find('.remove').toggleClass('hidden', !@id?)
 
 Metasoft.displays.ContaBancaria = ContaBancaria
