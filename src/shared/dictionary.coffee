@@ -10,8 +10,14 @@ else
     jsRoot.dictionary = dictionary
 
 _.extend(dictionary, {
-    bank: {
+    banksById: {
         "001": "001 - Banco do Brasil"
         "002": "002 - Bradesco"
+    }
+
+    rolesById: {
+        financeiro: 'Financeiro'
+        contabil: 'Contábil'
+        admin: 'Administrador'
     }
 })
