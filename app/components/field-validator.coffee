@@ -94,6 +94,12 @@ fieldValidator = {
         $(el).find('input, textarea').css('background-color', 'white')
         $(el).find('.error-message').remove()
         $(el).find('input, textarea').val('')
+
+        $(el).find('select').each(() ->
+            s = $(@)
+            s.val(s.find("option:first").val())
+        )
+
         $(el).find('.mask-money').val(money.defaultVal).css('color', 'black')
 
     fill: (el, data) ->
@@ -149,7 +155,7 @@ fieldValidator = {
     getValues: (el) ->
         data = {}
 
-        $(el).find('input, textarea').each(() ->
+        $(el).find('input, textarea, select').each(() ->
             f = $(@)
             val = if hasMoneyClass(f) then f.maskMoney('unmasked')[0] else f.val()
             data[f.attr('name')] = val

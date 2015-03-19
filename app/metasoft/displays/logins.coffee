@@ -9,7 +9,8 @@ class Logins extends Metasoft.CrudDisplay
 
         @urls = {
             list: 'configs/listaLogins'
-            upsert: 'configs/upsertLogins'
+            upsert: 'configs/upsertLogin'
+            remove: 'configs/removeLogin'
         }
 
         @tpls = {
@@ -17,7 +18,5 @@ class Logins extends Metasoft.CrudDisplay
         }
 
         super
-
-    isValid: () ->
 
 Metasoft.displays.Logins = Logins

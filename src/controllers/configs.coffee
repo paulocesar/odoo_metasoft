@@ -4,9 +4,9 @@ module.exports = C('configs', {
     post_listaLogins: () ->
         data = @json()
 
-        @_listaLogins(data.empresaId, @sendErrorOrData)
+        @_listaLogins(data.empresaId, @sendDataOrError)
 
-    post_upsertLogins: () ->
+    post_upsertLogin: () ->
         data = @json()
         q = @db('login')
         login = _.omit(data, 'id')
@@ -23,7 +23,11 @@ module.exports = C('configs', {
 
         tasks.push((rows, cb) => @_listaLogins(data.empresaId, cb))
 
-        A.waterfall(tasks, @sendErrorOrData)
+        A.waterfall(tasks, @sendDataOrError)
+
+    post_removeLogin: () ->
+        data = @json()
+        @db('login').where('id', data.id).del().exec(@sendDataOrError)
 
     _listaLogins: (empresaId, cb) ->
         @db.select('*')

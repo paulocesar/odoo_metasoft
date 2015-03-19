@@ -4,7 +4,7 @@ module.exports = C('financeiro', {
     post_listaContaBancaria: () ->
         data = @json()
 
-        @_listaContas(data.empresaId, @sendErrorOrData)
+        @_listaContas(data.empresaId, @sendDataOrError)
 
     post_upsertContaBancaria: () ->
         data = @json()
@@ -23,7 +23,11 @@ module.exports = C('financeiro', {
 
         tasks.push((rows, cb) => @_listaContas(data.empresaId, cb))
 
-        A.waterfall(tasks, @sendErrorOrData)
+        A.waterfall(tasks, @sendDataOrError)
+
+    post_removeContaBancaria: () ->
+        data = @json()
+        @db('contaBancaria').where('id', data.id).del().exec(@sendDataOrError)
 
     _listaContas: (empresaId, cb) ->
         @db.select('*')

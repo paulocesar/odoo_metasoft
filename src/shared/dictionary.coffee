@@ -1,17 +1,17 @@
 jsRoot = @
 
-identifiers = {}
+dictionary = {}
 
-if module.exports
+if module?.exports?
     _ = require('underscore')
-    module.exports = identifiers
+    module.exports = dictionary
 else
     { _ } = jsRoot
-    jsRoot.identifiers = identifiers
+    jsRoot.dictionary = dictionary
 
-_.extend(identifiers, {
-    bank {
-        1: "001 - Banco do Brasil"
-        2: "002 - Bradesco"
+_.extend(dictionary, {
+    bank: {
+        "001": "001 - Banco do Brasil"
+        "002": "002 - Bradesco"
     }
 })

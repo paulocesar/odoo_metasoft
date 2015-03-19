@@ -16,15 +16,14 @@
     function Logins(opts) {
       this.urls = {
         list: 'configs/listaLogins',
-        upsert: 'configs/upsertLogins'
+        upsert: 'configs/upsertLogin',
+        remove: 'configs/removeLogin'
       };
       this.tpls = {
         crudList: _.template($('#tpl-display-loginsListItem').html())
       };
       Logins.__super__.constructor.apply(this, arguments);
     }
-
-    Logins.prototype.isValid = function() {};
 
     return Logins;
 

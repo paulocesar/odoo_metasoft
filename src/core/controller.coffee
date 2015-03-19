@@ -42,7 +42,7 @@ class Controller
                 json: () -> JSON.parse(req.body.data)
                 sendData: (data) => res.json({ success: true, data: JSON.stringify(data) })
                 sendError: (err) => res.send({ status: false, data: JSON.stringify(err) })
-                sendErrorOrData: (err, data) =>
+                sendDataOrError: (err, data) =>
                     if err?
                         return res.send({ status: false, data: JSON.stringify(err) })
                     res.json({ success: true, data: JSON.stringify(data) })

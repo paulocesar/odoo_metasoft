@@ -11,9 +11,10 @@ class CrudDisplay extends Metasoft.Display
         @events ?= {}
 
         _.defaults(@events, {
-            'click .crud-list tr': 'showItemInForm'
+            'click .crud-list tr': 'onClickItemList'
             'click .save': 'onClickSave'
             'click .new': 'onClickReset'
+            'click .remove': 'onClickRemove'
             'keyup .crud-busca': 'filterTerms'
         })
 
@@ -21,46 +22,53 @@ class CrudDisplay extends Metasoft.Display
 
         super
 
-    onShow: () ->
+        @form = @$el.find('.form-crud')
+
+    onShow: () -> @refreshList()
+
+    refreshList: () ->
         #TODO: remove empresaId from here
         @post(@urls.list, { empresaId: 1 }, @renderItemlist)
 
-    isValid: () ->
+    isValid: () -> true
 
     onClickReset: () ->
-        fieldValidator.reset(@$el.find('.form-crud'))
+        fieldValidator.reset(@form)
         @id = null
-
         @updateButtonsDom()
 
     onClickSave: () =>
-        form = @$el.find('.form-crud')
-
-        valid = fieldValidator.isValidAndUnique(form, @crudItems, @id, true)
+        valid = fieldValidator.isValidAndUnique(@form, @crudItems, @id, true)
         unless valid && @isValid()
             return
 
-        data = fieldValidator.getValues(form)
+        data = fieldValidator.getValues(@form)
         data.id = @id if @id?
         #TODO: remove empresaId from here
         data.empresaId = 1
         @post(@urls.upsert, data, @renderItemlist)
 
+    onClickRemove: () =>
+        @post(@urls.remove, { @id }, (res) =>
+            @refreshList()
+        )
+
     renderItemlist: (@crudItems) =>
         @$el.find('.crud-list').html(@tpls.crudList({ items: @crudItems }))
         @filterTerms()
+        fieldValidator.reset(@form)
 
     filterTerms: () =>
         query = @$el.find('.crud-busca').val()
         Metasoft.filter(@$el.find('.crud-list'), query)
 
-    showItemInForm: (ev) ->
-        @id = $(ev.currentTarget).data('rowid')
+    onClickItemList: (ev) ->
+        id = $(ev.currentTarget).data('rowid')
+        @showItemInForm(id)
+
+    showItemInForm: (@id) ->
         account = _.findWhere(@crudItems, { @id })
-
-        form = @$el.find('.form-crud')
-        fieldValidator.fill(form, account)
-
+        fieldValidator.fill(@form, account)
         @updateButtonsDom()
 
     updateButtonsDom: () ->

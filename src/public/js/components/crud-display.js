@@ -17,6 +17,7 @@
     function CrudDisplay(opts) {
       this.filterTerms = __bind(this.filterTerms, this);
       this.renderItemlist = __bind(this.renderItemlist, this);
+      this.onClickRemove = __bind(this.onClickRemove, this);
       this.onClickSave = __bind(this.onClickSave, this);
       if (this.urls == null) {
         this.urls = {};
@@ -28,37 +29,44 @@
         this.events = {};
       }
       _.defaults(this.events, {
-        'click .crud-list tr': 'showItemInForm',
+        'click .crud-list tr': 'onClickItemList',
         'click .save': 'onClickSave',
         'click .new': 'onClickReset',
+        'click .remove': 'onClickRemove',
         'keyup .crud-busca': 'filterTerms'
       });
       this.crudItems = [];
       CrudDisplay.__super__.constructor.apply(this, arguments);
+      this.form = this.$el.find('.form-crud');
     }
 
     CrudDisplay.prototype.onShow = function() {
+      return this.refreshList();
+    };
+
+    CrudDisplay.prototype.refreshList = function() {
       return this.post(this.urls.list, {
         empresaId: 1
       }, this.renderItemlist);
     };
 
-    CrudDisplay.prototype.isValid = function() {};
+    CrudDisplay.prototype.isValid = function() {
+      return true;
+    };
 
     CrudDisplay.prototype.onClickReset = function() {
-      fieldValidator.reset(this.$el.find('.form-crud'));
+      fieldValidator.reset(this.form);
       this.id = null;
       return this.updateButtonsDom();
     };
 
     CrudDisplay.prototype.onClickSave = function() {
-      var data, form, valid;
-      form = this.$el.find('.form-crud');
-      valid = fieldValidator.isValidAndUnique(form, this.crudItems, this.id, true);
+      var data, valid;
+      valid = fieldValidator.isValidAndUnique(this.form, this.crudItems, this.id, true);
       if (!(valid && this.isValid())) {
         return;
       }
-      data = fieldValidator.getValues(form);
+      data = fieldValidator.getValues(this.form);
       if (this.id != null) {
         data.id = this.id;
       }
@@ -66,12 +74,23 @@
       return this.post(this.urls.upsert, data, this.renderItemlist);
     };
 
+    CrudDisplay.prototype.onClickRemove = function() {
+      return this.post(this.urls.remove, {
+        id: this.id
+      }, (function(_this) {
+        return function(res) {
+          return _this.refreshList();
+        };
+      })(this));
+    };
+
     CrudDisplay.prototype.renderItemlist = function(_at_crudItems) {
       this.crudItems = _at_crudItems;
       this.$el.find('.crud-list').html(this.tpls.crudList({
         items: this.crudItems
       }));
-      return this.filterTerms();
+      this.filterTerms();
+      return fieldValidator.reset(this.form);
     };
 
     CrudDisplay.prototype.filterTerms = function() {
@@ -80,14 +99,19 @@
       return Metasoft.filter(this.$el.find('.crud-list'), query);
     };
 
-    CrudDisplay.prototype.showItemInForm = function(ev) {
-      var account, form;
-      this.id = $(ev.currentTarget).data('rowid');
+    CrudDisplay.prototype.onClickItemList = function(ev) {
+      var id;
+      id = $(ev.currentTarget).data('rowid');
+      return this.showItemInForm(id);
+    };
+
+    CrudDisplay.prototype.showItemInForm = function(_at_id) {
+      var account;
+      this.id = _at_id;
       account = _.findWhere(this.crudItems, {
         id: this.id
       });
-      form = this.$el.find('.form-crud');
-      fieldValidator.fill(form, account);
+      fieldValidator.fill(this.form, account);
       return this.updateButtonsDom();
     };
 

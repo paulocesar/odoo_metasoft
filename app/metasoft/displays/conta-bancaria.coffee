@@ -10,6 +10,7 @@ class ContaBancaria extends Metasoft.CrudDisplay
         @urls = {
             list: 'financeiro/listaContaBancaria'
             upsert: 'financeiro/upsertContaBancaria'
+            remove: 'financeiro/removeContaBancaria'
         }
 
         @tpls = {
@@ -17,7 +18,5 @@ class ContaBancaria extends Metasoft.CrudDisplay
         }
 
         super
-
-    isValid: () ->
 
 Metasoft.displays.ContaBancaria = ContaBancaria
