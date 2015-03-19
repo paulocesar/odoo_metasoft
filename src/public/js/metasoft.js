@@ -33,7 +33,7 @@
       return this.container.html(data);
     },
     post: function(action, data, callback) {
-      return $.post("/" + action, {
+      return $.post("/" + action + "/" + this.empresaId, {
         data: JSON.stringify(data)
       }, (function(_this) {
         return function(raw) {
@@ -58,6 +58,6 @@
     }
   };
 
-  jsRoot.Metasoft = Metasoft;
+  _.extend(jsRoot.Metasoft, Metasoft);
 
 }).call(this);

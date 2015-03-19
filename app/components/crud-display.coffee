@@ -27,12 +27,13 @@ class CrudDisplay extends Metasoft.Display
     onShow: () -> @refreshList()
 
     refreshList: () ->
-        #TODO: remove empresaId from here
-        @post(@urls.list, { empresaId: 1 }, @renderItemlist)
+        @post(@urls.list, { }, @renderItemlist)
 
     isValid: () -> true
 
-    onClickReset: () ->
+    onClickReset: () -> @resetForm()
+
+    resetForm: () ->
         fieldValidator.reset(@form)
         @id = null
         @updateButtonsDom()
@@ -44,8 +45,6 @@ class CrudDisplay extends Metasoft.Display
 
         data = fieldValidator.getValues(@form)
         data.id = @id if @id?
-        #TODO: remove empresaId from here
-        data.empresaId = 1
         @post(@urls.upsert, data, @renderItemlist)
 
     onClickRemove: () =>
@@ -56,7 +55,7 @@ class CrudDisplay extends Metasoft.Display
     renderItemlist: (@crudItems) =>
         @$el.find('.crud-list').html(@tpls.crudList({ items: @crudItems }))
         @filterTerms()
-        fieldValidator.reset(@form)
+        @resetForm()
 
     filterTerms: () =>
         query = @$el.find('.crud-busca').val()

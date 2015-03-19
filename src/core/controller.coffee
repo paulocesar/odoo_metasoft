@@ -28,12 +28,15 @@ class Controller
         return @
 
     _addEndpoint: (method, action, cb) ->
-        path = "/#{@name}/#{action}"
+        path = "/#{@name}/#{action}/:empresaId"
 
         @router[method.toLowerCase()](path, (req, res) =>
             db = require('knex')(config.database)
 
+            empresaId = req.params.empresaId
+
             data = {
+                empresaId
                 req
                 res
                 db

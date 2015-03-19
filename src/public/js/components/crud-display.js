@@ -45,9 +45,7 @@
     };
 
     CrudDisplay.prototype.refreshList = function() {
-      return this.post(this.urls.list, {
-        empresaId: 1
-      }, this.renderItemlist);
+      return this.post(this.urls.list, {}, this.renderItemlist);
     };
 
     CrudDisplay.prototype.isValid = function() {
@@ -55,6 +53,10 @@
     };
 
     CrudDisplay.prototype.onClickReset = function() {
+      return this.resetForm();
+    };
+
+    CrudDisplay.prototype.resetForm = function() {
       fieldValidator.reset(this.form);
       this.id = null;
       return this.updateButtonsDom();
@@ -70,7 +72,6 @@
       if (this.id != null) {
         data.id = this.id;
       }
-      data.empresaId = 1;
       return this.post(this.urls.upsert, data, this.renderItemlist);
     };
 
@@ -90,7 +91,7 @@
         items: this.crudItems
       }));
       this.filterTerms();
-      return fieldValidator.reset(this.form);
+      return this.resetForm();
     };
 
     CrudDisplay.prototype.filterTerms = function() {

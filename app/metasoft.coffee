@@ -33,7 +33,7 @@ Metasoft = {
         @container.html(data)
 
     post: (action, data, callback) ->
-        $.post "/#{action}", {data: JSON.stringify(data)}, (raw) =>
+        $.post "/#{action}/#{@empresaId}", {data: JSON.stringify(data)}, (raw) =>
             res = @evalResponse(raw.data)
 
             unless raw.success
@@ -50,4 +50,4 @@ Metasoft.utils = {
     firstToLower: (str) -> str.charAt(0).toLowerCase() + str.slice(1)
 }
 
-jsRoot.Metasoft = Metasoft
+_.extend(jsRoot.Metasoft, Metasoft)

@@ -4,12 +4,13 @@ module.exports = C('financeiro', {
     post_listaContaBancaria: () ->
         data = @json()
 
-        @_listaContas(data.empresaId, @sendDataOrError)
+        @_listaContas(@sendDataOrError)
 
     post_upsertContaBancaria: () ->
         data = @json()
         q = @db('contaBancaria')
         conta = _.omit(data, 'id')
+        conta.empresaId = @empresaId
         tasks = []
 
         if data.id
@@ -21,7 +22,7 @@ module.exports = C('financeiro', {
         else
             tasks.push((cb) -> q.insert(conta).exec(cb))
 
-        tasks.push((rows, cb) => @_listaContas(data.empresaId, cb))
+        tasks.push((rows, cb) => @_listaContas(cb))
 
         A.waterfall(tasks, @sendDataOrError)
 
@@ -29,10 +30,10 @@ module.exports = C('financeiro', {
         data = @json()
         @db('contaBancaria').where('id', data.id).del().exec(@sendDataOrError)
 
-    _listaContas: (empresaId, cb) ->
+    _listaContas: (cb) ->
         @db.select('*')
             .from('contaBancaria')
-            .where('empresaId', empresaId)
+            .where('empresaId', @empresaId)
             .exec(cb)
 
 })

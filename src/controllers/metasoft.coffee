@@ -2,6 +2,6 @@
 
 module.exports = C('metasoft', {
     get_index: () ->
-        @res.render('metasoft/index', { title: 'Metasoft' })
+        @res.render('metasoft/index', { title: 'Metasoft', @empresaId })
 
 })
