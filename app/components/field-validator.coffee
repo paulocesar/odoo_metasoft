@@ -3,7 +3,7 @@ jsRoot = @
 { _, Metasoft } = jsRoot
 { money } = Metasoft
 
-rgxNotDigit = /[^\d]/g
+rgxNotBankDigit = /[^\dx]/g
 
 inputBackgroundColor = '#FFF9F4'
 
@@ -52,13 +52,13 @@ masks = {
     'mask-number-bank': ($el) ->
         func = () ->
             f = $(@)
-            val = f.val()
+            val = "#{f.val()}"
 
-            val = val.replace(rgxNotDigit, '')
+            val = val.replace(rgxNotBankDigit, '')
 
             if val.length > 3
                 l = val.length - 1
-                val = val.slice(0, -1) + - + val.slice(l, l+1)
+                val = val.slice(0, -1) + "-" + val.slice(l, l+1)
 
             f.val(val)
 
