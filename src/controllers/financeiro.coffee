@@ -10,5 +10,4 @@ module.exports = C('financeiro', {
 
     post_removeContaBancaria: () ->
         @ms.crud().remove('contaBancaria', @json(), @sendDataOrError)
-
 })

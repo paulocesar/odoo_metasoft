@@ -109,6 +109,10 @@ fieldValidator = {
         for name, value of data
             f = $el.find("[name='#{name}']")
 
+            if f.attr('type') == 'checkbox'
+                f.prop('checked', value)
+                continue
+
             if hasMoneyClass(f)
                 f.css('color', money.getColor(value))
                 value = money.format(value)
@@ -159,6 +163,11 @@ fieldValidator = {
             f = $(@)
             val = if hasMoneyClass(f) then f.maskMoney('unmasked')[0] else f.val()
             data[f.attr('name')] = val
+        )
+
+        $(el).find('input[type="checkbox"]').each(() ->
+            f = $(@)
+            data[f.attr('name')] = if f.is(":checked") then '1' else '0'
         )
 
         return data

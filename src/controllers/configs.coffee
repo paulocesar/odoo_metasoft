@@ -11,6 +11,8 @@ module.exports = C('configs', {
     post_removeLogin: () ->
         @ms.crud().remove('login', @json(), @sendDataOrError)
 
+
+
     post_listaCentroCusto: () ->
         @ms.crud().listWithEmpresa('centroCusto', @sendDataOrError)
 
@@ -21,4 +23,15 @@ module.exports = C('configs', {
     post_removeCentroCusto: () ->
         @ms.crud().remove('centroCusto', @json(), @sendDataOrError)
 
+
+
+    post_listaMetodoPagamento: () ->
+        @ms.crud().listWithEmpresa('metodoPagamento', @sendDataOrError)
+
+    post_upsertMetodoPagamento: () ->
+        data = _.extend({ @empresaId }, @json())
+        @ms.crud().upsertWithEmpresa('metodoPagamento', data, @sendDataOrError)
+
+    post_removeMetodoPagamento: () ->
+        @ms.crud().remove('metodoPagamento', @json(), @sendDataOrError)
 })

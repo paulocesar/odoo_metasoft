@@ -1,3 +1,4 @@
+util = require('util')
 express = require('express')
 _ = require('underscore')
 Context = require('./context')
@@ -47,6 +48,7 @@ class Controller
                 sendError: (err) => res.send({ status: false, data: JSON.stringify(err) })
                 sendDataOrError: (err, data) =>
                     if err?
+                        console.log(util.inspect(err, false, null))
                         return res.send({ status: false, data: JSON.stringify(err) })
                     res.json({ success: true, data: JSON.stringify(data) })
             }

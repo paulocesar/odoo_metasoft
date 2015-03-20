@@ -127,6 +127,10 @@
       for (name in data) {
         value = data[name];
         f = $el.find("[name='" + name + "']");
+        if (f.attr('type') === 'checkbox') {
+          f.prop('checked', value);
+          continue;
+        }
         if (hasMoneyClass(f)) {
           f.css('color', money.getColor(value));
           value = money.format(value);
@@ -181,6 +185,11 @@
         f = $(this);
         val = hasMoneyClass(f) ? f.maskMoney('unmasked')[0] : f.val();
         return data[f.attr('name')] = val;
+      });
+      $(el).find('input[type="checkbox"]').each(function() {
+        var f;
+        f = $(this);
+        return data[f.attr('name')] = f.is(":checked") ? '1' : '0';
       });
       return data;
     },
