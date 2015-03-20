@@ -8,13 +8,9 @@ class Logins extends Metasoft.CrudDisplay
     constructor: (opts) ->
 
         @urls = {
-            list: 'configs/listaLogins'
+            list: 'configs/listaLogin'
             upsert: 'configs/upsertLogin'
             remove: 'configs/removeLogin'
-        }
-
-        @tpls = {
-            crudList: _.template($('#tpl-display-loginsListItem').html())
         }
 
         super

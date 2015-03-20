@@ -22,6 +22,10 @@ class CrudDisplay extends Metasoft.Display
 
         super
 
+        _.defaults(@tpls, {
+            crudList: _.template($("#tpl-display-#{@name}ListItem").html())
+        })
+
         @form = @$el.find('.form-crud')
 
     onShow: () -> @refreshList()

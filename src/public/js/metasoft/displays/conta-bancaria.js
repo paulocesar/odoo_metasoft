@@ -19,9 +19,6 @@
         upsert: 'financeiro/upsertContaBancaria',
         remove: 'financeiro/removeContaBancaria'
       };
-      this.tpls = {
-        crudList: _.template($('#tpl-display-contaBancariaListItem').html())
-      };
       ContaBancaria.__super__.constructor.apply(this, arguments);
     }
 

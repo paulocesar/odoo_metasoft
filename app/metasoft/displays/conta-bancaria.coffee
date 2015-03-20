@@ -13,10 +13,6 @@ class ContaBancaria extends Metasoft.CrudDisplay
             remove: 'financeiro/removeContaBancaria'
         }
 
-        @tpls = {
-            crudList: _.template($('#tpl-display-contaBancariaListItem').html())
-        }
-
         super
 
 Metasoft.displays.ContaBancaria = ContaBancaria

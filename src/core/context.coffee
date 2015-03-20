@@ -1,7 +1,7 @@
 fs = require('fs')
 
 class Context
-    constructor: (@db) ->
+    constructor: (@db, @empresaId) ->
 
     @injectModels: () ->
         requireDirs = [ 'models' ]

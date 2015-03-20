@@ -2,38 +2,13 @@
 
 module.exports = C('financeiro', {
     post_listaContaBancaria: () ->
-        data = @json()
-
-        @_listaContas(@sendDataOrError)
+        @ms.crud().listWithEmpresa('contaBancaria', @sendDataOrError)
 
     post_upsertContaBancaria: () ->
-        data = @json()
-        q = @db('contaBancaria')
-        conta = _.omit(data, 'id')
-        conta.empresaId = @empresaId
-        tasks = []
-
-        if data.id
-            tasks.push((cb) ->
-                q.where('id', data.id)
-                    .update(conta)
-                    .exec(cb)
-            )
-        else
-            tasks.push((cb) -> q.insert(conta).exec(cb))
-
-        tasks.push((rows, cb) => @_listaContas(cb))
-
-        A.waterfall(tasks, @sendDataOrError)
+        data = _.extend({ @empresaId }, @json())
+        @ms.crud().upsertWithEmpresa('contaBancaria', data, @sendDataOrError)
 
     post_removeContaBancaria: () ->
-        data = @json()
-        @db('contaBancaria').where('id', data.id).del().exec(@sendDataOrError)
-
-    _listaContas: (cb) ->
-        @db.select('*')
-            .from('contaBancaria')
-            .where('empresaId', @empresaId)
-            .exec(cb)
+        @ms.crud().remove('contaBancaria', @json(), @sendDataOrError)
 
 })

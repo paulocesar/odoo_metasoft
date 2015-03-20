@@ -1,39 +1,24 @@
 { C, _, A } = require('../core/requires')
 
 module.exports = C('configs', {
-    post_listaLogins: () ->
-        data = @json()
-
-        @_listaLogins(@sendDataOrError)
+    post_listaLogin: () ->
+        @ms.crud().listWithEmpresa('login', @sendDataOrError)
 
     post_upsertLogin: () ->
-        data = @json()
-        q = @db('login')
-        login = _.omit(data, 'id')
-        login.empresaId = @empresaId
-        tasks = []
-
-        if data.id
-            tasks.push((cb) ->
-                q.where('id', data.id)
-                    .update(login)
-                    .exec(cb)
-            )
-        else
-            tasks.push((cb) -> q.insert(login).exec(cb))
-
-        tasks.push((rows, cb) => @_listaLogins(cb))
-
-        A.waterfall(tasks, @sendDataOrError)
+        data = _.extend({ @empresaId }, @json())
+        @ms.crud().upsertWithEmpresa('login', data, @sendDataOrError)
 
     post_removeLogin: () ->
-        data = @json()
-        @db('login').where('id', data.id).del().exec(@sendDataOrError)
+        @ms.crud().remove('login', @json(), @sendDataOrError)
 
-    _listaLogins: (cb) ->
-        @db.select('*')
-            .from('login')
-            .where('empresaId', @empresaId)
-            .exec(cb)
+    post_listaCentroCusto: () ->
+        @ms.crud().listWithEmpresa('centroCusto', @sendDataOrError)
+
+    post_upsertCentroCusto: () ->
+        data = _.extend({ @empresaId }, @json())
+        @ms.crud().upsertWithEmpresa('centroCusto', data, @sendDataOrError)
+
+    post_removeCentroCusto: () ->
+        @ms.crud().remove('centroCusto', @json(), @sendDataOrError)
 
 })

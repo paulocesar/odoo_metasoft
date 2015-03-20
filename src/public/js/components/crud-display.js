@@ -37,6 +37,9 @@
       });
       this.crudItems = [];
       CrudDisplay.__super__.constructor.apply(this, arguments);
+      _.defaults(this.tpls, {
+        crudList: _.template($("#tpl-display-" + this.name + "ListItem").html())
+      });
       this.form = this.$el.find('.form-crud');
     }
 
