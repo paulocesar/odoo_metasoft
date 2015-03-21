@@ -6,6 +6,8 @@ config = require('../../config')
 
 rgxHttpMethod = /^(get|post)_[a-zA-Z]+/
 
+db = require('knex')(config.database)
+
 class Controller
 
     constructor: (@name, @content) ->
@@ -32,8 +34,6 @@ class Controller
         path = "/#{@name}/#{action}/:empresaId"
 
         @router[method.toLowerCase()](path, (req, res) =>
-            db = require('knex')(config.database)
-
             empresaId = req.params.empresaId
 
             data = {

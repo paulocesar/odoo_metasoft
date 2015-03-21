@@ -1,20 +1,45 @@
 <script type='template' id='tpl-display-contas' class='tpl'>
+    <h2 class='display-title'>Lançamentos</h2>
 
-<h2 class='display-title'>Contas</h2>
+    <div class="row">
+        <div class="col-md-2 buttons-container">
+            <button class="btn btn-default btn-block" data-toggle="modal" data-target=".modal-conta-receber">
+                <span class="glyphicon glyphicon-plus-sign"></span> Conta a Receber
+            </button>
 
-<div class="row">
-    <div class="col-md-2 buttons-container">
-        <button class="btn btn-default btn-block" data-toggle="modal" data-target=".modal-conta-receber">
-            + Conta a Receber
-        </button>
-
-        <button class="btn btn-default btn-block" data-toggle="modal" data-target=".modal-conta-pagar">
-            + Conta a Pagar
-        </button>
-    </div>
-    <div class="col-md-10">
-        <div class="list-container">
-            <table class="table table-striped table-hover">
+            <button class="btn btn-default btn-block" data-toggle="modal" data-target=".modal-conta-pagar">
+                <span class="glyphicon glyphicon-plus-sign"></span> Conta a Pagar
+            </button>
+        </div>
+        <div class="col-md-10">
+            <div class='row'>
+                <div class='col-md-3'>
+                    <input type='text' class='form-control' placeHolder="buscar..." />
+                </div>
+                <div class='col-md-5'>
+                    <button class='btn btn-default'>Todos</button>
+                    <button class='btn btn-default'>Receber</button>
+                    <button class='btn btn-default'>Pagar</button>
+                    <div class="dropdown" style='float: right'>
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                            Dia
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Dia</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mês</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class='col-md-4'>
+                    <div class="input-group">
+                        <span class="input-group-addon"><</span>
+                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                        <span class="input-group-addon">></span>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover table-header">
                 <thead>
                     <tr>
                         <td>Data</td>
@@ -23,43 +48,136 @@
                     </tr>
                 </thead>
             </table>
+            <div class="list-container">
+                <table class="table table-striped table-hover">
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade modal-conta-receber" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Conta a Receber</h4>
-            </div>
-            <div class="modal-body">
-            ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-success">Salvar</button>
+    <div class="modal fade modal-conta-receber" tabindex="-1" role="dialog" aria-labelledby="modalReceber" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Conta a Receber</h4>
+                </div>
+                <div class="modal-body">
+                    {%= subTpls.form({ aReceber: true, subTpls: subTpls }) %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-success">Salvar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade modal-conta-pagar" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Conta a Pagar</h4>
-            </div>
-            <div class="modal-body">
-            ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-success">Salvar</button>
+
+    <div class="modal fade modal-conta-pagar" tabindex="-1" role="dialog" aria-labelledby="modalReceber" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Conta a Receber</h4>
+                </div>
+                <div class="modal-body">
+                    {%= subTpls.form({ aReceber: true, subTpls: subTpls }) %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-success">Salvar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</script>
+
+<script type='template' id='subtpl-display-contas-form'>
+    <div class="form-horizontal form-crud">
+        <input type="hidden" name="id">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="form-group">
+                    <label for="centroCustoId" class="col-md-4 control-label">Centro de Custo</label>
+                    <div class="col-md-8"><select name="centroCustoId" class="form-control">
+                        {% _.each(dictionary.banksById, function (name, value) { %}
+                            <option value="{%= value %}">{%= name %}</option>
+                        {% }); %}
+                    </select></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="metodoPagamentoId" class="col-md-4 control-label">Forma de Pagamento</label>
+                    <div class="col-md-8"><select name="metodoPagamentoId" class="form-control">
+                        {% _.each(dictionary.banksById, function (name, value) { %}
+                            <option value="{%= value %}">{%= name %}</option>
+                        {% }); %}
+                    </select></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contaBancariaId" class="col-md-4 control-label">Conta Bancária</label>
+                    <div class="col-md-8"><select name="contaBancariaId" class="form-control">
+                        {% _.each(dictionary.banksById, function (name, value) { %}
+                            <option value="{%= value %}">{%= name %}</option>
+                        {% }); %}
+                    </select></div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="valorBruto" class="col-md-4 control-label">Valor Bruto</label>
+                    <div class="col-md-8"><input type="text" name="valorBruto" class="form-control not-empty mask-money-positive"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="valorLiquido" class="col-md-4 control-label">Valor Líquido</label>
+                    <div class="col-md-8"><input type="text" name="valorLiquido" class="form-control not-empty mask-money-positive"></div>
+                </div>
+                <div class="form-group">
+                    <label for="parcelas" class="col-md-4 control-label">Parcelas</label>
+                    <div class="col-md-8"><input type="text" name="parcelas" value="1" class="form-control not-empty not-zero mask-only-number"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label for="descricao" class="col-md-12 descricao">Observações</label>
+                <div class="form-group">
+                    <div class="col-md-12"><textarea class="form-control" name="descricao" rows="3"></textarea></textarea></div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <table class="table table-striped table-hover table-header">
+                    <thead>
+                        <tr>
+                            <td class='col-md-2'>Numero</td>
+                            <td class='col-md-5'>Vencimento</td>
+                            <td class='col-md-5'>Valor</td>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="list-container parcelas-container">
+                    <table class="table table-striped table-hover">
+                        <tbody class="parcelas">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</script>
+
+<script type='template' id="subtpl-display-contas-parcelaItem">
+    <tr class='parcela-item' data-rowid='{%= id %}'>
+        <td class='col-md-2'>{%= numero %}<input type='hidden' name="id" value="{%= id %}"></td>
+        <td class='col-md-5'><input type='text' name="dataVencimento" value="{%= dataVencimento %}"></td>
+        <td class='col-md-5'><input type='text' name="valor" class="mask-money-positive" value="{%= valor %}"></td>
+    </tr>
 </script>

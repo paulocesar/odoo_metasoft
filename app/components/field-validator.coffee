@@ -4,6 +4,7 @@ jsRoot = @
 { money } = Metasoft
 
 rgxNotBankDigit = /[^\dx]/g
+rgxNotDigit = /[^\d]/g
 
 inputBackgroundColor = '#FFF9F4'
 
@@ -61,6 +62,13 @@ masks = {
                 val = val.slice(0, -1) + "-" + val.slice(l, l+1)
 
             f.val(val)
+
+        $el.on('keyup', func).on('change', func).on('focusout', func)
+
+    'mask-only-number': ($el) ->
+        func = () ->
+            f = $(@)
+            f.val("#{f.val()}".replace(rgxNotDigit, ''))
 
         $el.on('keyup', func).on('change', func).on('focusout', func)
 }

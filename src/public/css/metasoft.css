@@ -7,7 +7,12 @@
 
 .error-message { color: #E80808; }
 
-.mask-money, .money { text-align: right; }
+.money,
+.mask-money,
+.mask-money-positive,
+.mask-only-number {
+    text-align: right;
+}
 
 .subcategory { margin: 5px; }
 
@@ -17,7 +22,7 @@
 .fix-header div { padding: 0px; }
 
 .list-container {
-    height: 400px;
+    height: 350px;
     overflow-y: scroll;
     border: 1px solid #E8E8E8;
 }
@@ -34,6 +39,23 @@
     margin-bottom: 5px;
 }
 
+.fix-header,
+#display-contas table.table-header {
+    font-weight: bold;
+}
+
 #display-contas .buttons-container button.btn {
     text-align: left;
+}
+
+#display-contas table.table-header {
+    margin-bottom: 0px;
+}
+
+#display-contas textarea[name="descricao"],
+#display-contas .list-container.parcelas-container { height: 150px; }
+
+#display-contas label.descricao {
+    margin-top: 6px;
+    margin-bottom: 10px;
 }

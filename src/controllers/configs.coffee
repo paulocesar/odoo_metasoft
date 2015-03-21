@@ -34,4 +34,16 @@ module.exports = C('configs', {
 
     post_removeMetodoPagamento: () ->
         @ms.crud().remove('metodoPagamento', @json(), @sendDataOrError)
+
+
+
+    post_listaImposto: () ->
+        @ms.crud().listWithEmpresa('impostoNotaFiscal', @sendDataOrError)
+
+    post_upsertImposto: () ->
+        data = _.extend({ @empresaId }, @json())
+        @ms.crud().upsertWithEmpresa('impostoNotaFiscal', data, @sendDataOrError)
+
+    post_removeImposto: () ->
+        @ms.crud().remove('impostoNotaFiscal', @json(), @sendDataOrError)
 })

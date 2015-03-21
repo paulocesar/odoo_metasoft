@@ -18,13 +18,18 @@
       _.extend(this, opts);
       this.el = "#display-" + this.name;
       this.template = _.template($("#tpl-display-" + this.name).html());
+      if (this.subTpls == null) {
+        this.subTpls = {};
+      }
       Display.__super__.constructor.apply(this, arguments);
       this.render();
       fieldValidator.apply(this.$el);
     }
 
     Display.prototype.render = function() {
-      return this.$el.html(this.template());
+      return this.$el.html(this.template({
+        subTpls: this.subTpls
+      }));
     };
 
     Display.prototype.addToGrid = function() {

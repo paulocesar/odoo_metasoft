@@ -1,0 +1,66 @@
+<script type='template' id='tpl-display-imposto' class='tpl'>
+    <h2 class='display-title'>Impostos</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <input type='text' class='crud-busca form-control' placeHolder='buscar...'>
+            <div class='row fix-header'>
+                <div class='col-md-4 login'>Login</div>
+                <div class='col-md-4 papel'>Papel</div>
+                <div class='col-md-4 none'>Nome</div>
+            </div>
+            <div class='list-container'>
+                <table class="table table-striped table-hover crud-list">
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-horizontal form-crud">
+                <div class="form-group">
+                    <label for="imposto" class="col-sm-2 control-label">Nome</label>
+                    <div class="col-sm-10"><input type="text" name="imposto" class="form-control not-empty unique"></div>
+                </div>
+                <div class="form-group">
+                    <label for="taxa" class="col-sm-2 control-label">Taxa</label>
+                    <div class="col-sm-10"><input type="text" name="taxa" class="form-control"></div>
+                </div>
+                <div class="form-group">
+                    <label for="valor" class="col-sm-2 control-label">Valor fixo</label>
+                    <div class="col-sm-10"><input type="text" name="valor" class="form-control mask-money-positive"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipoConta" class="col-sm-2 control-label">Lançamento</label>
+                    <div class="col-sm-10">
+                        <select name="tipoConta" class="form-control">
+                            <option value="1">Conta a Pagar</option>
+                            <option value="0">Conta a Receber</option>
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button class="btn btn-success save left margin-right">Salvar</button>
+                        <button class="btn btn-default remove hidden left">Excluir</button>
+                        <button class="btn btn-info new hidden right">Novo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type='template' id='tpl-display-impostoListItem'>
+    <tbody>
+        {% _.each(items, function (c) { %}
+            <tr data-rowid='{%= c.id %}' class='clickable'>
+                <td class='col-md-4 login'>{%= c.imposto %}</td>
+                <td class='col-md-4 papel'>{%= c.taxa %}</td>
+                <td class='col-md-4 nome'>{%= c.valor %}</td>
+            </tr>
+        {% }) %}
+    </tbody>
+</script>

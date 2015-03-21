@@ -10,12 +10,14 @@ class Display extends Backbone.View
         @el = "#display-#{@name}"
         @template = _.template($("#tpl-display-#{@name}").html())
 
+        @subTpls ?= {}
+
         super
 
         @render()
         fieldValidator.apply(@$el)
 
-    render: () -> @$el.html(@template())
+    render: () -> @$el.html(@template({ @subTpls }))
 
     addToGrid: () -> @category? || @subCategory?
 
