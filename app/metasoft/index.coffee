@@ -51,7 +51,7 @@ metasoftRouter = new MetasoftRouter()
 app.metasoftRouter = metasoftRouter
 
 Backbone.history.start()
-metasoftRouter.navigate('page/contaBancaria')
-metasoftRouter.goToPage('contaBancaria')
+metasoftRouter.navigate('page/contas')
+metasoftRouter.goToPage('contas')
 
 Metasoft.fieldValidator.apply($('body'))

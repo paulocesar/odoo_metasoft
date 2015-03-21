@@ -17,7 +17,7 @@
 .fix-header div { padding: 0px; }
 
 .list-container {
-    height: 300px;
+    height: 400px;
     overflow-y: scroll;
     border: 1px solid #E8E8E8;
 }
@@ -32,4 +32,8 @@
 
 .conta-banco-busca {
     margin-bottom: 5px;
+}
+
+#display-contas .buttons-container button.btn {
+    text-align: left;
 }

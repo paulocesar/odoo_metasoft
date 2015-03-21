@@ -72,9 +72,9 @@
 
   Backbone.history.start();
 
-  metasoftRouter.navigate('page/contaBancaria');
+  metasoftRouter.navigate('page/contas');
 
-  metasoftRouter.goToPage('contaBancaria');
+  metasoftRouter.goToPage('contas');
 
   Metasoft.fieldValidator.apply($('body'));
 
