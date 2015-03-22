@@ -10,17 +10,19 @@
     VERSION: '0.0.1',
     tpls: {},
     displays: {},
+    modals: {},
     components: {},
     init: function(appName) {
       this.appName = appName;
       $('body').append("<div id='" + appName + "'></div>");
       this.container = $("#" + appName);
-      return $('.tpl').each(function() {
+      $('.tpl').each(function() {
         var $el, name;
         $el = $(this);
         name = $el.attr('id').replace('tpl-', '');
         return Metasoft.tpls[name] = _.template($el.html());
       });
+      return this.$loader = $('.loader');
     },
     render: function(name, data) {
       if (data == null) {
@@ -32,12 +34,26 @@
       }
       return this.container.html(data);
     },
-    post: function(action, data, callback) {
-      return $.post("/" + action + "/" + this.empresaId, {
+    showLoading: function() {
+      return this.$loader.show();
+    },
+    hideLoading: function() {
+      return this.$loader.hide();
+    },
+    get: function(action, data, cb) {
+      return this.ajax('get', action, data, cb);
+    },
+    post: function(action, data, cb) {
+      return this.ajax('post', action, data, cb);
+    },
+    ajax: function(method, action, data, callback) {
+      this.showLoading();
+      return $[method]("/" + action + "/" + this.empresaId, {
         data: JSON.stringify(data)
       }, (function(_this) {
         return function(raw) {
           var res;
+          _this.hideLoading();
           res = _this.evalResponse(raw.data);
           if (!raw.success) {
             alert(raw.data);

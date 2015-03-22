@@ -78,4 +78,6 @@
 
   Metasoft.fieldValidator.apply($('body'));
 
+  Metasoft.hideLoading();
+
 }).call(this);

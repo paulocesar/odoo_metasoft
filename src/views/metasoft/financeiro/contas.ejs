@@ -3,12 +3,26 @@
 
     <div class="row">
         <div class="col-md-2 buttons-container">
-            <button class="btn btn-default btn-block" data-toggle="modal" data-target=".modal-conta-receber">
-                <span class="glyphicon glyphicon-plus-sign"></span> Conta a Receber
+            <button
+                class="btn btn-default btn-block"
+                data-toggle="modal"
+                data-target=".modal-conta-crud"
+                data-contaid=''
+                data-contatipo='receber'
+            >
+                <span class="glyphicon glyphicon-plus-sign"></span>
+                Conta a Receber
             </button>
 
-            <button class="btn btn-default btn-block" data-toggle="modal" data-target=".modal-conta-pagar">
-                <span class="glyphicon glyphicon-plus-sign"></span> Conta a Pagar
+            <button
+                class="btn btn-default btn-block"
+                data-toggle="modal"
+                data-target=".modal-conta-crud"
+                data-contaid=''
+                data-contatipo='pagar'
+            >
+                <span class="glyphicon glyphicon-plus-sign"></span>
+                Conta a Pagar
             </button>
         </div>
         <div class="col-md-10">
@@ -57,34 +71,15 @@
         </div>
     </div>
 
-    <div class="modal fade modal-conta-receber" tabindex="-1" role="dialog" aria-labelledby="modalReceber" aria-hidden="true">
+    <div class="modal fade modal-conta-crud" id="modalContas" tabindex="-1" role="dialog" aria-labelledby="modalReceber" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Conta a Receber</h4>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
                 </div>
                 <div class="modal-body">
-                    {%= subTpls.form({ aReceber: true, subTpls: subTpls }) %}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-success">Salvar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="modal fade modal-conta-pagar" tabindex="-1" role="dialog" aria-labelledby="modalReceber" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Conta a Receber</h4>
-                </div>
-                <div class="modal-body">
-                    {%= subTpls.form({ aReceber: true, subTpls: subTpls }) %}
+                    {%= subTpls.form() %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
@@ -178,20 +173,22 @@
 </script>
 
 <script type='template' id="subtpl-display-contas-parcelaItem">
-    <tr class='parcela-item' data-rowid='{%= id %}'>
-        <td class='col-md-2'>{%= identificador %}<input type='hidden' name="id" value="{%= id %}"></td>
-        <td class='col-md-2'><input type='text' name="dataVencimento" value="{%= dataVencimento %}"></td>
-        <td class='col-md-2'>
-            {% if (aliquota) { %}
-                <input type='text' name="aliquota" value="{%= aliquota %}">
-            {% } %}
-        </td>
-        <td class='col-md-2'>
-            {% if (deducao) { %}
-                <input type='text' name="deducao" class="mask-money" value="{%= deducao %}">
-            {% } %}
-        </td>
-        <td class='col-md-2'><input type='text' name="valor" class="mask-money" value="{%= valor %}"></td>
-        <td class='col-md-2'>{%= status %}</td>
-    </tr>
+    {% _.each(parcelas, function (p) { %}
+        <tr class='parcela-item'>
+            <td class='col-md-2'>{%= p.titulo %}<input type='hidden' name="id" value="{%= p.id %}"></td>
+            <td class='col-md-2'><input type='text' class='date' name="dataVencimento" value="{%= p.dataVencimento %}"></td>
+            <td class='col-md-2'>
+                {% if (p.aliquota) { %}
+                    <input type='text' name="aliquota" value="{%= p.aliquota %}">
+                {% } %}
+            </td>
+            <td class='col-md-2'>
+                {% if (p.deducao) { %}
+                    <input type='text' name="deducao" class="mask-money" value="{%= p.deducao %}">
+                {% } %}
+            </td>
+            <td class='col-md-2'><input type='text' name="valor" class="mask-money" value="{%= p.valor %}"></td>
+            <td class='col-md-2'>{%= p.status %}</td>
+        </tr>
+    {% }) %}
 </script>

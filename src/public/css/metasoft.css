@@ -1,3 +1,33 @@
+/*******************
+    LOADER
+********************/
+
+.loader {
+    position: absolute;
+    top: calc(50% - 32px);
+    left: calc(50% - 32px);
+    width: 127px;
+    height: 50px;
+    border-radius: 5px;
+    perspective: 800px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    background-color: #F4F4F4;
+    z-index: 99999;
+}
+
+.loader div,
+.loader img {
+    float:left;
+}
+
+.loader div { margin-top: 8px; }
+.loader img { width: 40px; }
+
+/*******************
+    METASOFT
+********************/
+
 .left { float: left; }
 .right { float: right; }
 
@@ -13,6 +43,8 @@
 .mask-only-number {
     text-align: right;
 }
+
+input.date { width: 78px; }
 
 .subcategory { margin: 5px; }
 
@@ -57,4 +89,8 @@
 #display-contas label.descricao {
     margin-top: 6px;
     margin-bottom: 10px;
+}
+
+#display-contas .parcelas .mask-money {
+    width: 110px;
 }

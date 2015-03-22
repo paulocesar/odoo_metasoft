@@ -55,3 +55,5 @@ metasoftRouter.navigate('page/contas')
 metasoftRouter.goToPage('contas')
 
 Metasoft.fieldValidator.apply($('body'))
+
+Metasoft.hideLoading()

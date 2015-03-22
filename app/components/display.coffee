@@ -29,7 +29,7 @@ class Display extends Backbone.View
 
     onHide: () ->
 
-    get: (args...) -> Metasoft.post(args...)
+    get: (args...) -> Metasoft.get(args...)
     post: (args...) -> Metasoft.post(args...)
 
 Metasoft.Display = Display

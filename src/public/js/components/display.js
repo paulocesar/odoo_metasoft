@@ -51,7 +51,7 @@
     Display.prototype.get = function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return Metasoft.post.apply(Metasoft, args);
+      return Metasoft.get.apply(Metasoft, args);
     };
 
     Display.prototype.post = function() {

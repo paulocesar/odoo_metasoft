@@ -44,6 +44,7 @@ module.exports = C('metasoft', {
                 @db.select('id', 'banco', 'agencia', 'conta')
                     .from('contaBancaria')
                     .where('empresaId', @empresaId)
+                    .orderBy('saldo', 'desc')
                     .exec(cb)
 
         }, (err, raw) ->

@@ -10,6 +10,8 @@ Metasoft = {
 
     displays: {}
 
+    modals: {}
+
     components: {}
 
     init: (appName) ->
@@ -23,6 +25,7 @@ Metasoft = {
             Metasoft.tpls[name] = _.template($el.html())
         )
 
+        @$loader = $('.loader')
 
     render: (name, data = {}) ->
         data = @tpls[name](data)
@@ -32,8 +35,17 @@ Metasoft = {
 
         @container.html(data)
 
-    post: (action, data, callback) ->
-        $.post "/#{action}/#{@empresaId}", {data: JSON.stringify(data)}, (raw) =>
+    showLoading: () -> @$loader.show()
+    hideLoading: () -> @$loader.hide()
+
+    get: (action, data, cb) -> @ajax('get', action, data, cb)
+    post: (action, data, cb) -> @ajax('post', action, data, cb)
+
+    ajax: (method, action, data, callback) ->
+        @showLoading()
+
+        $[method] "/#{action}/#{@empresaId}", {data: JSON.stringify(data)}, (raw) =>
+            @hideLoading()
             res = @evalResponse(raw.data)
 
             unless raw.success
