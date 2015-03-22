@@ -14,12 +14,16 @@
   money = {
     defaultVal: 'R$ 0,00',
     applyMask: function($el, config) {
+      var color, v;
       if (config == null) {
         config = {};
       }
       _.defaults(config, defaultConfig);
+      v = parseFloat($el.val()) || 0.00;
+      color = this.getColor(v);
+      v = this.format(v);
       $el.maskMoney(config);
-      $el.val(this.defaultVal);
+      $el.val(v).css('color', color);
       return $el.on('keyup', function() {
         var value;
         value = $(this).maskMoney('unmasked')[0];

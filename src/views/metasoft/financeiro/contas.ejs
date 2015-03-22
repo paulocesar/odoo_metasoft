@@ -93,7 +93,7 @@
 <script type='template' id='subtpl-display-contas-form'>
     <div class="form-horizontal form-crud">
         <input type="hidden" name="id">
-        <div class="row">
+        <div class="row form-conta-top">
             <div class="col-md-7">
                 <div class="form-group">
                     <label for="centroCustoId" class="col-md-4 control-label">Centro de Custo</label>
@@ -125,16 +125,16 @@
             <div class="col-md-5">
                 <div class="form-group">
                     <label for="valorBruto" class="col-md-4 control-label">Valor Bruto</label>
-                    <div class="col-md-8"><input type="text" name="valorBruto" class="form-control not-empty mask-money-positive"></div>
+                    <div class="col-md-8"><input type="text" name="valorBruto" class="form-control valorBruto not-empty mask-money-positive"></div>
                 </div>
 
                 <div class="form-group">
                     <label for="valorLiquido" class="col-md-4 control-label">Valor Líquido</label>
-                    <div class="col-md-8"><input type="text" name="valorLiquido" class="form-control not-empty mask-money-positive"></div>
+                    <div class="col-md-8"><input type="text" name="valorLiquido" class="form-control valorLiquido not-empty mask-money-positive"></div>
                 </div>
                 <div class="form-group">
-                    <label for="parcelas" class="col-md-4 control-label">Parcelas</label>
-                    <div class="col-md-8"><input type="text" name="parcelas" value="1" class="form-control not-empty not-zero mask-only-number"></div>
+                    <label for="quantParcelas" class="col-md-4 control-label">Parcelas</label>
+                    <div class="col-md-8"><input type="text" name="quantParcelas" value="1" class="form-control quantParcelas not-empty not-zero mask-only-number"></div>
                 </div>
             </div>
         </div>
@@ -160,7 +160,9 @@
                     </table>
                 </div>
             </div>
+        </div>
 
+        <div class="row form-conta-bottom">
             <div class="col-md-12">
                 <label for="descricao" class="col-md-12 descricao">Observações</label>
                 <div class="form-group">

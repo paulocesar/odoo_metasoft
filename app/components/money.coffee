@@ -16,8 +16,12 @@ money = {
     applyMask: ($el, config = {}) ->
         _.defaults(config, defaultConfig)
 
+        v = parseFloat($el.val()) || 0.00
+        color = @getColor(v)
+        v = @format(v)
+
         $el.maskMoney(config)
-        $el.val(@defaultVal)
+        $el.val(v).css('color', color)
         $el.on('keyup', () ->
             value = $(@).maskMoney('unmasked')[0]
 
