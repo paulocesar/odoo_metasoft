@@ -145,20 +145,16 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6">
-                <label for="descricao" class="col-md-12 descricao">Observações</label>
-                <div class="form-group">
-                    <div class="col-md-12"><textarea class="form-control" name="descricao" rows="3"></textarea></textarea></div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <table class="table table-striped table-hover table-header">
                     <thead>
                         <tr>
-                            <td class='col-md-2'>Numero</td>
-                            <td class='col-md-5'>Vencimento</td>
-                            <td class='col-md-5'>Valor</td>
+                            <td class='col-md-2'>Identificador</td>
+                            <td class='col-md-2'>Vencimento</td>
+                            <td class='col-md-2'>Alíquota</td>
+                            <td class='col-md-2'>Dedução</td>
+                            <td class='col-md-2'>Valor</td>
+                            <td class='col-md-2'>Status</td>
                         </tr>
                     </thead>
                 </table>
@@ -170,14 +166,32 @@
                 </div>
             </div>
 
+            <div class="col-md-12">
+                <label for="descricao" class="col-md-12 descricao">Observações</label>
+                <div class="form-group">
+                    <div class="col-md-12"><textarea class="form-control" name="descricao" rows="3"></textarea></textarea></div>
+                </div>
+            </div>
+
         </div>
     </div>
 </script>
 
 <script type='template' id="subtpl-display-contas-parcelaItem">
     <tr class='parcela-item' data-rowid='{%= id %}'>
-        <td class='col-md-2'>{%= numero %}<input type='hidden' name="id" value="{%= id %}"></td>
-        <td class='col-md-5'><input type='text' name="dataVencimento" value="{%= dataVencimento %}"></td>
-        <td class='col-md-5'><input type='text' name="valor" class="mask-money-positive" value="{%= valor %}"></td>
+        <td class='col-md-2'>{%= identificador %}<input type='hidden' name="id" value="{%= id %}"></td>
+        <td class='col-md-2'><input type='text' name="dataVencimento" value="{%= dataVencimento %}"></td>
+        <td class='col-md-2'>
+            {% if (aliquota) { %}
+                <input type='text' name="aliquota" value="{%= aliquota %}">
+            {% } %}
+        </td>
+        <td class='col-md-2'>
+            {% if (deducao) { %}
+                <input type='text' name="deducao" class="mask-money" value="{%= deducao %}">
+            {% } %}
+        </td>
+        <td class='col-md-2'><input type='text' name="valor" class="mask-money" value="{%= valor %}"></td>
+        <td class='col-md-2'>{%= status %}</td>
     </tr>
 </script>

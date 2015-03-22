@@ -52,7 +52,6 @@
     margin-bottom: 0px;
 }
 
-#display-contas textarea[name="descricao"],
 #display-contas .list-container.parcelas-container { height: 150px; }
 
 #display-contas label.descricao {

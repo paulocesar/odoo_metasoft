@@ -203,6 +203,7 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`parcela` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `dataVencimento` DATE NOT NULL,
   `valor` DECIMAL(10,2) NOT NULL,
+  `deducao` DECIMAL(10,2) NULL,
   `contaId` INT UNSIGNED NOT NULL,
   `pago` TINYINT(1) NOT NULL,
   `empresaId` INT UNSIGNED NOT NULL,
