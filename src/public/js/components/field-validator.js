@@ -61,6 +61,21 @@
         allowNegative: false
       });
     },
+    'mask-money-negative': function($el) {
+      var func;
+      money.applyMask($el, {
+        allowNegative: true
+      });
+      func = function() {
+        var val;
+        val = $el.maskMoney('unmasked')[0];
+        if (val > 0) {
+          val = 0 - val;
+          return $el.maskMoney('mask', val);
+        }
+      };
+      return $el.on('keyup', func).on('change', func);
+    },
     'mask-number-bank': function($el) {
       var func;
       func = function() {
@@ -112,7 +127,7 @@
   };
 
   hasMoneyClass = function(el) {
-    return hasClasses(el, ['mask-money', 'mask-money-positive']);
+    return hasClasses(el, ['mask-money', 'mask-money-positive', 'mask-money-negative']);
   };
 
   fieldValidator = {
@@ -121,6 +136,7 @@
       return this.applyMasks(el, masks);
     },
     reset: function(el) {
+      var m;
       $(el).find('input, textarea').css('background-color', 'white');
       $(el).find('.error-message').remove();
       $(el).find('input, textarea').val('');
@@ -129,7 +145,9 @@
         s = $(this);
         return s.val(s.find("option:first").val());
       });
-      return $(el).find('.mask-money').val(money.defaultVal).css('color', 'black');
+      m = $(el).find('.mask-money, .mask-money-positive, .mask-money-negative');
+      m.val(money.defaultVal);
+      return money.setColor(m);
     },
     fill: function(el, data) {
       var $el, f, name, value;
@@ -143,7 +161,7 @@
           continue;
         }
         if (hasMoneyClass(f)) {
-          f.css('color', money.getColor(value));
+          f.addClass(money.getColorCls(value));
           value = money.format(value);
         }
         f.val(value);

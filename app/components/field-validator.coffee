@@ -50,6 +50,17 @@ validators = {
 masks = {
     'mask-money': ($el) -> money.applyMask($el)
     'mask-money-positive': ($el) -> money.applyMask($el, { allowNegative: false })
+    'mask-money-negative': ($el) ->
+        money.applyMask($el, { allowNegative: true })
+
+        func = () ->
+            val = $el.maskMoney('unmasked')[0]
+            if val > 0
+                val = 0 - val
+                $el.maskMoney('mask', val)
+
+        $el.on('keyup', func).on('change', func)
+
     'mask-number-bank': ($el) ->
         func = () ->
             f = $(@)
@@ -91,7 +102,8 @@ hasClasses = (el, arr) ->
 
     return false
 
-hasMoneyClass = (el) -> hasClasses(el, ['mask-money', 'mask-money-positive'])
+hasMoneyClass = (el) ->
+    hasClasses(el, ['mask-money',  'mask-money-positive',  'mask-money-negative'])
 
 fieldValidator = {
     apply: (el) ->
@@ -108,7 +120,9 @@ fieldValidator = {
             s.val(s.find("option:first").val())
         )
 
-        $(el).find('.mask-money').val(money.defaultVal).css('color', 'black')
+        m = $(el).find('.mask-money, .mask-money-positive, .mask-money-negative')
+        m.val(money.defaultVal)
+        money.setColor(m)
 
     fill: (el, data) ->
         @reset(el)
@@ -122,7 +136,7 @@ fieldValidator = {
                 continue
 
             if hasMoneyClass(f)
-                f.css('color', money.getColor(value))
+                f.addClass(money.getColorCls(value))
                 value = money.format(value)
 
             f.val(value)

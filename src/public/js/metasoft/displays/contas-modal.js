@@ -41,7 +41,8 @@
         'hide.bs.modal': 'onHide',
         'change .valorBruto': 'onChangeValorBruto',
         'change .valorLiquido': 'onChangeValorLiquido',
-        'change .quantParcelas': 'onChangeParcelas'
+        'change .quantParcelas': 'onChangeParcelas',
+        'change .desconto': 'onChangeDesconto'
       };
       ContasModal.__super__.constructor.apply(this, arguments);
       fieldValidator.apply(this.$el);
@@ -53,7 +54,9 @@
     ContasModal.prototype.onChangeValorBruto = function() {
       var data;
       data = this.getFormData();
+      data.valorLiquido = data.valorBruto;
       this.$el.find(".valorLiquido").maskMoney('mask', data.valorBruto);
+      this.updateDesconto(data);
       return this.buildParcelas();
     };
 
@@ -61,8 +64,23 @@
       var data;
       data = this.getFormData();
       if (data.valorBruto < data.valorLiquido) {
+        data.valorBruto = data.valorLiquido;
         this.$el.find(".valorBruto").maskMoney('mask', data.valorLiquido);
       }
+      this.updateDesconto(data);
+      return this.buildParcelas();
+    };
+
+    ContasModal.prototype.onChangeDesconto = function() {
+      var data;
+      data = this.getFormData();
+      if (data.valorBruto < data.desconto) {
+        data.valorBruto = 0 - data.desconto;
+        this.$el.find(".valorBruto").maskMoney('mask', data.valorBruto);
+      }
+      data.valorLiquido = data.valorBruto + data.desconto;
+      this.$el.find(".valorLiquido").maskMoney('mask', data.valorLiquido);
+      this.updateDesconto(data);
       return this.buildParcelas();
     };
 
@@ -80,6 +98,12 @@
         return;
       }
       return this.buildParcelas();
+    };
+
+    ContasModal.prototype.updateDesconto = function(data) {
+      var desconto;
+      desconto = 0 - money.round(data.valorBruto - data.valorLiquido);
+      return this.$el.find('.desconto').maskMoney('mask', desconto);
     };
 
     ContasModal.prototype.buildParcelas = function() {
@@ -105,13 +129,16 @@
 
     ContasModal.prototype.onShow = function(ev) {
       var $btn, contaId, contaType, title;
+      this.resetFormData();
       $btn = $(ev.relatedTarget);
-      contaType = $btn.data('conta');
+      contaType = $btn.data('contatipo');
       contaId = $btn.data('contaid');
       this.parcelas = [];
       title = 'Conta a Receber';
+      this.$el.find('.modal-dialog').removeClass('invert-money-color');
       if (contaType === 'pagar') {
         title = 'Conta a Pagar';
+        this.$el.find('.modal-dialog').addClass('invert-money-color');
       }
       if (!contaId) {
         title = "Nova " + title;
@@ -119,6 +146,10 @@
       }
       this.$el.find('.modal-title').html(title);
       return this.renderModalParcelas();
+    };
+
+    ContasModal.prototype.resetFormData = function() {
+      return fieldValidator.reset(this.$formTop);
     };
 
     ContasModal.prototype.getFormData = function() {
@@ -132,7 +163,9 @@
       return data;
     };
 
-    ContasModal.prototype.onHide = function(ev) {};
+    ContasModal.prototype.onHide = function(ev) {
+      return this.$el.find('.modal-dialog').removeClass('invert-money-color');
+    };
 
     ContasModal.prototype.get = function() {
       var args;

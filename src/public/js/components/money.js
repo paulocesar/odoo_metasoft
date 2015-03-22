@@ -14,29 +14,34 @@
   money = {
     defaultVal: 'R$ 0,00',
     applyMask: function($el, config) {
-      var color, v;
+      var v;
       if (config == null) {
         config = {};
       }
       _.defaults(config, defaultConfig);
       v = parseFloat($el.val()) || 0.00;
-      color = this.getColor(v);
       v = this.format(v);
       $el.maskMoney(config);
-      $el.val(v).css('color', color);
+      this.setColor($el);
       return $el.on('keyup', function() {
-        var value;
-        value = $(this).maskMoney('unmasked')[0];
-        return $(this).css('color', money.getColor(value));
+        return money.setColor($(this));
       });
     },
-    getColor: function(value) {
-      var color;
-      color = value > 0 ? '#35BA00' : 'black';
-      if (value < 0) {
-        color = 'red';
+    setColor: function(el) {
+      var $el, colorCls;
+      $el = $(el);
+      colorCls = money.getColorCls($el.maskMoney('unmasked')[0]);
+      $el.removeClass('green-money red-money');
+      return $el.addClass(colorCls);
+    },
+    getColorCls: function(value) {
+      if (value > 0) {
+        return 'green-money';
       }
-      return color;
+      if (value < 0) {
+        return 'red-money';
+      }
+      return '';
     },
     round: function(num, decimalPlaces) {
       var d, f, i, m, n, r;
@@ -60,7 +65,7 @@
       }
     },
     html: function(num) {
-      return "<font color='" + (this.getColor(num)) + "'>" + (this.format(num)) + "</font>";
+      return "<font class='" + (this.getColorCls(num)) + "'>" + (this.format(num)) + "</font>";
     },
     format: function(num) {
       var c, d, i, j, s, t;

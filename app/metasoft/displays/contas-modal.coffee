@@ -27,6 +27,7 @@ class ContasModal extends Backbone.View
             'change .valorBruto': 'onChangeValorBruto'
             'change .valorLiquido': 'onChangeValorLiquido'
             'change .quantParcelas': 'onChangeParcelas'
+            'change .desconto': 'onChangeDesconto'
         }
 
         super
@@ -39,14 +40,32 @@ class ContasModal extends Backbone.View
 
     onChangeValorBruto: () ->
         data = @getFormData()
+        data.valorLiquido = data.valorBruto
         @$el.find(".valorLiquido").maskMoney('mask', data.valorBruto)
+
+        @updateDesconto(data)
         @buildParcelas()
 
     onChangeValorLiquido: () ->
         data = @getFormData()
         if data.valorBruto < data.valorLiquido
+            data.valorBruto = data.valorLiquido
             @$el.find(".valorBruto").maskMoney('mask', data.valorLiquido)
 
+        @updateDesconto(data)
+        @buildParcelas()
+
+    onChangeDesconto: () ->
+        data = @getFormData()
+
+        if data.valorBruto < data.desconto
+            data.valorBruto = 0 - data.desconto
+            @$el.find(".valorBruto").maskMoney('mask', data.valorBruto)
+
+        data.valorLiquido = data.valorBruto + data.desconto
+        @$el.find(".valorLiquido").maskMoney('mask', data.valorLiquido)
+
+        @updateDesconto(data)
         @buildParcelas()
 
     onChangeParcelas: () ->
@@ -59,6 +78,10 @@ class ContasModal extends Backbone.View
             return
 
         @buildParcelas()
+
+    updateDesconto: (data) ->
+        desconto = 0 - money.round(data.valorBruto - data.valorLiquido)
+        @$el.find('.desconto').maskMoney('mask', desconto)
 
     buildParcelas: () ->
         data = @getFormData()
@@ -76,14 +99,19 @@ class ContasModal extends Backbone.View
         @$parcelas.find('tr').each(() -> fieldValidator.apply($(@)))
 
     onShow: (ev) ->
+        @resetFormData()
+
         $btn = $(ev.relatedTarget)
-        contaType = $btn.data('conta')
+        contaType = $btn.data('contatipo')
         contaId = $btn.data('contaid')
         @parcelas = []
 
         title = 'Conta a Receber'
+        @$el.find('.modal-dialog').removeClass('invert-money-color')
+
         if contaType == 'pagar'
             title = 'Conta a Pagar'
+            @$el.find('.modal-dialog').addClass('invert-money-color')
 
         unless contaId
             title = "Nova #{title}"
@@ -92,6 +120,10 @@ class ContasModal extends Backbone.View
         @$el.find('.modal-title').html(title)
 
         @renderModalParcelas()
+
+    resetFormData: () ->
+        fieldValidator.reset(@$formTop)
+        # fieldValidator.reset(@$formBottom)
 
     getFormData: () ->
         data = fieldValidator.getValues(@$formTop)
@@ -105,7 +137,7 @@ class ContasModal extends Backbone.View
 
         return data
 
-    onHide: (ev) ->
+    onHide: (ev) -> @$el.find('.modal-dialog').removeClass('invert-money-color')
 
     get: (args...) -> Metasoft.get(args...)
     post: (args...) -> Metasoft.post(args...)

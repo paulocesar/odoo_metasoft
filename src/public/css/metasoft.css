@@ -40,9 +40,17 @@
 .money,
 .mask-money,
 .mask-money-positive,
+.mask-money-negative,
 .mask-only-number {
     text-align: right;
 }
+
+.green-money { color: #35BA00; }
+.red-money { color: red; }
+.black-money { color: black; }
+
+.invert-money-color .green-money { color: red; }
+.invert-money-color .red-money { color: #35BA00 }
 
 input.date { width: 78px; }
 

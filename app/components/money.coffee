@@ -17,21 +17,25 @@ money = {
         _.defaults(config, defaultConfig)
 
         v = parseFloat($el.val()) || 0.00
-        color = @getColor(v)
         v = @format(v)
 
         $el.maskMoney(config)
-        $el.val(v).css('color', color)
-        $el.on('keyup', () ->
-            value = $(@).maskMoney('unmasked')[0]
 
-            $(@).css('color', money.getColor(value))
-        )
+        @setColor($el)
 
-    getColor: (value) ->
-        color = if value > 0 then '#35BA00' else 'black'
-        color = 'red' if value < 0
-        return color
+        $el.on('keyup', () -> money.setColor($(@)))
+
+    setColor: (el) ->
+        $el = $(el)
+        colorCls = money.getColorCls($el.maskMoney('unmasked')[0])
+
+        $el.removeClass('green-money red-money')
+        $el.addClass(colorCls)
+
+    getColorCls: (value) ->
+        return 'green-money' if value > 0
+        return 'red-money' if value < 0
+        return ''
 
     round: (num, decimalPlaces = 2) ->
         d = decimalPlaces || 0
@@ -46,7 +50,7 @@ money = {
 
         return if d then r / m else r
 
-    html: (num) -> "<font color='#{ @getColor(num) }'>#{ @format(num) }</font>"
+    html: (num) -> "<font class='#{ @getColorCls(num) }'>#{ @format(num) }</font>"
 
     # http://stackoverflow.com/questions/149055/how-can-i-format-numbers-as-money-in-javascript?answertab=votes#tab-top
     format: (num) ->
