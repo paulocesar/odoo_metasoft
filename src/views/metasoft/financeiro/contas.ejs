@@ -103,8 +103,8 @@
                 <div class="form-group">
                     <label for="centroCustoId" class="col-md-4 control-label">Centro de Custo</label>
                     <div class="col-md-8"><select name="centroCustoId" class="form-control">
-                        {% _.each(dictionary.banksById, function (name, value) { %}
-                            <option value="{%= value %}">{%= name %}</option>
+                        {% _.each(Metasoft.centroCustoById, function (c) { %}
+                            <option value="{%= c.id %}">{%= c.nome %}</option>
                         {% }); %}
                     </select></div>
                 </div>
@@ -112,8 +112,8 @@
                 <div class="form-group">
                     <label for="metodoPagamentoId" class="col-md-4 control-label">Forma de Pagamento</label>
                     <div class="col-md-8"><select name="metodoPagamentoId" class="form-control">
-                        {% _.each(dictionary.banksById, function (name, value) { %}
-                            <option value="{%= value %}">{%= name %}</option>
+                        {% _.each(Metasoft.metodoPagamentoById, function (p) { %}
+                            <option value="{%= p.id %}">{%= p.nome %}</option>
                         {% }); %}
                     </select></div>
                 </div>
@@ -121,8 +121,8 @@
                 <div class="form-group">
                     <label for="contaBancariaId" class="col-md-4 control-label">Conta Financeira</label>
                     <div class="col-md-8"><select name="contaBancariaId" class="form-control">
-                        {% _.each(dictionary.banksById, function (name, value) { %}
-                            <option value="{%= value %}">{%= name %}</option>
+                        {% _.each(Metasoft.contaBancariaById, function (c) { %}
+                            <option value="{%= c.id %}">{%= dictionary.banksById[c.banco] %} / {%= c.agencia %} / {%= c.conta %}</option>
                         {% }); %}
                     </select></div>
                 </div>
