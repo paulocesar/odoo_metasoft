@@ -123,7 +123,8 @@ class ContasModal extends Backbone.View
 
     resetFormData: () ->
         fieldValidator.reset(@$formTop)
-        # fieldValidator.reset(@$formBottom)
+        fieldValidator.reset(@$formBottom)
+        @$formTop.find('.quantParcelas').val('1')
 
     getFormData: () ->
         data = fieldValidator.getValues(@$formTop)

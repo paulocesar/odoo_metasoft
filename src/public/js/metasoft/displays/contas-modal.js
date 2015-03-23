@@ -149,7 +149,9 @@
     };
 
     ContasModal.prototype.resetFormData = function() {
-      return fieldValidator.reset(this.$formTop);
+      fieldValidator.reset(this.$formTop);
+      fieldValidator.reset(this.$formBottom);
+      return this.$formTop.find('.quantParcelas').val('1');
     };
 
     ContasModal.prototype.getFormData = function() {

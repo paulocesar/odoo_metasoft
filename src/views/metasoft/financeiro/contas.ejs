@@ -201,10 +201,10 @@
             </td>
             <td class='col-md-2'>
                 {% if (p.deducao) { %}
-                    <input type='text' name="deducao" class="mask-money" value="{%= p.deducao %}">
+                    <input type='text' name="deducao" class="mask-money" value="{%= Metasoft.money.format(p.deducao) %}">
                 {% } %}
             </td>
-            <td class='col-md-2'><input type='text' name="valor" class="mask-money" value="{%= p.valor %}"></td>
+            <td class='col-md-2'><input type='text' name="valor" class="mask-money" value="{%= Metasoft.money.format(p.valor) %}"></td>
             <td class='col-md-2'>{%= p.status %}</td>
         </tr>
     {% }) %}
