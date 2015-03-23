@@ -126,6 +126,7 @@ fieldValidator = {
         $(el).find('input, textarea').css('background-color', 'white')
         $(el).find('.error-message').remove()
         $(el).find('input, textarea').val('')
+        $(el).find('input[type="checkbox"]').attr('checked', false)
 
         $(el).find('select').each(() ->
             s = $(@)

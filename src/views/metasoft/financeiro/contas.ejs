@@ -164,7 +164,7 @@
                             <td class='col-md-2'>Alíquota</td>
                             <td class='col-md-2'>Dedução</td>
                             <td class='col-md-2'>Valor</td>
-                            <td class='col-md-2'>Status</td>
+                            <td class='col-md-2'>Pago?</td>
                         </tr>
                     </thead>
                 </table>
@@ -205,7 +205,7 @@
                 {% } %}
             </td>
             <td class='col-md-2'><input type='text' name="valor" class="mask-money" value="{%= Metasoft.money.format(p.valor) %}"></td>
-            <td class='col-md-2'>{%= dictionary.getParcelaStatus(p) %}</td>
+            <td class='col-md-2'><input type='checkbox' name="pago" value="{%= p.pago %}" style='margin-left:25px;'></td>
         </tr>
     {% }) %}
 </script>

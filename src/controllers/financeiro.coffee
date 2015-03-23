@@ -13,7 +13,9 @@ module.exports = C('financeiro', {
 
     post_upsertConta: () ->
         data = @json()
-        console.log data
+        parcelas = data.parcelas
+        conta = _.omit(data, 'parcelas', 'desconto', 'quantParcelas')
+
         setTimeout(
             () => @sendData({conta: data})
             3000
