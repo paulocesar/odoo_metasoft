@@ -99,6 +99,18 @@
         return f.val(("" + (f.val())).replace(rgxNotDigit, ''));
       };
       return $el.on('keyup', func).on('change', func).on('focusout', func);
+    },
+    'mask-date-day': function($el) {
+      return $el.datetimepicker({
+        viewMode: 'days',
+        format: 'DD/MM/YYYY'
+      });
+    },
+    'mask-date-month': function($el) {
+      return $el.datetimepicker({
+        viewMode: 'months',
+        format: 'MM/YYYY'
+      });
     }
   };
 

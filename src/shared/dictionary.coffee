@@ -20,4 +20,7 @@ _.extend(dictionary, {
         contabil: 'Contábil'
         admin: 'Administrador'
     }
+
+    getParcelaStatus: (p) ->
+        return 'pendente'
 })

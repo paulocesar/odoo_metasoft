@@ -82,6 +82,18 @@ masks = {
             f.val("#{f.val()}".replace(rgxNotDigit, ''))
 
         $el.on('keyup', func).on('change', func).on('focusout', func)
+
+    'mask-date-day': ($el) ->
+        $el.datetimepicker({
+            viewMode: 'days'
+            format: 'DD/MM/YYYY'
+        })
+
+    'mask-date-month': ($el) ->
+        $el.datetimepicker({
+            viewMode: 'months'
+            format: 'MM/YYYY'
+        })
 }
 
 buildValidatorFunc = (v) ->

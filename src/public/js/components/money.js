@@ -27,6 +27,12 @@
         return money.setColor($(this));
       });
     },
+    setValue: function(el, value) {
+      var $el;
+      $el = $(el);
+      $el.maskMoney('mask', value);
+      return this.setColor($el);
+    },
     setColor: function(el) {
       var $el, colorCls;
       $el = $(el);

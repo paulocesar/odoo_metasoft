@@ -138,13 +138,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="valorLiquido" class="col-md-4 control-label">Valor Líquido</label>
-                    <div class="col-md-8"><input type="text" name="valorLiquido" class="form-control valorLiquido not-empty mask-money-positive"></div>
+                    <label for="desconto" class="col-md-4 control-label">Desconto</label>
+                    <div class="col-md-8"><input type="text" name="desconto" class="form-control desconto not-empty mask-money-negative"></div>
                 </div>
 
                 <div class="form-group">
-                    <label for="desconto" class="col-md-4 control-label">Desconto</label>
-                    <div class="col-md-8"><input type="text" name="desconto" class="form-control desconto not-empty mask-money-negative"></div>
+                    <label for="valorLiquido" class="col-md-4 control-label">Valor Líquido</label>
+                    <div class="col-md-8"><input type="text" name="valorLiquido" class="form-control valorLiquido not-empty mask-money-positive"></div>
                 </div>
 
                 <div class="form-group">
@@ -191,9 +191,9 @@
 
 <script type='template' id="subtpl-display-contas-parcelaItem">
     {% _.each(parcelas, function (p) { %}
-        <tr class='parcela-item'>
-            <td class='col-md-2'>{%= p.titulo %}<input type='hidden' name="id" value="{%= p.id %}"></td>
-            <td class='col-md-2'><input type='text' class='date' name="dataVencimento" value="{%= p.dataVencimento %}"></td>
+        <tr class='parcela-item' >
+            <td class='col-md-2'>Parcela {%= p.numero %}<input type='hidden' name="id" value="{%= p.id %}"><input type='hidden' name="numero" value="{%= p.numero %}"></td>
+            <td class='col-md-2'><input type='text' class='mask-date-day' name="dataVencimento" value="{%= p.dataVencimento %}"></td>
             <td class='col-md-2'>
                 {% if (p.aliquota) { %}
                     <input type='text' name="aliquota" value="{%= p.aliquota %}">
@@ -205,7 +205,7 @@
                 {% } %}
             </td>
             <td class='col-md-2'><input type='text' name="valor" class="mask-money" value="{%= Metasoft.money.format(p.valor) %}"></td>
-            <td class='col-md-2'>{%= p.status %}</td>
+            <td class='col-md-2'>{%= dictionary.getParcelaStatus(p) %}</td>
         </tr>
     {% }) %}
 </script>

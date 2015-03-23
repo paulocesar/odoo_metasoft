@@ -1,7 +1,2 @@
-Adapters
-- create database selection
-- fix specs
-
-Sql
-- create sql script templates
-- auto generate tags
+Parcelas
+ - melhorar forma de update (nõa renderizar novamente)

@@ -52,7 +52,10 @@
 .invert-money-color .green-money { color: red; }
 .invert-money-color .red-money { color: #35BA00 }
 
-input.date { width: 78px; }
+.mask-date-day,
+.mask-date-month {
+    width: 78px;
+}
 
 .subcategory { margin: 5px; }
 

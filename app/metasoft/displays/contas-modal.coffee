@@ -4,12 +4,11 @@ jsRoot = @
 
 { fieldValidator, money } = Metasoft
 
-createParcela = (numero = '1', valor = 0) -> {
+createParcela = (numero = 1, valor = 0) -> {
     id: null
-    titulo: "Parcela #{numero}"
-    dataVencimento: moment().format('DD/MM/YYYY')
+    numero
     valor
-    status: 'pendente'
+    dataVencimento: moment().add(numero-1, 'month').format('DD/MM/YYYY')
 }
 
 class ContasModal extends Backbone.View
@@ -28,6 +27,7 @@ class ContasModal extends Backbone.View
             'change .valorLiquido': 'onChangeValorLiquido'
             'change .quantParcelas': 'onChangeParcelas'
             'change .desconto': 'onChangeDesconto'
+            'change .parcelas'
         }
 
         super
@@ -38,10 +38,12 @@ class ContasModal extends Backbone.View
         @$formBottom = @$el.find('.form-conta-bottom')
         @$parcelas = @$el.find('table .parcelas')
 
+        @$parcelas.on('change', 'input[name="valor"]', @onChangeValorParcelas)
+
     onChangeValorBruto: () ->
         data = @getFormData()
         data.valorLiquido = data.valorBruto
-        @$el.find(".valorLiquido").maskMoney('mask', data.valorBruto)
+        money.setValue(@$el.find(".valorLiquido"), data.valorBruto)
 
         @updateDesconto(data)
         @buildParcelas()
@@ -50,7 +52,7 @@ class ContasModal extends Backbone.View
         data = @getFormData()
         if data.valorBruto < data.valorLiquido
             data.valorBruto = data.valorLiquido
-            @$el.find(".valorBruto").maskMoney('mask', data.valorLiquido)
+            money.setValue(@$el.find(".valorBruto"), data.valorLiquido)
 
         @updateDesconto(data)
         @buildParcelas()
@@ -60,10 +62,10 @@ class ContasModal extends Backbone.View
 
         if data.valorBruto < data.desconto
             data.valorBruto = 0 - data.desconto
-            @$el.find(".valorBruto").maskMoney('mask', data.valorBruto)
+            money.setValue(@$el.find(".valorBruto"), data.valorBruto)
 
         data.valorLiquido = data.valorBruto + data.desconto
-        @$el.find(".valorLiquido").maskMoney('mask', data.valorLiquido)
+        money.setValue(@$el.find(".valorLiquido"), data.valorLiquido)
 
         @updateDesconto(data)
         @buildParcelas()
@@ -79,9 +81,38 @@ class ContasModal extends Backbone.View
 
         @buildParcelas()
 
+    onChangeValorParcelas: () =>
+        if @parcelas.length <= 1
+            return
+
+        @parcelas = @getParcelas()
+
+        liquido = @getFormData().valorLiquido
+        last = _.last(@parcelas)
+        totalPrimeiras = 0
+
+        for p in @parcelas when p.numero != last.numero
+            totalPrimeiras += p.valor
+
+        lastValor = liquido - totalPrimeiras
+
+        if totalPrimeiras < 0
+            return
+
+        last.valor = money.round(lastValor)
+
+        @renderModalParcelas()
+
     updateDesconto: (data) ->
         desconto = 0 - money.round(data.valorBruto - data.valorLiquido)
         @$el.find('.desconto').maskMoney('mask', desconto)
+
+    getParcelas: (data) ->
+        parcelas = []
+        @$parcelas.find('tr').each(() ->
+            parcelas.push(fieldValidator.getValues($(@)))
+        )
+        return parcelas
 
     buildParcelas: () ->
         data = @getFormData()
@@ -98,18 +129,22 @@ class ContasModal extends Backbone.View
         @$parcelas.html(@subTpls.parcelas({ @parcelas }))
         @$parcelas.find('tr').each(() -> fieldValidator.apply($(@)))
 
+        @$parcelas.find('.mask-date-day')
+            .data("DateTimePicker")
+            .minDate(moment())
+
     onShow: (ev) ->
         @resetFormData()
 
         $btn = $(ev.relatedTarget)
-        contaType = $btn.data('contatipo')
+        @contaTipo = $btn.data('contatipo')
         contaId = $btn.data('contaid')
         @parcelas = []
 
         title = 'Conta a Receber'
         @$el.find('.modal-dialog').removeClass('invert-money-color')
 
-        if contaType == 'pagar'
+        if @contaTipo == 'pagar'
             title = 'Conta a Pagar'
             @$el.find('.modal-dialog').addClass('invert-money-color')
 

@@ -23,6 +23,9 @@
       financeiro: 'Financeiro',
       contabil: 'Contábil',
       admin: 'Administrador'
+    },
+    getParcelaStatus: function(p) {
+      return 'pendente';
     }
   });
 

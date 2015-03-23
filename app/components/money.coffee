@@ -25,6 +25,11 @@ money = {
 
         $el.on('keyup', () -> money.setColor($(@)))
 
+    setValue: (el, value) ->
+        $el = $(el)
+        $el.maskMoney('mask', value)
+        @setColor($el)
+
     setColor: (el) ->
         $el = $(el)
         colorCls = money.getColorCls($el.maskMoney('unmasked')[0])
