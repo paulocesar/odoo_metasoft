@@ -92,6 +92,8 @@ input.date { width: 78px; }
     margin-bottom: 0px;
 }
 
+#display-contas .modal-dialog { margin-top: 8px; }
+
 #display-contas .list-container.parcelas-container { height: 150px; }
 
 #display-contas label.descricao {

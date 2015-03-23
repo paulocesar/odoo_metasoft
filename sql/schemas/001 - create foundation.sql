@@ -135,6 +135,7 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`conta` (
   `valorLiquido` DECIMAL(10,2) NOT NULL,
   `parceiroId` INT UNSIGNED NULL,
   `contaBancariaId` INT UNSIGNED NOT NULL,
+  `status` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_0a936f08-c6a2-11e4-844e-9439e5f3523b` (`empresaId` ASC),
   INDEX `fk_0a9370d4-c6a2-11e4-844e-9439e5f3523b` (`loginId` ASC),
@@ -201,7 +202,7 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`impostoNotaFiscal` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `metasoft`.`parcela` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `dataVencimento` DATE NOT NULL,
+  `dataVencimento` DATE NULL,
   `valor` DECIMAL(10,2) NOT NULL,
   `deducao` DECIMAL(10,2) NULL,
   `contaId` INT UNSIGNED NOT NULL,
@@ -452,6 +453,42 @@ COMMIT;
 START TRANSACTION;
 USE `metasoft`;
 INSERT INTO `metasoft`.`login` (`id`, `login`, `senha`, `nome`, `papel`, `empresaId`) VALUES (1, 'admin', 'admin', 'Admin', 'admin', 1);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `metasoft`.`centroCusto`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `metasoft`;
+INSERT INTO `metasoft`.`centroCusto` (`id`, `empresaId`, `nome`) VALUES (NULL, 1, 'Rio Vermelho');
+INSERT INTO `metasoft`.`centroCusto` (`id`, `empresaId`, `nome`) VALUES (NULL, 1, 'STIEP');
+INSERT INTO `metasoft`.`centroCusto` (`id`, `empresaId`, `nome`) VALUES (NULL, 1, 'Barra');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `metasoft`.`contaBancaria`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `metasoft`;
+INSERT INTO `metasoft`.`contaBancaria` (`id`, `empresaId`, `saldo`, `banco`, `agencia`, `conta`) VALUES (NULL, 1, 2040.94, '001', '4289-2', '92980-2');
+INSERT INTO `metasoft`.`contaBancaria` (`id`, `empresaId`, `saldo`, `banco`, `agencia`, `conta`) VALUES (NULL, 1, -399.40, '002', '9293-x', '19304-3');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `metasoft`.`metodoPagamento`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `metasoft`;
+INSERT INTO `metasoft`.`metodoPagamento` (`id`, `nome`, `empresaId`) VALUES (NULL, 'Dinheiro', 1);
+INSERT INTO `metasoft`.`metodoPagamento` (`id`, `nome`, `empresaId`) VALUES (NULL, 'Débito', 1);
+INSERT INTO `metasoft`.`metodoPagamento` (`id`, `nome`, `empresaId`) VALUES (NULL, 'Crédito', 1);
+INSERT INTO `metasoft`.`metodoPagamento` (`id`, `nome`, `empresaId`) VALUES (NULL, 'Transferência', 1);
 
 COMMIT;
 
