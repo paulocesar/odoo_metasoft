@@ -44,13 +44,13 @@
         'change .valorLiquido': 'onChangeValorLiquido',
         'change .quantParcelas': 'onChangeParcelas',
         'change .desconto': 'onChangeDesconto',
-        'change .parcelas': 'change .parcelas'
+        'click .save': 'onClickSave'
       };
       ContasModal.__super__.constructor.apply(this, arguments);
-      fieldValidator.apply(this.$el);
       this.$formTop = this.$el.find('.form-conta-top');
       this.$formBottom = this.$el.find('.form-conta-bottom');
       this.$parcelas = this.$el.find('table .parcelas');
+      fieldValidator.apply(this.$el);
       this.$parcelas.on('change', 'input[name="valor"]', this.onChangeValorParcelas);
     }
 
@@ -108,7 +108,7 @@
       if (this.parcelas.length <= 1) {
         return;
       }
-      this.parcelas = this.getParcelas();
+      this.parcelas = this.getFormData().parcelas;
       liquido = this.getFormData().valorLiquido;
       last = _.last(this.parcelas);
       totalPrimeiras = 0;
@@ -120,7 +120,7 @@
         }
       }
       lastValor = liquido - totalPrimeiras;
-      if (totalPrimeiras < 0) {
+      if (lastValor < 0) {
         return;
       }
       last.valor = money.round(lastValor);
@@ -131,15 +131,6 @@
       var desconto;
       desconto = 0 - money.round(data.valorBruto - data.valorLiquido);
       return this.$el.find('.desconto').maskMoney('mask', desconto);
-    };
-
-    ContasModal.prototype.getParcelas = function(data) {
-      var parcelas;
-      parcelas = [];
-      this.$parcelas.find('tr').each(function() {
-        return parcelas.push(fieldValidator.getValues($(this)));
-      });
-      return parcelas;
     };
 
     ContasModal.prototype.buildParcelas = function() {
@@ -168,12 +159,12 @@
       var $btn, contaId, title;
       this.resetFormData();
       $btn = $(ev.relatedTarget);
-      this.contaTipo = $btn.data('contatipo');
+      this.tipoConta = $btn.data('contatipo');
       contaId = $btn.data('contaid');
       this.parcelas = [];
       title = 'Conta a Receber';
       this.$el.find('.modal-dialog').removeClass('invert-money-color');
-      if (this.contaTipo === 'pagar') {
+      if (this.tipoConta === 'pagar') {
         title = 'Conta a Pagar';
         this.$el.find('.modal-dialog').addClass('invert-money-color');
       }
@@ -199,11 +190,43 @@
       this.$parcelas.find('tr').each(function() {
         return data.parcelas.push(fieldValidator.getValues($(this)));
       });
+      data.tipoConta = this.tipoConta === 'pagar' ? '1' : '0';
       return data;
     };
 
     ContasModal.prototype.onHide = function(ev) {
       return this.$el.find('.modal-dialog').removeClass('invert-money-color');
+    };
+
+    ContasModal.prototype.isParcelasSumMatches = function(data) {
+      var p, ps, sum, _i, _len;
+      sum = 0;
+      ps = data.parcelas;
+      for (_i = 0, _len = ps.length; _i < _len; _i++) {
+        p = ps[_i];
+        sum += p.valor;
+      }
+      if (money.round(sum) === money.round(data.valorLiquido)) {
+        return true;
+      }
+      alert('A soma das parcelas está diferente do valor líquido!');
+      return false;
+    };
+
+    ContasModal.prototype.onClickSave = function() {
+      var data, isValid;
+      data = this.getFormData();
+      isValid = fieldValidator.isValid(this.$formTop, true) && fieldValidator.isValid(this.$formBottom, true) && this.isParcelasSumMatches(data);
+      if (!isValid) {
+        return;
+      }
+      this.$('.save').attr('disabled', 'disabled');
+      return this.post('financeiro/upsertConta', data, (function(_this) {
+        return function(conta) {
+          _this.$('.save').removeAttr('disabled');
+          return _this.$el.modal('hide');
+        };
+      })(this));
     };
 
     ContasModal.prototype.get = function() {

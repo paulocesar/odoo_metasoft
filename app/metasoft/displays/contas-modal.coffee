@@ -27,16 +27,17 @@ class ContasModal extends Backbone.View
             'change .valorLiquido': 'onChangeValorLiquido'
             'change .quantParcelas': 'onChangeParcelas'
             'change .desconto': 'onChangeDesconto'
-            'change .parcelas'
+            'click .save': 'onClickSave'
         }
 
         super
 
-        fieldValidator.apply(@$el)
 
         @$formTop = @$el.find('.form-conta-top')
         @$formBottom = @$el.find('.form-conta-bottom')
         @$parcelas = @$el.find('table .parcelas')
+
+        fieldValidator.apply(@$el)
 
         @$parcelas.on('change', 'input[name="valor"]', @onChangeValorParcelas)
 
@@ -85,7 +86,7 @@ class ContasModal extends Backbone.View
         if @parcelas.length <= 1
             return
 
-        @parcelas = @getParcelas()
+        @parcelas = @getFormData().parcelas
 
         liquido = @getFormData().valorLiquido
         last = _.last(@parcelas)
@@ -96,7 +97,7 @@ class ContasModal extends Backbone.View
 
         lastValor = liquido - totalPrimeiras
 
-        if totalPrimeiras < 0
+        if lastValor < 0
             return
 
         last.valor = money.round(lastValor)
@@ -106,13 +107,6 @@ class ContasModal extends Backbone.View
     updateDesconto: (data) ->
         desconto = 0 - money.round(data.valorBruto - data.valorLiquido)
         @$el.find('.desconto').maskMoney('mask', desconto)
-
-    getParcelas: (data) ->
-        parcelas = []
-        @$parcelas.find('tr').each(() ->
-            parcelas.push(fieldValidator.getValues($(@)))
-        )
-        return parcelas
 
     buildParcelas: () ->
         data = @getFormData()
@@ -137,14 +131,14 @@ class ContasModal extends Backbone.View
         @resetFormData()
 
         $btn = $(ev.relatedTarget)
-        @contaTipo = $btn.data('contatipo')
+        @tipoConta = $btn.data('contatipo')
         contaId = $btn.data('contaid')
         @parcelas = []
 
         title = 'Conta a Receber'
         @$el.find('.modal-dialog').removeClass('invert-money-color')
 
-        if @contaTipo == 'pagar'
+        if @tipoConta == 'pagar'
             title = 'Conta a Pagar'
             @$el.find('.modal-dialog').addClass('invert-money-color')
 
@@ -171,9 +165,40 @@ class ContasModal extends Backbone.View
             data.parcelas.push(fieldValidator.getValues($(@)))
         )
 
+        data.tipoConta = if @tipoConta == 'pagar' then '1' else '0'
+
         return data
 
     onHide: (ev) -> @$el.find('.modal-dialog').removeClass('invert-money-color')
+
+    isParcelasSumMatches: (data) ->
+        sum = 0
+        ps = data.parcelas
+
+        for p in ps
+            sum += p.valor
+
+        if money.round(sum) == money.round(data.valorLiquido)
+            return true
+
+        alert('A soma das parcelas está diferente do valor líquido!')
+        return false
+
+    onClickSave: () ->
+        data = @getFormData()
+        isValid = fieldValidator.isValid(@$formTop, true) &&
+            fieldValidator.isValid(@$formBottom,true) &&
+            @isParcelasSumMatches(data)
+
+        unless isValid
+            return
+
+        @$('.save').attr('disabled', 'disabled')
+
+        @post('financeiro/upsertConta', data, (conta) =>
+            @$('.save').removeAttr('disabled')
+            @$el.modal('hide')
+        )
 
     get: (args...) -> Metasoft.get(args...)
     post: (args...) -> Metasoft.post(args...)

@@ -46,7 +46,7 @@
     'not-zero': {
       test: function(v) {
         var _ref;
-        return (_ref = $.trim(v)) !== '' && _ref !== 0 && _ref !== '0' && _ref !== 'R$ 0.00';
+        return (_ref = $.trim(v)) !== '' && _ref !== 0 && _ref !== '0' && _ref !== 'R$ 0,00';
       },
       message: 'Não pode ser zero'
     }

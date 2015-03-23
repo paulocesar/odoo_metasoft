@@ -10,4 +10,12 @@ module.exports = C('financeiro', {
 
     post_removeContaBancaria: () ->
         @ms.crud().remove('contaBancaria', @json(), @sendDataOrError)
+
+    post_upsertConta: () ->
+        data = @json()
+        console.log data
+        setTimeout(
+            () => @sendData({conta: data})
+            3000
+        )
 })

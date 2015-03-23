@@ -42,7 +42,7 @@ validators = {
     }
 
     'not-zero': {
-        test: (v) -> $.trim(v) not in [ '', 0, '0', 'R$ 0.00' ]
+        test: (v) -> $.trim(v) not in [ '', 0, '0', 'R$ 0,00' ]
         message: 'Não pode ser zero'
     }
 }
