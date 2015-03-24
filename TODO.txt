@@ -2,7 +2,7 @@ Parcelas
  - melhorar forma de update (nõa renderizar novamente)
 
 CRUD Produtos
-login
+login - melhorar seguraça de password
 em lancamentos - fazer listagem
 em lancamentos - fazer filtros
 em lancamentos - salvar informacoes

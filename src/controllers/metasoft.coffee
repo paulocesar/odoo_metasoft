@@ -59,4 +59,11 @@ module.exports = C('metasoft', {
             callback(null, data)
         )
 
+    post_login: () ->
+        passport.authenticate('local', {
+            successRedirect: "/metasoft/index/#{@empresaId}",
+            failureRedirect: '/login',
+            failureFlash: true
+        })
+
 })

@@ -2,14 +2,10 @@ util = require('util')
 express = require('express')
 _ = require('underscore')
 Context = require('./context')
-config = require('../../config')
 
 rgxHttpMethod = /^(get|post)_[a-zA-Z]+/
 
-db = require('knex')(config.database)
-
 class Controller
-
     constructor: (@name, @content) ->
         @router = express.Router()
 
@@ -22,12 +18,11 @@ class Controller
     done: () -> return @router
 
     requireLogin: (roles) ->
-        ###
         router.use((req, res, next) ->
-          # login stuff
-          next()
-        })
-        ###
+            if !req.user || req.user.role not in roles
+                return res.redirect("/")
+        )
+
         return @
 
     _addEndpoint: (method, action, cb) ->
@@ -40,8 +35,8 @@ class Controller
                 empresaId
                 req
                 res
-                db
-                ms: new Context(db, empresaId)
+                db: req.db
+                ms: new Context(req.db, empresaId)
 
                 json: () -> JSON.parse(req.body.data)
                 sendData: (data) => res.json({ success: true, data: JSON.stringify(data) })

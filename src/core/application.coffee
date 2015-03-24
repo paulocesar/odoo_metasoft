@@ -6,7 +6,25 @@ bodyParser = require('body-parser')
 cookieParser = require('cookie-parser')
 session = require('cookie-session')
 fs = require('fs')
-{ Context } = require('./requires')
+
+config = require('../../config')
+db = require('knex')(config.database)
+
+passport = require('passport')
+LocalStrategy = require('passport-local').Strategy
+
+passport.use(new LocalStrategy((username, senha, done) ->
+    db('logins').select('password').where('login', username).exec((err, logins) ->
+        return done(err) if err?
+
+        login = logins[0]
+        # TODO: melhorar seguraca
+        if (!login || senha != login.senha)
+            return done(null, false, { message: 'Login ou senha incorretos' })
+
+        done(null, login)
+    )
+)
 
 class Application
     constructor: () ->
@@ -32,6 +50,10 @@ class Application
         @app.use(cookieParser())
         @app.use(session({ keys: ['kasbsa9da&gd', 'jnasd8yabyb'] }))
         @app.use(express.static(path.join(srcPath, 'public')))
+        @app.use((req, res, next) ->
+            req.db = db
+            next()
+        )
 
     injectControllers: () ->
         requireDirs = [ 'controllers' ]

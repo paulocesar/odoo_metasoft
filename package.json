@@ -17,6 +17,8 @@
     "knex": "",
     "morgan": "",
     "mysql": "",
+    "passport": "",
+    "passport-local": "",
     "serve-favicon": "",
     "underscore": ""
   },
