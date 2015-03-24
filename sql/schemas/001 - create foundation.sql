@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`conta` (
   `empresaId` INT UNSIGNED NOT NULL,
   `loginId` INT UNSIGNED NOT NULL,
   `tipoConta` TINYINT(1) NOT NULL,
-  `criadoEm` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `criadoEm` DATETIME NOT NULL,
   `descricao` VARCHAR(255) NULL DEFAULT NULL,
   `centroCustoId` INT UNSIGNED NOT NULL,
   `metodoPagamentoId` INT UNSIGNED NOT NULL,
@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`impostoNotaFiscal` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `loginId` INT UNSIGNED NOT NULL,
   `empresaId` INT UNSIGNED NOT NULL,
-  `criadoEm` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `criadoEm` DATETIME NOT NULL,
   `imposto` VARCHAR(45) NOT NULL,
   `taxa` DECIMAL(5,5) NOT NULL,
   `valor` DECIMAL(10,2) NOT NULL,
@@ -281,7 +281,7 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`contrato` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'status - aprovando orcamento, em desenvolvimento, finalizado, cancelado, suspenso';
+COMMENT = 'status - aprovando orcamento, em desenvolvimento, finalizado /* comment truncated */ /*, cancelado, suspenso*/';
 
 
 -- -----------------------------------------------------
@@ -306,11 +306,11 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`colaborador` (
   `observacao` TEXT NULL,
   `inss` DECIMAL(10,2) NULL,
   `impostoRetido` DECIMAL(10,2) NULL,
-  `empresa_id` INT UNSIGNED NOT NULL,
+  `empresaId` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_colaborador_empresa1_idx` (`empresa_id` ASC),
+  INDEX `fk_colaborador_empresa1_idx` (`empresaId` ASC),
   CONSTRAINT `fk_colaborador_empresa1`
-    FOREIGN KEY (`empresa_id`)
+    FOREIGN KEY (`empresaId`)
     REFERENCES `metasoft`.`empresa` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -439,7 +439,14 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `metasoft`.`produtoCategoria` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`))
+  `empresaId` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`, `empresaId`),
+  INDEX `fk_produtoCategoria_empresa1_idx` (`empresaId` ASC),
+  CONSTRAINT `fk_produtoCategoria_empresa1`
+    FOREIGN KEY (`empresaId`)
+    REFERENCES `metasoft`.`empresa` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -452,11 +459,18 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`produto` (
   `codigo` VARCHAR(45) NULL,
   `preco` DECIMAL(10,2) NOT NULL,
   `produtoCategoriaId` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
+  `empresaId` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`, `empresaId`),
   INDEX `fk_produto_produtoCategoria1_idx` (`produtoCategoriaId` ASC),
+  INDEX `fk_produto_empresa1_idx` (`empresaId` ASC),
   CONSTRAINT `fk_produto_produtoCategoria1`
     FOREIGN KEY (`produtoCategoriaId`)
     REFERENCES `metasoft`.`produtoCategoria` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_produto_empresa1`
+    FOREIGN KEY (`empresaId`)
+    REFERENCES `metasoft`.`empresa` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

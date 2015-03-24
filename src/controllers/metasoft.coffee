@@ -33,6 +33,13 @@ module.exports = C('metasoft', {
                     .orderBy('nome', 'asc')
                     .exec(cb)
 
+            produtoCategoria: (cb) =>
+                @db.select('id', 'nome')
+                    .from('produtoCategoria')
+                    .where('empresaId', @empresaId)
+                    .orderBy('nome', 'asc')
+                    .exec(cb)
+
             metodoPagamentos: (cb) =>
                 @db.select('id', 'nome')
                     .from('metodoPagamento')
@@ -54,6 +61,7 @@ module.exports = C('metasoft', {
                 centroCustoById: toDictionary(raw.centroCustos)
                 metodoPagamentoById: toDictionary(raw.metodoPagamentos)
                 contaBancariaById: toDictionary(raw.contaBancarias)
+                produtoCategoriaById: toDictionary(raw.produtoCategoria)
             }
 
             callback(null, data)
