@@ -3,6 +3,7 @@ Parcelas
 
 CRUD Produtos
 login
+busca assincrona para clientes
 em lancamentos - fazer listagem
 em lancamentos - fazer filtros
 em lancamentos - salvar informacoes
