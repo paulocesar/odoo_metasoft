@@ -6,24 +6,41 @@ bodyParser = require('body-parser')
 cookieParser = require('cookie-parser')
 session = require('cookie-session')
 fs = require('fs')
+_ = require('underscore')
+A = require('async')
 
 config = require('../../config')
+Context = require('./context')
 db = require('knex')(config.database)
 
 passport = require('passport')
 LocalStrategy = require('passport-local').Strategy
 
-passport.use(new LocalStrategy((username, senha, done) ->
-    db('logins').select('password').where('login', username).exec((err, logins) ->
-        return done(err) if err?
+passport.use(new LocalStrategy((username, senha, next) ->
+
+    onDone = (err, logins) ->
+        return next(err) if err?
 
         login = logins[0]
-        # TODO: melhorar seguraca
-        if (!login || senha != login.senha)
-            return done(null, false, { message: 'Login ou senha incorretos' })
 
-        done(null, login)
-    )
+        # TODO: melhorar seguraca
+        if login? && senha == login.senha
+            return next(null, _.omit(login, 'senha'))
+
+        next(null, false, { message: 'Login ou senha incorretos' })
+
+    db('login')
+        .select('login', 'senha', 'empresaId', 'papel', 'nome')
+        .where('login', username)
+        .exec(onDone)
+))
+
+passport.serializeUser((user, done) ->
+  done(null, user)
+)
+
+passport.deserializeUser((user, done) ->
+  done(null, user)
 )
 
 class Application
@@ -54,6 +71,9 @@ class Application
             req.db = db
             next()
         )
+
+        @app.use(passport.initialize());
+        @app.use(passport.session());
 
     injectControllers: () ->
         requireDirs = [ 'controllers' ]

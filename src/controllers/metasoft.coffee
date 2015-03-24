@@ -8,7 +8,9 @@ toDictionary = (content, field = 'id') ->
 
     return contentByField
 
-module.exports = C('metasoft', {
+configs = { roles: ['admin'] }
+
+module.exports = C('metasoft', configs, {
     get_index: () ->
         # Centro de Custo / Forma de Pagamento / Conta Financeira
 
@@ -66,12 +68,4 @@ module.exports = C('metasoft', {
 
             callback(null, data)
         )
-
-    post_login: () ->
-        passport.authenticate('local', {
-            successRedirect: "/metasoft/index/#{@empresaId}",
-            failureRedirect: '/login',
-            failureFlash: true
-        })
-
 })

@@ -6,8 +6,15 @@ Context = require('./context')
 rgxHttpMethod = /^(get|post)_[a-zA-Z]+/
 
 class Controller
-    constructor: (@name, @content) ->
+    constructor: (@name, @content, configs) ->
+        _.extend(@, configs)
+
         @router = express.Router()
+        @roles ?= []
+        @hasEmpresaId ?= true
+
+        unless _.isEmpty(@roles)
+            @requireLogin()
 
         for name, func of @content when rgxHttpMethod.test(name)
             httpMethod = name.split('_')
@@ -17,16 +24,22 @@ class Controller
 
     done: () -> return @router
 
-    requireLogin: (roles) ->
-        router.use((req, res, next) ->
-            if !req.user || req.user.role not in roles
-                return res.redirect("/")
+    requireLogin: () ->
+        roles = @roles
+        @router.use((req, res, next) ->
+            if !req.user || (req.user.papel not in roles)
+                return res.redirect("/access/index")
+
+            next()
         )
 
         return @
 
     _addEndpoint: (method, action, cb) ->
-        path = "/#{@name}/#{action}/:empresaId"
+        path = "/#{@name}/#{action}"
+
+        if @hasEmpresaId
+            path += "/:empresaId"
 
         @router[method.toLowerCase()](path, (req, res) =>
             empresaId = req.params.empresaId
@@ -54,4 +67,9 @@ class Controller
         console.log("#{method.toUpperCase()} #{path}")
         return @
 
-module.exports = (name, content) -> new Controller(name, content)
+module.exports = (name, configs, content) ->
+    unless content?
+        content = configs
+        configs = null
+
+    new Controller(name, content, configs)
