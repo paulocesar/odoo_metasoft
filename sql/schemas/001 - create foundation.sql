@@ -433,6 +433,35 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`transferenciaEstoque` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `metasoft`.`produtoCategoria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`produtoCategoria` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `metasoft`.`produto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`produto` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(45) NOT NULL,
+  `codigo` VARCHAR(45) NULL,
+  `preco` DECIMAL(10,2) NOT NULL,
+  `produtoCategoriaId` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_produto_produtoCategoria1_idx` (`produtoCategoriaId` ASC),
+  CONSTRAINT `fk_produto_produtoCategoria1`
+    FOREIGN KEY (`produtoCategoriaId`)
+    REFERENCES `metasoft`.`produtoCategoria` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

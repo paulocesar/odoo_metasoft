@@ -1,2 +1,16 @@
 Parcelas
  - melhorar forma de update (nõa renderizar novamente)
+
+CRUD Produtos
+login
+em lancamentos - fazer listagem
+em lancamentos - fazer filtros
+em lancamentos - salvar informacoes
+na remocao dos itens verificar relacionamento
+
+PENDENCIAS - SB
+Modulo Administrativo
+Modulo RH
+Contrato
+Nota Fiscal
+Transferencia entre bancos
