@@ -43,9 +43,15 @@ class Controller
 
         @router[method.toLowerCase()](path, (req, res) =>
             empresaId = req.params.empresaId
+            login = req.user
+
+            if login && login.papel != 'admin' && login.empresaId != empresaId
+                res.redirect("/metasoft/index/#{login.empresaId}")
+                return
 
             data = {
                 empresaId
+                login
                 req
                 res
                 db: req.db
