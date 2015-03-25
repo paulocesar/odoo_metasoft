@@ -19,5 +19,24 @@ module.exports = C('financeiro', {
         @ms.lancamento().save(conta, parcelas, @sendDataOrError)
 
     post_listaLancamentos: () ->
-        @ms.crud().listWithEmpresa('parcela', @sendDataOrError)
+        @db('parcela')
+            .select(
+                'dataVencimento'
+                'valor'
+                'pago'
+                'contaId'
+                'impostoNotaFiscalId'
+
+                'tipoConta'
+                'descricao'
+                'parceiro.nome as parceiroNome'
+                'centroCustoId'
+                'contaBancariaId'
+                'metodoPagamentoId'
+                'status'
+            )
+            .innerJoin('conta', 'conta.id', 'parcela.contaId')
+            .leftJoin('parceiro', 'parceiro.id', 'conta.parceiroId')
+            .orderBy('dataVencimento', 'asc')
+            .exec(@sendDataOrError)
 })

@@ -45,6 +45,12 @@ class Application
             @displaysById[name] = display
         )
 
+        $s = $('.btn-subcategory')
+        $s.on('click', () ->
+            $s.removeClass('active')
+            $(@).addClass('active')
+        )
+
 
 app = window.app = new Application()
 

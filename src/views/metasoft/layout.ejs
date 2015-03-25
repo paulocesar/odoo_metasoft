@@ -22,33 +22,39 @@
 
     <div role="tabpanel">
 
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#inicio" aria-controls="home" role="tab" data-toggle="tab">Início</a></li>
+    <ul class="nav nav-tabs category-menu" role="tablist">
+        <li role="presentation" class='active'><a href="#financeiro" aria-controls="profile" role="tab" data-toggle="tab">Financeiro</a></li>
         <li role="presentation"><a href="#administrativo" aria-controls="profile" role="tab" data-toggle="tab">Administrativo</a></li>
         <li role="presentation"><a href="#parceiros" aria-controls="profile" role="tab" data-toggle="tab">Parceiros</a></li>
-        <li role="presentation"><a href="#financeiro" aria-controls="profile" role="tab" data-toggle="tab">Financeiro</a></li>
-        <li role="presentation"><a href="#contabilidade" aria-controls="messages" role="tab" data-toggle="tab">Contábil</a></li>
+        <!-- li role="presentation"><a href="#contabilidade" aria-controls="messages" role="tab" data-toggle="tab">Contábil</a></li -->
         <li role="presentation"><a href="#configuracoes" aria-controls="settings" role="tab" data-toggle="tab">Configurações</a></li>
     </ul>
 
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active subcategory" id="inicio">&nbsp;</div>
+        <div role="tabpanel" class="tab-pane active subcategory" id="financeiro">
+            <a class='btn-subcategory active' href='#/page/contas'>Lançamentos</a>
+            <a class='btn-subcategory' href='#/page/contaBancaria'>Contas Financeiras</a>
+        </div>
+
+
         <div role="tabpanel" class="tab-pane subcategory" id="administrativo">
-            <a href='#/page/produtos'>Produtos</a>
+            <a class='btn-subcategory' href='#/page/produtos'>Produtos</a>
         </div>
+
+
         <div role="tabpanel" class="tab-pane subcategory" id="parceiros">
-            <a href='#/page/parceiros'>Clientes / Fornecedores</a>
+            <a class='btn-subcategory' href='#/page/parceiros'>Clientes / Fornecedores</a>
         </div>
-        <div role="tabpanel" class="tab-pane subcategory" id="financeiro">
-            <a href='#/page/contas'>Lançamentos</a>
-            &nbsp; <a href='#/page/contaBancaria'>Contas Financeiras</a>
-        </div>
+
+
         <div role="tabpanel" class="tab-pane subcategory" id="contabilidade">&nbsp;</div>
+
+
         <div role="tabpanel" class="tab-pane subcategory" id="configuracoes">
-            <a href='#/page/centroCusto'>Centros de Custo</a>
-            &nbsp; <a href='#/page/metodoPagamento'>Formas de Pagamento</a>
-            &nbsp; <a href='#/page/imposto'>Impostos</a>
-            &nbsp; <a href='#/page/logins'>Usuários</a>
+            <a class='btn-subcategory' href='#/page/centroCusto'>Centros de Custo</a>
+            <a class='btn-subcategory' href='#/page/metodoPagamento'>Formas de Pagamento</a>
+            <a class='btn-subcategory' href='#/page/imposto'>Impostos</a>
+            <a class='btn-subcategory' href='#/page/logins'>Usuários</a>
         </div>
     </div>
 

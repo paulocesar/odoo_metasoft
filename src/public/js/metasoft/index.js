@@ -47,6 +47,7 @@
 
   Application = (function() {
     function Application() {
+      var $s;
       this.displaysById = {};
       this.displaysContainer = Metasoft.container.find('#displayContainer');
       _.each(Metasoft.displays, (function(_this) {
@@ -60,6 +61,11 @@
           return _this.displaysById[name] = display;
         };
       })(this));
+      $s = $('.btn-subcategory');
+      $s.on('click', function() {
+        $s.removeClass('active');
+        return $(this).addClass('active');
+      });
     }
 
     return Application;

@@ -29,7 +29,9 @@
     };
 
     Contas.prototype.renderLancamentos = function(parcelas) {
-      return this.$el.find('.list-lancamentos').html(this.subTpls.parcelas({
+      var $l;
+      $l = this.$el.find('.list-lancamentos');
+      return $l.html(this.subTpls.parcelas({
         parcelas: parcelas
       }));
     };

@@ -20,7 +20,8 @@ class Contas extends Metasoft.Display
         @post('financeiro/listaLancamentos', { }, @renderLancamentos)
 
     renderLancamentos: (parcelas) =>
-        @$el.find('.list-lancamentos').html(@subTpls.parcelas({ parcelas }))
+        $l = @$el.find('.list-lancamentos')
+        $l.html(@subTpls.parcelas({ parcelas }))
 
 
 Metasoft.displays.Contas = Contas
