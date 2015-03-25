@@ -6,7 +6,7 @@ login - melhorar seguraça de password
 login - busca assincrona para clientes
 em lancamentos - fazer listagem
 em lancamentos - fazer filtros
-em lancamentos - salvar informacoes
+em lancamentos - conrrigir salvamento da flag PAGO
 na remocao dos itens verificar relacionamento
 
 PENDENCIAS - SB

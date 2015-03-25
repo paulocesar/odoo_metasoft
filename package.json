@@ -15,6 +15,7 @@
     "ejs": "",
     "express": "",
     "knex": "",
+    "moment": "",
     "morgan": "",
     "mysql": "",
     "passport": "",

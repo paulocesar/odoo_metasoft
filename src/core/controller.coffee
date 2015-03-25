@@ -55,7 +55,7 @@ class Controller
                 req
                 res
                 db: req.db
-                ms: new Context(req.db, empresaId)
+                ms: new Context(req.db, { empresaId , login })
 
                 json: () -> JSON.parse(req.body.data)
                 sendData: (data) => res.json({ success: true, data: JSON.stringify(data) })

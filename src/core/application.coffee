@@ -30,7 +30,7 @@ passport.use(new LocalStrategy((username, senha, next) ->
         next(null, false, { message: 'Login ou senha incorretos' })
 
     db('login')
-        .select('login', 'senha', 'empresaId', 'papel', 'nome')
+        .select('id', 'login', 'senha', 'empresaId', 'papel', 'nome')
         .where('login', username)
         .exec(onDone)
 ))

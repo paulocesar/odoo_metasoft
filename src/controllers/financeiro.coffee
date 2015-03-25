@@ -16,8 +16,5 @@ module.exports = C('financeiro', {
         parcelas = data.parcelas
         conta = _.omit(data, 'parcelas', 'desconto', 'quantParcelas')
 
-        setTimeout(
-            () => @sendData({conta: data})
-            3000
-        )
+        @ms.lancamento().save(conta, parcelas, @sendDataOrError)
 })

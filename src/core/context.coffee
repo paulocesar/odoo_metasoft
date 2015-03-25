@@ -1,7 +1,9 @@
 fs = require('fs')
+_ = require('underscore')
 
 class Context
-    constructor: (@db, @empresaId) ->
+    constructor: (@db, config) ->
+        _.extend(@, config)
 
     @injectModels: () ->
         requireDirs = [ 'models' ]
