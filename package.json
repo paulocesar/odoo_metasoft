@@ -15,8 +15,11 @@
     "ejs": "",
     "express": "",
     "knex": "",
+    "moment": "",
     "morgan": "",
     "mysql": "",
+    "passport": "",
+    "passport-local": "",
     "serve-favicon": "",
     "underscore": ""
   },

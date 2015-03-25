@@ -8,24 +8,30 @@ toDictionary = (content, field = 'id') ->
 
     return contentByField
 
-module.exports = C('metasoft', {
+configs = { roles: ['admin'] }
+
+module.exports = C('metasoft', configs, {
     get_index: () ->
-        # Centro de Custo / Forma de Pagamento / Conta Financeira
 
         @getBasicItems((err, data) =>
             return @sendError(err) if err?
 
             renderContent = {
-                title: 'Metasoft'
-                jsData: JSON.stringify(_.extend({ @empresaId }, data))
+                @login
+                jsData: JSON.stringify(_.extend({ @empresaId, @login }, data))
             }
-
 
             @res.render('metasoft/index', renderContent)
         )
 
     getBasicItems: (callback) ->
         A.parallel({
+            empresa: (cb) =>
+                @db.select('id', 'nome')
+                    .from('empresa')
+                    .where('id', @empresaId)
+                    .exec(cb)
+
             centroCustos: (cb) =>
                 @db.select('id', 'nome')
                     .from('centroCusto')
@@ -62,9 +68,9 @@ module.exports = C('metasoft', {
                 metodoPagamentoById: toDictionary(raw.metodoPagamentos)
                 contaBancariaById: toDictionary(raw.contaBancarias)
                 produtoCategoriaById: toDictionary(raw.produtoCategoria)
+                empresa: raw.empresa[0]
             }
 
             callback(null, data)
         )
-
 })

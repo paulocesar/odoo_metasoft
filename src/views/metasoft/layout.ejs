@@ -4,16 +4,16 @@
         <div class="container-fluid">
 
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Metasoft</a>
+                <a class="navbar-brand" href="#">{%= Metasoft.empresa.nome %}</a>
             </div>
 
             <div class="collapse navbar-collapse">
                 <form class="navbar-form navbar-right">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Login">
-                        <input type="password" class="form-control" placeholder="Senha">
+                        <label class="label-control">{%= Metasoft.login.nome %}</label>
                     </div>
-                    <button type="submit" class="btn btn-default">Entrar</button>
+                    &nbsp; &nbsp;
+                    <a href="/access/logout" class="btn btn-default">Sair</a>
                 </form>
             </div>
 

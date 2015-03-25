@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-br">
     <meta>
-        <title><%= title %></title>
+        <title>Metasoft</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <% include ../base/stylesheet %>
         <% include ../base/javascript %>
+
+        <script type="text/javascript">
+            var Metasoft = <%- jsData %>;
+        </script>
+
+        <script src='/js/metasoft.js'></script>
 
         <link rel='stylesheet' href='/css/metasoft.css'>
     </meta>
