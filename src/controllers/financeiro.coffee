@@ -17,4 +17,7 @@ module.exports = C('financeiro', {
         conta = _.omit(data, 'parcelas', 'desconto', 'quantParcelas')
 
         @ms.lancamento().save(conta, parcelas, @sendDataOrError)
+
+    post_listaLancamentos: () ->
+        @ms.crud().listWithEmpresa('parcela', @sendDataOrError)
 })

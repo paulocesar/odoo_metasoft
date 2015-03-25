@@ -24,6 +24,27 @@
     return "<a href='#page/" + name + "' class='list-group-item page-" + name + "'>" + subCategory + "</a>";
   };
 
+  MetasoftRouter = Backbone.Router.extend({
+    routes: {
+      "page/:name": "goToPage"
+    },
+    goToPage: function(name) {
+      var _ref, _ref1;
+      if (this.previousPage == null) {
+        this.previousPage = '';
+      }
+      if ((_ref = app.displaysById[this.previousPage]) != null) {
+        _ref.onHide();
+      }
+      $('.display').hide();
+      $("#display-" + name).show();
+      this.previousPage = name;
+      return (_ref1 = app.displaysById[name]) != null ? _ref1.onShow() : void 0;
+    }
+  });
+
+  Backbone.history.start();
+
   Application = (function() {
     function Application() {
       this.displaysById = {};
@@ -47,30 +68,9 @@
 
   app = window.app = new Application();
 
-  MetasoftRouter = Backbone.Router.extend({
-    routes: {
-      "page/:name": "goToPage"
-    },
-    goToPage: function(name) {
-      var _ref, _ref1;
-      if (this.previousPage == null) {
-        this.previousPage = '';
-      }
-      if ((_ref = app.displaysById[this.previousPage]) != null) {
-        _ref.onHide();
-      }
-      $('.display').hide();
-      $("#display-" + name).show();
-      this.previousPage = name;
-      return (_ref1 = app.displaysById[name]) != null ? _ref1.onShow() : void 0;
-    }
-  });
-
   metasoftRouter = new MetasoftRouter();
 
   app.metasoftRouter = metasoftRouter;
-
-  Backbone.history.start();
 
   metasoftRouter.navigate('page/contas');
 
