@@ -16,6 +16,7 @@ module.exports = C('financeiro', {
         parcelas = @db('parcela').select(
                 'parcela.id as id'
                 'dataVencimento'
+                'criadoEm'
                 'valor'
                 'pago'
                 'contaId'

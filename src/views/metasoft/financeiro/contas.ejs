@@ -9,7 +9,7 @@
                 data-contatipo='receber'
             >
                 <span class="glyphicon glyphicon-plus-sign"></span>
-                Conta a Receber
+                A Receber
             </button>
 
             <button
@@ -20,7 +20,7 @@
                 data-contatipo='pagar'
             >
                 <span class="glyphicon glyphicon-plus-sign"></span>
-                Conta a Pagar
+                A Pagar
             </button>
         </div>
         <div class="col-md-10">
@@ -28,22 +28,36 @@
                 <div class='col-md-3'>
                     <input type='text' class='form-control' placeHolder="buscar..." />
                 </div>
-                <div class='col-md-5'>
-                    <button class='btn btn-default'>Todos</button>
-                    <button class='btn btn-default'>Receber</button>
-                    <button class='btn btn-default'>Pagar</button>
-                    <div class="dropdown" style='float: right'>
+                <div class='col-md-3'>
+
+                    <div class="dropdown" style='float: left'>
                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                            Dia
-                            <span class="caret"></span>
+                            Vencidos <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Dia</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mês</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Vencidos</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">A Pagar</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">A Receber</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Pagos</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Recebidos</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Todos</a></li>
                         </ul>
                     </div>
                 </div>
-                <div class='col-md-4'>
+
+                <div class='col-md-3'>
+                    <div class="dropdown" style='float: right'>
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                            Qualquer periodo <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Qualquer periodo</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Por Dia</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Por Mês</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class='col-md-3'>
                     <div class="input-group">
                         <span class="input-group-addon"><</span>
                         <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
@@ -55,9 +69,9 @@
                 <thead>
                     <tr>
                         <td class='col-md-2'>Vencimento</td>
+                        <td class='col-md-2'>Admissão</td>
                         <td class='col-md-2'>Centro de Custo</td>
-                        <td class='col-md-2'>Cliente/Fornecedor</td>
-                        <td class='col-md-3'>Conta Financeira</td>
+                        <td class='col-md-3'>Cliente/Fornecedor</td>
                         <td class='col-md-2'>Valor</td>
                         <td class='col-md-1'>Pago?</td>
                     </tr>
@@ -197,12 +211,11 @@
             {% var dv = moment(p.dataVencimento); %}
             {% var dataCls = dv.diff(moment(), 'days') <= 0 && !p.pago ? 'red' : ''; %}
             <td class='col-md-2 {%= dataCls %}'>{%= dv.format('DD/MM/YYYY') %}</td>
+            <td class='col-md-2'>{%= moment(p.criadoEm).format('DD/MM/YYYY') %}</td>
             <td class='col-md-2'>{%= Metasoft.centroCustoById[p.centroCustoId].nome %}</td>
-            <td class='col-md-2'>{%= p.parceiroNome %}</td>
-            {% var c = Metasoft.contaBancariaById[p.contaBancariaId] %}
-            <td class='col-md-3'>{%= c.banco %} {%= c.agencia %} / {%= c.conta %}</td>
+            <td class='col-md-3'>{%= p.parceiroNome %}</td>
             <td class='col-md-2 green-money'>{%= Metasoft.money.format(p.valor) %}</td>
-            <td class='col-md-1'><input type='checkbox' name="pago" {%= p.pago ? 'checked' :'' %} style='margin-left:25px;'></td>
+            <td class='col-md-1'><input type='checkbox' name="pago" {%= p.pago ? 'checked' :'' %}></td>
         </tr>
     {% }) %}
 </script>
