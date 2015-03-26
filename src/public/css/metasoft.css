@@ -98,7 +98,7 @@
 .fix-header div { padding: 0px; }
 
 .list-container {
-    height: 350px;
+    height: 450px;
     overflow-y: scroll;
     border: 1px solid #E8E8E8;
 }

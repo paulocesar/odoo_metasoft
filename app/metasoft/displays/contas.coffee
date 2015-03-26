@@ -7,6 +7,8 @@ jsRoot = @
 
 class Contas extends Metasoft.Display
     constructor: (opts) ->
+        @model = 'lancamento'
+
         @subTpls = {
             form: _.template($('#subtpl-display-contas-form').html())
             parcelas: _.template($('#subtpl-display-contas-parcelaItem').html())
@@ -17,7 +19,8 @@ class Contas extends Metasoft.Display
         @modal = new modals.Contas()
 
     onShow: () ->
-        @post('financeiro/listaLancamentos', { }, @renderLancamentos)
+        data = { @model, action: 'list' }
+        @post('crud/model', data, @renderLancamentos)
 
     renderLancamentos: (data) =>
         { @parcelas, @pages } = data

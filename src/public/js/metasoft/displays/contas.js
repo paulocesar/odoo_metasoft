@@ -16,6 +16,7 @@
 
     function Contas(opts) {
       this.renderLancamentos = __bind(this.renderLancamentos, this);
+      this.model = 'lancamento';
       this.subTpls = {
         form: _.template($('#subtpl-display-contas-form').html()),
         parcelas: _.template($('#subtpl-display-contas-parcelaItem').html())
@@ -25,7 +26,12 @@
     }
 
     Contas.prototype.onShow = function() {
-      return this.post('financeiro/listaLancamentos', {}, this.renderLancamentos);
+      var data;
+      data = {
+        model: this.model,
+        action: 'list'
+      };
+      return this.post('crud/model', data, this.renderLancamentos);
     };
 
     Contas.prototype.renderLancamentos = function(data) {

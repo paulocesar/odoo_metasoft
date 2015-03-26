@@ -1,11 +1,13 @@
 { Model, _, A, Context, moment } = require('../core/requires')
 
 class Lancamento extends Model
-    save: (conta, parcelas, callback) ->
+    save: (data, callback) ->
+        parcelas = data.parcelas
+        conta = @formatRow('conta', data)
+
         conta.empresaId = @empresaId
         conta.loginId = @login.id
         conta.criadoEm = @datetimeNow()
-        conta = @formatRow('conta', conta)
 
         @db('conta').insert(conta).exec((err, ids) =>
             return callback(err) if err?
@@ -21,6 +23,45 @@ class Lancamento extends Model
                 ps.push(@formatRow('parcela', p))
 
             @db('parcela').insert(ps).exec(callback)
+        )
+
+    list: (data, callback) ->
+        limit = data.limit || 100
+        offset = data.offset || 0
+
+        parcelas = @db('parcela').select(
+                'parcela.id as id'
+                'dataVencimento'
+                'criadoEm'
+                'valor'
+                'pago'
+                'contaId'
+                'impostoNotaFiscalId'
+                'tipoConta'
+                'descricao'
+                'parceiro.nome as parceiroNome'
+                'centroCustoId'
+                'contaBancariaId'
+                'metodoPagamentoId'
+                'status'
+            )
+            .innerJoin('conta', 'conta.id', 'parcela.contaId')
+            .leftJoin('parceiro', 'parceiro.id', 'conta.parceiroId')
+            .orderBy('dataVencimento', 'asc')
+            .limit(limit)
+            .offset(offset)
+
+        pages = @db('parcela').count('parcela.id as pages')
+
+        A.parallel({
+            parcelas: (cb) -> parcelas.exec(cb)
+            pages: (cb) -> pages.exec(cb)
+        }, (err, raw) =>
+            return callback(err) if err?
+            callback(null, {
+                parcelas: raw.parcelas
+                pages: Math.floor(raw.pages[0].pages / limit)
+            })
         )
 
 

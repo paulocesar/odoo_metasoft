@@ -195,7 +195,13 @@ class ContasModal extends Backbone.View
 
         @$('.save').attr('disabled', 'disabled')
 
-        @post('financeiro/upsertConta', data, (conta) =>
+        d = {
+            model: 'lancamento'
+            action: 'save'
+            data
+        }
+
+        @post('crud/model', d, (conta) =>
             @$('.save').removeAttr('disabled')
             @$el.modal('hide')
         )

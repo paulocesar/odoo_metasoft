@@ -16,17 +16,16 @@ module.exports = C('crud', {
         @ms.crud().remove(d.table, d.data, @sendDataOrError)
 
     post_model: () ->
-        d = @json()
-        model = @ms[d.model]
-        action = d.action
+        { model, action, data } = @json()
+        data ?= {}
 
-        unless model? && _.isFunction(model)
-            return @sendError("Cannot find model '#{d.model}'")
+        unless _.isFunction(@ms[model])
+            return @sendError("Cannot find model '#{model}'")
 
-        m = model()
+        m = @ms[model]()
 
-        unless m[action]?
+        unless _.isFunction(m[action])
             return @sendError("Cannot find action '#{action}'")
 
-        m.action(d.data || {}, callback)
+        return m[action](data, @sendDataOrError)
 })

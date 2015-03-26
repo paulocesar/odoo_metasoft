@@ -214,14 +214,19 @@
     };
 
     ContasModal.prototype.onClickSave = function() {
-      var data, isValid;
+      var d, data, isValid;
       data = this.getFormData();
       isValid = fieldValidator.isValid(this.$formTop, true) && fieldValidator.isValid(this.$formBottom, true) && this.isParcelasSumMatches(data);
       if (!isValid) {
         return;
       }
       this.$('.save').attr('disabled', 'disabled');
-      return this.post('financeiro/upsertConta', data, (function(_this) {
+      d = {
+        model: 'lancamento',
+        action: 'save',
+        data: data
+      };
+      return this.post('crud/model', d, (function(_this) {
         return function(conta) {
           _this.$('.save').removeAttr('disabled');
           return _this.$el.modal('hide');
