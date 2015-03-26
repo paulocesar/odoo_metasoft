@@ -19,14 +19,15 @@
       this.renderItemlist = __bind(this.renderItemlist, this);
       this.onClickRemove = __bind(this.onClickRemove, this);
       this.onClickSave = __bind(this.onClickSave, this);
-      if (this.urls == null) {
-        this.urls = {};
-      }
+      this.refreshList = __bind(this.refreshList, this);
       if (this.tpls == null) {
         this.tpls = {};
       }
       if (this.events == null) {
         this.events = {};
+      }
+      if (this.withEmpresa == null) {
+        this.withEmpresa = true;
       }
       _.defaults(this.events, {
         'click .crud-list tr': 'onClickItemList',
@@ -48,7 +49,10 @@
     };
 
     CrudDisplay.prototype.refreshList = function() {
-      return this.post(this.urls.list, {}, this.renderItemlist);
+      return this.post('crud/list', {
+        table: this.table,
+        withEmpresa: this.withEmpresa
+      }, this.renderItemlist);
     };
 
     CrudDisplay.prototype.isValid = function() {
@@ -75,17 +79,20 @@
       if (this.id != null) {
         data.id = this.id;
       }
-      return this.post(this.urls.upsert, data, this.renderItemlist);
+      return this.post('crud/upsert', {
+        table: this.table,
+        withEmpresa: this.withEmpresa,
+        data: data
+      }, this.refreshList);
     };
 
     CrudDisplay.prototype.onClickRemove = function() {
-      return this.post(this.urls.remove, {
-        id: this.id
-      }, (function(_this) {
-        return function(res) {
-          return _this.refreshList();
-        };
-      })(this));
+      return this.post('crud/remove', {
+        table: this.table,
+        data: {
+          id: this.id
+        }
+      }, this.refreshList);
     };
 
     CrudDisplay.prototype.renderItemlist = function(_at_crudItems) {

@@ -14,11 +14,7 @@
     __extends(MetodoPagamento, _super);
 
     function MetodoPagamento(opts) {
-      this.urls = {
-        list: 'configs/listaMetodoPagamento',
-        upsert: 'configs/upsertMetodoPagamento',
-        remove: 'configs/removeMetodoPagamento'
-      };
+      this.table = 'metodoPagamento';
       MetodoPagamento.__super__.constructor.apply(this, arguments);
     }
 

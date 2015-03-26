@@ -6,12 +6,7 @@ jsRoot = @
 
 class Imposto extends Metasoft.CrudDisplay
     constructor: (opts) ->
-
-        @urls = {
-            list: 'configs/listaImposto'
-            upsert: 'configs/upsertImposto'
-            remove: 'configs/removeImposto'
-        }
+        @table = 'impostoNotaFiscal'
 
         super
 

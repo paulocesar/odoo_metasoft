@@ -44,11 +44,16 @@ passport.deserializeUser((user, done) ->
 )
 
 class Application
-    constructor: () ->
-        Context.injectModels()
-        @startExpress()
-        @injectControllers()
-        @configureErrorHandlers()
+    constructor: (callback) ->
+        Context.init(db, (err) =>
+            return callback(err) if err?
+
+            @startExpress()
+            @injectControllers()
+            @configureErrorHandlers()
+
+            callback(null, @expressApp())
+        )
 
     expressApp: () -> @app
 
@@ -112,6 +117,4 @@ class Application
             })
         )
 
-module.exports = {
-    init: () -> @metaApp = new Application()
-}
+module.exports = (args...) -> new Application(args...)

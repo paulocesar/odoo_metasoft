@@ -6,12 +6,7 @@ jsRoot = @
 
 class MetodoPagamento extends Metasoft.CrudDisplay
     constructor: (opts) ->
-
-        @urls = {
-            list: 'configs/listaMetodoPagamento'
-            upsert: 'configs/upsertMetodoPagamento'
-            remove: 'configs/removeMetodoPagamento'
-        }
+        @table = 'metodoPagamento'
 
         super
 

@@ -14,11 +14,7 @@
     __extends(Parceiros, _super);
 
     function Parceiros(opts) {
-      this.urls = {
-        list: 'parceiros/lista',
-        upsert: 'parceiros/upsert',
-        remove: 'parceiros/remove'
-      };
+      this.table = 'parceiro';
       Parceiros.__super__.constructor.apply(this, arguments);
     }
 

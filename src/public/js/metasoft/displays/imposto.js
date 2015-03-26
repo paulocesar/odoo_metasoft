@@ -14,11 +14,7 @@
     __extends(Imposto, _super);
 
     function Imposto(opts) {
-      this.urls = {
-        list: 'configs/listaImposto',
-        upsert: 'configs/upsertImposto',
-        remove: 'configs/removeImposto'
-      };
+      this.table = 'impostoNotaFiscal';
       Imposto.__super__.constructor.apply(this, arguments);
     }
 

@@ -14,11 +14,7 @@
     __extends(Produtos, _super);
 
     function Produtos(opts) {
-      this.urls = {
-        list: 'configs/listaProduto',
-        upsert: 'configs/upsertProduto',
-        remove: 'configs/removeProduto'
-      };
+      this.table = 'produto';
       Produtos.__super__.constructor.apply(this, arguments);
     }
 

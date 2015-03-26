@@ -14,11 +14,7 @@
     __extends(CentroCusto, _super);
 
     function CentroCusto(opts) {
-      this.urls = {
-        list: 'configs/listaCentroCusto',
-        upsert: 'configs/upsertCentroCusto',
-        remove: 'configs/removeCentroCusto'
-      };
+      this.table = 'centroCusto';
       CentroCusto.__super__.constructor.apply(this, arguments);
     }
 

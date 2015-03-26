@@ -6,13 +6,7 @@ jsRoot = @
 
 class CentroCusto extends Metasoft.CrudDisplay
     constructor: (opts) ->
-
-        @urls = {
-            list: 'configs/listaCentroCusto'
-            upsert: 'configs/upsertCentroCusto'
-            remove: 'configs/removeCentroCusto'
-        }
-
+        @table = 'centroCusto'
         super
 
 Metasoft.displays.CentroCusto = CentroCusto

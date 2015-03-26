@@ -14,11 +14,7 @@
     __extends(Logins, _super);
 
     function Logins(opts) {
-      this.urls = {
-        list: 'configs/listaLogin',
-        upsert: 'configs/upsertLogin',
-        remove: 'configs/removeLogin'
-      };
+      this.table = 'login';
       Logins.__super__.constructor.apply(this, arguments);
     }
 

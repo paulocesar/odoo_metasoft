@@ -14,11 +14,7 @@
     __extends(ContaBancaria, _super);
 
     function ContaBancaria(opts) {
-      this.urls = {
-        list: 'financeiro/listaContaBancaria',
-        upsert: 'financeiro/upsertContaBancaria',
-        remove: 'financeiro/removeContaBancaria'
-      };
+      this.table = 'contaBancaria';
       ContaBancaria.__super__.constructor.apply(this, arguments);
     }
 

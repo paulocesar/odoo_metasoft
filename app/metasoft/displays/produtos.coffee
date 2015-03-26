@@ -6,13 +6,7 @@ jsRoot = @
 
 class Produtos extends Metasoft.CrudDisplay
     constructor: (opts) ->
-
-        @urls = {
-            list: 'configs/listaProduto'
-            upsert: 'configs/upsertProduto'
-            remove: 'configs/removeProduto'
-        }
-
+        @table = 'produto'
         super
 
 Metasoft.displays.Produtos = Produtos

@@ -6,9 +6,10 @@ jsRoot = @
 
 class CrudDisplay extends Metasoft.Display
     constructor: (opts) ->
-        @urls ?= {}
         @tpls ?= {}
         @events ?= {}
+
+        @withEmpresa ?= true
 
         _.defaults(@events, {
             'click .crud-list tr': 'onClickItemList'
@@ -30,8 +31,8 @@ class CrudDisplay extends Metasoft.Display
 
     onShow: () -> @refreshList()
 
-    refreshList: () ->
-        @post(@urls.list, { }, @renderItemlist)
+    refreshList: () =>
+        @post('crud/list', { @table, @withEmpresa }, @renderItemlist)
 
     isValid: () -> true
 
@@ -49,12 +50,10 @@ class CrudDisplay extends Metasoft.Display
 
         data = fieldValidator.getValues(@form)
         data.id = @id if @id?
-        @post(@urls.upsert, data, @renderItemlist)
+        @post('crud/upsert', { @table, @withEmpresa, data }, @refreshList)
 
     onClickRemove: () =>
-        @post(@urls.remove, { @id }, (res) =>
-            @refreshList()
-        )
+        @post('crud/remove', { @table, data: { @id } }, @refreshList)
 
     renderItemlist: (@crudItems) =>
         @$el.find('.crud-list').html(@tpls.crudList({ items: @crudItems }))

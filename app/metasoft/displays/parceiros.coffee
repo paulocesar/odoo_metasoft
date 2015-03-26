@@ -6,13 +6,7 @@ jsRoot = @
 
 class Parceiros extends Metasoft.CrudDisplay
     constructor: (opts) ->
-
-        @urls = {
-            list: 'parceiros/lista'
-            upsert: 'parceiros/upsert'
-            remove: 'parceiros/remove'
-        }
-
+        @table = 'parceiro'
         super
 
 Metasoft.displays.Parceiros = Parceiros

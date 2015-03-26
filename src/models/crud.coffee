@@ -1,33 +1,16 @@
 { Model, _, A, Context } = require('../core/requires')
 
 class Crud extends Model
+    list: (table, withEmpresa, callback) ->
+        q = @db(table).select('*')
 
-    listWithEmpresa: (table, callback) ->
-        @db.select('*')
-            .from(table)
-            .where('empresaId', @empresaId)
-            .exec(callback)
+        if withEmpresa
+            q = q.where('empresaId', @empresaId)
 
-    upsertWithEmpresa: (table, data, callback) ->
-        content = _.omit(data, 'id')
-        q = @db(table)
-        tasks = []
-
-        if data.id
-            tasks.push((cb) ->
-                q.where('id', data.id)
-                    .update(content)
-                    .exec(cb)
-            )
-        else
-            tasks.push((cb) -> q.insert(content).exec(cb))
-
-        tasks.push((rows, cb) => @listWithEmpresa(table, cb))
-
-        A.waterfall(tasks, callback)
+        q.exec(callback)
 
     upsert: (table, data, callback) ->
-        content = _.omit(data, 'id')
+        content = @formatRow(table, _.omit(data, 'id'))
         q = @db(table)
         tasks = []
 
@@ -40,11 +23,9 @@ class Crud extends Model
         else
             tasks.push((cb) -> q.insert(content).exec(cb))
 
-        tasks.push((rows, cb) => @listWithEmpresa(table, cb))
-
         A.waterfall(tasks, callback)
 
-    list: (table, callback) ->
+    list: (table, where, callback) ->
         @db.select('*')
             .from(table)
             .exec(callback)

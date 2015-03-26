@@ -6,12 +6,7 @@ jsRoot = @
 
 class Logins extends Metasoft.CrudDisplay
     constructor: (opts) ->
-
-        @urls = {
-            list: 'configs/listaLogin'
-            upsert: 'configs/upsertLogin'
-            remove: 'configs/removeLogin'
-        }
+        @table = 'login'
 
         super
 

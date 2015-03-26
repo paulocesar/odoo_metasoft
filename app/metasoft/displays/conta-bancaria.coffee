@@ -6,13 +6,7 @@ jsRoot = @
 
 class ContaBancaria extends Metasoft.CrudDisplay
     constructor: (opts) ->
-
-        @urls = {
-            list: 'financeiro/listaContaBancaria'
-            upsert: 'financeiro/upsertContaBancaria'
-            remove: 'financeiro/removeContaBancaria'
-        }
-
+        @table = 'contaBancaria'
         super
 
 Metasoft.displays.ContaBancaria = ContaBancaria

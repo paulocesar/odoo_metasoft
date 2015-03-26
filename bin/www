@@ -1,9 +1,3 @@
 #!/usr/bin/env coffee
 debug = require('debug')
-app = require('../app')
-
-app.set('port', process.env.PORT || 3535)
-
-server = app.listen(app.get('port'), () ->
-  console.log('Express server listening on port ' + server.address().port)
-)
+require('../app')
