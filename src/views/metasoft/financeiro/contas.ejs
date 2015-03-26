@@ -202,12 +202,12 @@
             {% var c = Metasoft.contaBancariaById[p.contaBancariaId] %}
             <td class='col-md-3'>{%= c.banco %} {%= c.agencia %} / {%= c.conta %}</td>
             <td class='col-md-2 green-money'>{%= Metasoft.money.format(p.valor) %}</td>
-            <td class='col-md-1'><input type='checkbox' name="pago" value="{%= p.pago %}" style='margin-left:25px;'></td>
+            <td class='col-md-1'><input type='checkbox' name="pago" {%= p.pago ? 'checked' :'' %} style='margin-left:25px;'></td>
         </tr>
     {% }) %}
 </script>
 
-<script type='template' id="subtpl-display-contas-parcelaItem">
+<script type='template' id="subtpl-display-contas-parcelaItemModal">
     {% _.each(parcelas, function (p) { %}
         <tr class='parcela-item' >
             <td class='col-md-2'>Parcela {%= p.numero %}<input type='hidden' name="id" value="{%= p.id %}"><input type='hidden' name="numero" value="{%= p.numero %}"></td>
@@ -223,7 +223,7 @@
                 {% } %}
             </td>
             <td class='col-md-2'><input type='text' name="valor" class="mask-money" value="{%= Metasoft.money.format(p.valor) %}"></td>
-            <td class='col-md-2'><input type='checkbox' name="pago" value="{%= p.pago %}" style='margin-left:25px;'></td>
+            <td class='col-md-2'><input type='checkbox' name="pago" {%= p.pago ? 'checked' :'' %} style='margin-left:25px;'></td>
         </tr>
     {% }) %}
 </script>

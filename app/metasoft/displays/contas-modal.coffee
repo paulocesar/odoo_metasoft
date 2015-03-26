@@ -17,7 +17,7 @@ class ContasModal extends Backbone.View
         @el = "#modalContas"
 
         @subTpls = {
-            parcelas: _.template($('#subtpl-display-contas-parcelaItem').html())
+            parcelas: _.template($('#subtpl-display-contas-parcelaItemModal').html())
         }
 
         @events = {
