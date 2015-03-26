@@ -28,11 +28,12 @@
       return this.post('financeiro/listaLancamentos', {}, this.renderLancamentos);
     };
 
-    Contas.prototype.renderLancamentos = function(parcelas) {
+    Contas.prototype.renderLancamentos = function(data) {
       var $l;
+      this.parcelas = data.parcelas, this.pages = data.pages;
       $l = this.$el.find('.list-lancamentos');
       return $l.html(this.subTpls.parcelas({
-        parcelas: parcelas
+        parcelas: this.parcelas
       }));
     };
 

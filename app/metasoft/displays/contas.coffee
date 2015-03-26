@@ -19,9 +19,10 @@ class Contas extends Metasoft.Display
     onShow: () ->
         @post('financeiro/listaLancamentos', { }, @renderLancamentos)
 
-    renderLancamentos: (parcelas) =>
+    renderLancamentos: (data) =>
+        { @parcelas, @pages } = data
         $l = @$el.find('.list-lancamentos')
-        $l.html(@subTpls.parcelas({ parcelas }))
+        $l.html(@subTpls.parcelas({ @parcelas }))
 
 
 Metasoft.displays.Contas = Contas

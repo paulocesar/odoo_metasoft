@@ -193,9 +193,9 @@
 
 <script type='template' id="subtpl-display-contas-parcelaItem">
     {% _.each(parcelas, function (p) { %}
-        <tr class='parcela-item {%= p.tipoConta == 1 ? "invert-money-color" : "" %}' >
+        <tr data-rowid='{%= p.id %}' class='parcela-item {%= p.tipoConta == 1 ? "invert-money-color" : "" %}' >
             {% var dv = moment(p.dataVencimento); %}
-            {% var dataCls = dv.diff(moment(), 'days') <= 0 ? 'red' : ''; %}
+            {% var dataCls = dv.diff(moment(), 'days') <= 0 && !p.pago ? 'red' : ''; %}
             <td class='col-md-2 {%= dataCls %}'>{%= dv.format('DD/MM/YYYY') %}</td>
             <td class='col-md-2'>{%= Metasoft.centroCustoById[p.centroCustoId].nome %}</td>
             <td class='col-md-2'>{%= p.parceiroNome %}</td>
@@ -209,7 +209,7 @@
 
 <script type='template' id="subtpl-display-contas-parcelaItemModal">
     {% _.each(parcelas, function (p) { %}
-        <tr class='parcela-item' >
+        <tr data-rowid='{%= p.id %}' class='parcela-item' >
             <td class='col-md-2'>Parcela {%= p.numero %}<input type='hidden' name="id" value="{%= p.id %}"><input type='hidden' name="numero" value="{%= p.numero %}"></td>
             <td class='col-md-2'><input type='text' class='mask-date-day' name="dataVencimento" value="{%= p.dataVencimento %}"></td>
             <td class='col-md-2'>
