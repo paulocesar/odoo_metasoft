@@ -24,29 +24,6 @@
     return "<a href='#page/" + name + "' class='list-group-item page-" + name + "'>" + subCategory + "</a>";
   };
 
-  Application = (function() {
-    function Application() {
-      this.displaysById = {};
-      this.displaysContainer = Metasoft.container.find('#displayContainer');
-      _.each(Metasoft.displays, (function(_this) {
-        return function(method, name) {
-          var display;
-          name = Metasoft.utils.firstToLower(name);
-          _this.displaysContainer.append(displayHtml(name));
-          display = new method({
-            name: name
-          });
-          return _this.displaysById[name] = display;
-        };
-      })(this));
-    }
-
-    return Application;
-
-  })();
-
-  app = window.app = new Application();
-
   MetasoftRouter = Backbone.Router.extend({
     routes: {
       "page/:name": "goToPage"
@@ -66,11 +43,40 @@
     }
   });
 
+  Backbone.history.start();
+
+  Application = (function() {
+    function Application() {
+      var $s;
+      this.displaysById = {};
+      this.displaysContainer = Metasoft.container.find('#displayContainer');
+      _.each(Metasoft.displays, (function(_this) {
+        return function(method, name) {
+          var display;
+          name = Metasoft.utils.firstToLower(name);
+          _this.displaysContainer.append(displayHtml(name));
+          display = new method({
+            name: name
+          });
+          return _this.displaysById[name] = display;
+        };
+      })(this));
+      $s = $('.btn-subcategory');
+      $s.on('click', function() {
+        $s.removeClass('active');
+        return $(this).addClass('active');
+      });
+    }
+
+    return Application;
+
+  })();
+
+  app = window.app = new Application();
+
   metasoftRouter = new MetasoftRouter();
 
   app.metasoftRouter = metasoftRouter;
-
-  Backbone.history.start();
 
   metasoftRouter.navigate('page/contas');
 

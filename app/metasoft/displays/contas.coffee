@@ -16,4 +16,13 @@ class Contas extends Metasoft.Display
 
         @modal = new modals.Contas()
 
+    onShow: () ->
+        @post('financeiro/listaLancamentos', { }, @renderLancamentos)
+
+    renderLancamentos: (data) =>
+        { @parcelas, @pages } = data
+        $l = @$el.find('.list-lancamentos')
+        $l.html(@subTpls.parcelas({ @parcelas }))
+
+
 Metasoft.displays.Contas = Contas

@@ -35,7 +35,7 @@
       _.extend(this, opts);
       this.el = "#modalContas";
       this.subTpls = {
-        parcelas: _.template($('#subtpl-display-contas-parcelaItem').html())
+        parcelas: _.template($('#subtpl-display-contas-parcelaItemModal').html())
       };
       this.events = {
         'show.bs.modal': 'onShow',
