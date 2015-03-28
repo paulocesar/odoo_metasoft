@@ -1,9 +1,11 @@
 jsRoot = @
 
-{ _, Metasoft } = jsRoot
+{ _, Metasoft, moment } = jsRoot
 
 { F, modals, fieldSearch } = Metasoft
 
+todayDate = () -> moment().format('DD/MM/YYYY')
+todayMonth = () -> moment().format('MM/YYYY')
 
 class Contas extends Metasoft.Display
     constructor: (opts) ->
@@ -16,17 +18,23 @@ class Contas extends Metasoft.Display
 
         @events = {
             'change #contasSearchForm .status': 'doSearch'
-            'change #contasSearchForm .periodo': 'doSearch'
+            'change #contasSearchForm .periodo': 'onChangePeriodo'
+            'click .increment, .decrement': 'onClickMoveDate'
         }
 
         super
 
         @modal = new modals.Contas()
+        @modal.on('parcela:save', @doSearch)
 
         @search = fieldSearch({ el: '#contasSearchForm', @model, action: 'list' })
         @search.on('search:done', @renderLancamentos)
 
-    doSearch: () -> @search.doSearch()
+        @$('#contasSearchForm .data').on('dp.change', @doSearch)
+        @$('#contasSearchForm .data').data("DateTimePicker").disable()
+        @period = 'qualquer'
+
+    doSearch: () => @search.doSearch()
 
     onShow: () -> @doSearch()
 
@@ -35,5 +43,53 @@ class Contas extends Metasoft.Display
         $l = @$('.list-lancamentos')
         $l.html(@subTpls.parcelas({ @parcelas }))
 
+    onChangePeriodo: () ->
+        $periodField = @$('#contasSearchForm .periodo')
+        @period = $periodField.val()
+
+        $dateField = @$('#contasSearchForm .data')
+        d = $dateField.data("DateTimePicker")
+
+        if @period == 'qualquer'
+            d.disable()
+            $dateField.val('')
+
+        if @period == 'mes'
+            d.enable()
+            d.viewMode('months')
+            d.format('MM/YYYY')
+            d.date(todayMonth())
+
+        if @period == 'dia'
+            d.enable()
+            d.viewMode('days')
+            d.format('DD/MM/YYYY')
+            d.date(todayDate())
+
+        @doSearch()
+
+    onClickMoveDate: (ev) ->
+        return if @period == 'qualquer'
+
+        $el = $(ev.currentTarget)
+        mustDecrement = $el.hasClass('decrement')
+        $date = @$('#contasSearchForm .data')
+        date = $date.val()
+        type = 'days'
+        format = 'DD/MM/YYYY'
+
+        if @period == 'mes'
+            type = 'months'
+            format = 'MM/YYYY'
+
+        increment = 1
+        increment = -1 if mustDecrement
+
+        $date.val(moment(date, format).add(increment, type).format(format))
+
+        @doSearch()
+
+    onChangeDate: () ->
+        alert('changed')
 
 Metasoft.displays.Contas = Contas

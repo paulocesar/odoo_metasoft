@@ -33,9 +33,9 @@ class ContasModal extends Backbone.View
         super
 
 
-        @$formTop = @$el.find('.form-conta-top')
-        @$formBottom = @$el.find('.form-conta-bottom')
-        @$parcelas = @$el.find('table .parcelas')
+        @$formTop = @$('.form-conta-top')
+        @$formBottom = @$('.form-conta-bottom')
+        @$parcelas = @$('table .parcelas')
 
         fieldValidator.apply(@$el)
 
@@ -44,7 +44,7 @@ class ContasModal extends Backbone.View
     onChangeValorBruto: () ->
         data = @getFormData()
         data.valorLiquido = data.valorBruto
-        money.setValue(@$el.find(".valorLiquido"), data.valorBruto)
+        money.setValue(@$(".valorLiquido"), data.valorBruto)
 
         @updateDesconto(data)
         @buildParcelas()
@@ -53,7 +53,7 @@ class ContasModal extends Backbone.View
         data = @getFormData()
         if data.valorBruto < data.valorLiquido
             data.valorBruto = data.valorLiquido
-            money.setValue(@$el.find(".valorBruto"), data.valorLiquido)
+            money.setValue(@$(".valorBruto"), data.valorLiquido)
 
         @updateDesconto(data)
         @buildParcelas()
@@ -63,10 +63,10 @@ class ContasModal extends Backbone.View
 
         if data.valorBruto < data.desconto
             data.valorBruto = 0 - data.desconto
-            money.setValue(@$el.find(".valorBruto"), data.valorBruto)
+            money.setValue(@$(".valorBruto"), data.valorBruto)
 
         data.valorLiquido = data.valorBruto + data.desconto
-        money.setValue(@$el.find(".valorLiquido"), data.valorLiquido)
+        money.setValue(@$(".valorLiquido"), data.valorLiquido)
 
         @updateDesconto(data)
         @buildParcelas()
@@ -77,7 +77,7 @@ class ContasModal extends Backbone.View
         quant = parseInt(data.quantParcelas)
 
         if !quant || parcelas.length == quant
-            @$el.find('.quantParcelas').val(parcelas.length) if !quant
+            @$('.quantParcelas').val(parcelas.length) if !quant
             return
 
         @buildParcelas()
@@ -106,7 +106,7 @@ class ContasModal extends Backbone.View
 
     updateDesconto: (data) ->
         desconto = 0 - money.round(data.valorBruto - data.valorLiquido)
-        @$el.find('.desconto').maskMoney('mask', desconto)
+        @$('.desconto').maskMoney('mask', desconto)
 
     buildParcelas: () ->
         data = @getFormData()
@@ -136,17 +136,17 @@ class ContasModal extends Backbone.View
         @parcelas = []
 
         title = 'Conta a Receber'
-        @$el.find('.modal-dialog').removeClass('invert-money-color')
+        @$('.modal-dialog').removeClass('invert-money-color')
 
         if @tipoConta == 'pagar'
             title = 'Conta a Pagar'
-            @$el.find('.modal-dialog').addClass('invert-money-color')
+            @$('.modal-dialog').addClass('invert-money-color')
 
         unless contaId
             title = "Nova #{title}"
             @parcelas.push(createParcela())
 
-        @$el.find('.modal-title').html(title)
+        @$('.modal-title').html(title)
 
         @renderModalParcelas()
 
@@ -169,7 +169,7 @@ class ContasModal extends Backbone.View
 
         return data
 
-    onHide: (ev) -> @$el.find('.modal-dialog').removeClass('invert-money-color')
+    onHide: (ev) -> @$('.modal-dialog').removeClass('invert-money-color')
 
     isParcelasSumMatches: (data) ->
         sum = 0
@@ -204,6 +204,7 @@ class ContasModal extends Backbone.View
         @post('crud/model', d, (conta) =>
             @$('.save').removeAttr('disabled')
             @$el.modal('hide')
+            @trigger('parcela:save')
         )
 
     get: (args...) -> Metasoft.get(args...)

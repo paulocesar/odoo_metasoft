@@ -1,7 +1,8 @@
 { Model, _, A, Context, moment } = require('../core/requires')
 dict = require('../shared/dictionary')
 
-today = () -> moment().utc().format('YYYY-MM-DD')
+today = () -> moment().format('YYYY-MM-DD')
+formatDateLastMinute = (d) -> moment(d, 'DD/MM/YYYY').format('YYYY-MM-DD 23:59:59')
 
 filters = {
     apagar: (q) ->
@@ -39,10 +40,11 @@ class Lancamento extends Model
 
             ps = []
 
+
             for p in parcelas
                 p.contaId = id
                 p.empresaId = @empresaId
-                p.dataVencimento = @formatDateLastMinute(p.dataVencimento)
+                p.dataVencimento = formatDateLastMinute(p.dataVencimento)
                 ps.push(@formatRow('parcela', p))
 
             @db('parcela').insert(ps).exec(callback)
@@ -93,9 +95,11 @@ class Lancamento extends Model
         )
 
     applyFilter: (q, filter) ->
-        { query, status, period, date } = filter
+        { query, status, period, data } = filter
 
         q.where('parcela.empresaId', @empresaId)
+
+        q = @applyDateFilter(q, data) if data
 
         status ?= ''
         status = status.toLowerCase()
@@ -103,6 +107,21 @@ class Lancamento extends Model
         f = filters[status]
 
         return f(q) if f?
+        return q
+
+    applyDateFilter: (q, date) ->
+        date = date.split('/')
+
+
+        year = _.last(date)
+        month = _.last(_.initial(date))
+
+        q = q.whereRaw('YEAR(dataVencimento) = ?', [year])
+                .whereRaw('MONTH(dataVencimento) = ?', [month])
+
+        if date.length == 3
+            q = q.whereRaw('DAY(dataVencimento) = ?', [date[0]])
+
         return q
 
 module.exports = Lancamento

@@ -47,9 +47,9 @@
         'click .save': 'onClickSave'
       };
       ContasModal.__super__.constructor.apply(this, arguments);
-      this.$formTop = this.$el.find('.form-conta-top');
-      this.$formBottom = this.$el.find('.form-conta-bottom');
-      this.$parcelas = this.$el.find('table .parcelas');
+      this.$formTop = this.$('.form-conta-top');
+      this.$formBottom = this.$('.form-conta-bottom');
+      this.$parcelas = this.$('table .parcelas');
       fieldValidator.apply(this.$el);
       this.$parcelas.on('change', 'input[name="valor"]', this.onChangeValorParcelas);
     }
@@ -58,7 +58,7 @@
       var data;
       data = this.getFormData();
       data.valorLiquido = data.valorBruto;
-      money.setValue(this.$el.find(".valorLiquido"), data.valorBruto);
+      money.setValue(this.$(".valorLiquido"), data.valorBruto);
       this.updateDesconto(data);
       return this.buildParcelas();
     };
@@ -68,7 +68,7 @@
       data = this.getFormData();
       if (data.valorBruto < data.valorLiquido) {
         data.valorBruto = data.valorLiquido;
-        money.setValue(this.$el.find(".valorBruto"), data.valorLiquido);
+        money.setValue(this.$(".valorBruto"), data.valorLiquido);
       }
       this.updateDesconto(data);
       return this.buildParcelas();
@@ -79,10 +79,10 @@
       data = this.getFormData();
       if (data.valorBruto < data.desconto) {
         data.valorBruto = 0 - data.desconto;
-        money.setValue(this.$el.find(".valorBruto"), data.valorBruto);
+        money.setValue(this.$(".valorBruto"), data.valorBruto);
       }
       data.valorLiquido = data.valorBruto + data.desconto;
-      money.setValue(this.$el.find(".valorLiquido"), data.valorLiquido);
+      money.setValue(this.$(".valorLiquido"), data.valorLiquido);
       this.updateDesconto(data);
       return this.buildParcelas();
     };
@@ -96,7 +96,7 @@
       quant = parseInt(data.quantParcelas);
       if (!quant || parcelas.length === quant) {
         if (!quant) {
-          this.$el.find('.quantParcelas').val(parcelas.length);
+          this.$('.quantParcelas').val(parcelas.length);
         }
         return;
       }
@@ -130,7 +130,7 @@
     ContasModal.prototype.updateDesconto = function(data) {
       var desconto;
       desconto = 0 - money.round(data.valorBruto - data.valorLiquido);
-      return this.$el.find('.desconto').maskMoney('mask', desconto);
+      return this.$('.desconto').maskMoney('mask', desconto);
     };
 
     ContasModal.prototype.buildParcelas = function() {
@@ -163,16 +163,16 @@
       contaId = $btn.data('contaid');
       this.parcelas = [];
       title = 'Conta a Receber';
-      this.$el.find('.modal-dialog').removeClass('invert-money-color');
+      this.$('.modal-dialog').removeClass('invert-money-color');
       if (this.tipoConta === 'pagar') {
         title = 'Conta a Pagar';
-        this.$el.find('.modal-dialog').addClass('invert-money-color');
+        this.$('.modal-dialog').addClass('invert-money-color');
       }
       if (!contaId) {
         title = "Nova " + title;
         this.parcelas.push(createParcela());
       }
-      this.$el.find('.modal-title').html(title);
+      this.$('.modal-title').html(title);
       return this.renderModalParcelas();
     };
 
@@ -195,7 +195,7 @@
     };
 
     ContasModal.prototype.onHide = function(ev) {
-      return this.$el.find('.modal-dialog').removeClass('invert-money-color');
+      return this.$('.modal-dialog').removeClass('invert-money-color');
     };
 
     ContasModal.prototype.isParcelasSumMatches = function(data) {
@@ -229,7 +229,8 @@
       return this.post('crud/model', d, (function(_this) {
         return function(conta) {
           _this.$('.save').removeAttr('disabled');
-          return _this.$el.modal('hide');
+          _this.$el.modal('hide');
+          return _this.trigger('parcela:save');
         };
       })(this));
     };

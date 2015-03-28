@@ -48,9 +48,9 @@
                 </div>
                 <div class='col-md-3'>
                     <div class="input-group">
-                        <span class="input-group-addon"><</span>
-                        <input type="text" name="data" class="form-control" aria-label="Amount (to the nearest dollar)">
-                        <span class="input-group-addon">></span>
+                        <span class="input-group-addon decrement"><</span>
+                        <input type="text" name="data" class="form-control mask-date-day data text-center">
+                        <span class="input-group-addon increment">></span>
                     </div>
                 </div>
             </div>
@@ -197,10 +197,10 @@
 <script type='template' id="subtpl-display-contas-parcelaItem">
     {% _.each(parcelas, function (p) { %}
         <tr data-rowid='{%= p.id %}' class='parcela-item {%= p.tipoConta == 1 ? "invert-money-color" : "" %}' >
-            {% var dv = moment(p.dataVencimento); %}
+            {% var dv = moment(p.dataVencimento).utc(); %}
             {% var dataCls = dv.diff(moment(), 'days') <= 0 && !p.pago ? 'red' : ''; %}
             <td class='col-md-2 {%= dataCls %}'>{%= dv.format('DD/MM/YYYY') %}</td>
-            <td class='col-md-2'>{%= moment(p.criadoEm).format('DD/MM/YYYY') %}</td>
+            <td class='col-md-2'>{%= moment(p.criadoEm).utc().format('DD/MM/YYYY') %}</td>
             <td class='col-md-2'>{%= Metasoft.centroCustoById[p.centroCustoId].nome %}</td>
             <td class='col-md-3'>{%= p.parceiroNome %}</td>
             <td class='col-md-2 green-money'>{%= Metasoft.money.format(p.valor) %}</td>
