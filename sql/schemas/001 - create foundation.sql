@@ -281,7 +281,7 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`contrato` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'status - aprovando orcamento, em desenvolvimento, finalizado /* comment truncated */ /*, cancelado, suspenso*/';
+COMMENT = 'status - aprovando orcamento, em desenvolvimento, finalizado, cancelado, suspenso';
 
 
 -- -----------------------------------------------------

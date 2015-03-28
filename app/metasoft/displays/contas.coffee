@@ -2,7 +2,7 @@ jsRoot = @
 
 { _, Metasoft } = jsRoot
 
-{ fieldValidator, modals } = Metasoft
+{ F, modals, fieldSearch } = Metasoft
 
 
 class Contas extends Metasoft.Display
@@ -14,13 +14,20 @@ class Contas extends Metasoft.Display
             parcelas: _.template($('#subtpl-display-contas-parcelaItem').html())
         }
 
+        @events = {
+            'change #contasSearchForm .status': 'doSearch'
+        }
+
         super
 
         @modal = new modals.Contas()
 
-    onShow: () ->
-        data = { @model, action: 'list' }
-        @post('crud/model', data, @renderLancamentos)
+        @search = fieldSearch({ el: '#contasSearchForm', @model, action: 'list' })
+        @search.on('search:done', @renderLancamentos)
+
+    doSearch: () -> @search.doSearch()
+
+    onShow: () -> @doSearch()
 
     renderLancamentos: (data) =>
         { @parcelas, @pages } = data

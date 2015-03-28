@@ -4,20 +4,20 @@ today = () -> moment().utc().format('YYYY-MM-DD')
 
 filters = {
     apagar: (q) ->
-        q.andWhere({ contaTipo: '0', pago: '0' })
+        q.andWhere({ tipoConta: '0', pago: '0' })
             .andWhere('dataVencimento', '>=', today())
 
     areceber: (q) ->
-        q.andWhere({ contaTipo: '1', pago: '0' })
+        q.andWhere({ tipoConta: '1', pago: '0' })
             .andWhere('dataVencimento', '>=', today())
 
     vencido: (q) ->
         q.andWhere('pago', '0')
             .andWhere('dataVencimento', '<', today())
 
-    pago: (q) -> q.andWhere({ contaTipo: '0', pago: '1' })
+    pago: (q) -> q.andWhere({ tipoConta: '0', pago: '1' })
 
-    recebido: (q) -> q.andWhere({ contaTipo: '1', pago: '1' })
+    recebido: (q) -> q.andWhere({ tipoConta: '1', pago: '1' })
 
     todos: (q) -> q
 }
@@ -74,6 +74,11 @@ class Lancamento extends Model
             .offset(offset)
 
         pages = @db('parcela').count('parcela.id as pages')
+            .innerJoin('conta', 'conta.id', 'parcela.contaId')
+
+        parcelas = @applyFilter(parcelas, data)
+        pages = @applyFilter(pages, data)
+
 
         A.parallel({
             parcelas: (cb) -> parcelas.exec(cb)
@@ -89,7 +94,7 @@ class Lancamento extends Model
     applyFilter: (q, filter) ->
         { query, status, period, date } = filter
 
-        q.where({ @empresaId })
+        q.where('parcela.empresaId', @empresaId)
 
         status ?= ''
         status = status.toLowerCase()

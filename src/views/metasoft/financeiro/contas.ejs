@@ -24,25 +24,19 @@
             </button>
         </div>
         <div class="col-md-10">
-            <div class='row'>
+            <div class='row' id="contasSearchForm">
                 <div class='col-md-3'>
-                    <input type='text' class='form-control' placeHolder="buscar..." />
+                    <input type='text' class='form-control query' name='query' placeHolder="buscar..." />
                 </div>
                 <div class='col-md-3'>
-
-                    <div class="dropdown" style='float: left'>
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                            Vencidos <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Vencidos</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">A Pagar</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">A Receber</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Pagos</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Recebidos</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Todos</a></li>
-                        </ul>
-                    </div>
+                    <select class='status' name="status">
+                        <option value="vencido" selected>Vencidos</option>
+                        <option value="apagar">A Pagar</option>
+                        <option value="areceber">A Receber</option>
+                        <option value="pago">Pagos</option>
+                        <option value="recebido">Recebidos</option>
+                        <option value="todos">Todos</option>
+                    </select>
                 </div>
 
                 <div class='col-md-3'>
@@ -60,7 +54,7 @@
                 <div class='col-md-3'>
                     <div class="input-group">
                         <span class="input-group-addon"><</span>
-                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                        <input type="text" name="date" class="form-control" aria-label="Amount (to the nearest dollar)">
                         <span class="input-group-addon">></span>
                     </div>
                 </div>

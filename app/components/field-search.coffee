@@ -1,22 +1,36 @@
 jsRoot = @
 
-{ _, $, Metasoft } = jsRoot
+{ _, $, Metasoft, V } = jsRoot
 { F } = Metasoft
 
-jsRoot.fieldSearch = (args...) -> new FieldSearch(args...)
+Metasoft.fieldSearch = (args...) -> new FieldSearch(args...)
 
 class FieldSearch extends Backbone.View
     constructor: (opts) ->
-        V.demandGoodString(opts.url, 'opts.url')
-        @events = {
+        _.extend(@, opts)
+        V.demandGoodString(@model, 'model')
+        V.demandGoodString(@action, 'action')
 
+        @events = {
+            'keyup input.query': 'doLazySearch'
+            'change input.query': 'doLazySearch'
         }
 
         super
 
-        @$input = @$('input.search')
+        @options = {}
+        @lazySearch = _.debounce(@doSearch, 1000)
+
+    setOptions: (@options) ->
+
+    doLazySearch: () ->
+        Metasoft.showLoading()
+        @lazySearch()
 
     doSearch: () ->
-        Metasoft.post()
+        data = { @model, @action, data: _.extend(@getData(), @options) }
+        Metasoft.post('crud/model', data, @onSearchResult)
+
+    onSearchResult: (@items) => @trigger('search:done', @items)
 
     getData: () -> F.getValues(@$el)
