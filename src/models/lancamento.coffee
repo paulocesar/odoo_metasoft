@@ -1,23 +1,24 @@
 { Model, _, A, Context, moment } = require('../core/requires')
+dict = require('../shared/dictionary')
 
 today = () -> moment().utc().format('YYYY-MM-DD')
 
 filters = {
     apagar: (q) ->
-        q.andWhere({ tipoConta: '0', pago: '0' })
+        q.andWhere({ tipoConta: dict.tipoConta.pagar, pago: '0' })
             .andWhere('dataVencimento', '>=', today())
 
     areceber: (q) ->
-        q.andWhere({ tipoConta: '1', pago: '0' })
+        q.andWhere({ tipoConta: dict.tipoConta.receber, pago: '0' })
             .andWhere('dataVencimento', '>=', today())
 
     vencido: (q) ->
         q.andWhere('pago', '0')
             .andWhere('dataVencimento', '<', today())
 
-    pago: (q) -> q.andWhere({ tipoConta: '0', pago: '1' })
+    pago: (q) -> q.andWhere({ tipoConta: dict.tipoConta.pagar, pago: '1' })
 
-    recebido: (q) -> q.andWhere({ tipoConta: '1', pago: '1' })
+    recebido: (q) -> q.andWhere({ tipoConta: dict.tipoConta.receber, pago: '1' })
 
     todos: (q) -> q
 }

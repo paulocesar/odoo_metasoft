@@ -29,7 +29,7 @@
                     <input type='text' class='form-control query' name='query' placeHolder="buscar..." />
                 </div>
                 <div class='col-md-3'>
-                    <select class='status' name="status">
+                    <select class='status form-control' name="status">
                         <option value="vencido" selected>Vencidos</option>
                         <option value="apagar">A Pagar</option>
                         <option value="areceber">A Receber</option>
@@ -40,21 +40,16 @@
                 </div>
 
                 <div class='col-md-3'>
-                    <div class="dropdown" style='float: right'>
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                            Qualquer periodo <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Qualquer periodo</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Por Dia</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Por Mês</a></li>
-                        </ul>
-                    </div>
+                    <select class='periodo form-control' name="periodo">
+                        <option value="qualquer" selected>Qualquer período</option>
+                        <option value="mes">Meses</option>
+                        <option value="dia">Dias</option>
+                    </select>
                 </div>
                 <div class='col-md-3'>
                     <div class="input-group">
                         <span class="input-group-addon"><</span>
-                        <input type="text" name="date" class="form-control" aria-label="Amount (to the nearest dollar)">
+                        <input type="text" name="data" class="form-control" aria-label="Amount (to the nearest dollar)">
                         <span class="input-group-addon">></span>
                     </div>
                 </div>

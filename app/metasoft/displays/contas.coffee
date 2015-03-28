@@ -16,6 +16,7 @@ class Contas extends Metasoft.Display
 
         @events = {
             'change #contasSearchForm .status': 'doSearch'
+            'change #contasSearchForm .periodo': 'doSearch'
         }
 
         super

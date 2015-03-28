@@ -21,6 +21,11 @@ _.extend(dictionary, {
         admin: 'Administrador'
     }
 
+    tipoConta: {
+        receber: '0'
+        pagar: '1'
+    }
+
     getParcelaStatus: (p) ->
         return 'pendente'
 })

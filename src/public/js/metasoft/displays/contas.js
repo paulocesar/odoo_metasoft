@@ -22,7 +22,8 @@
         parcelas: _.template($('#subtpl-display-contas-parcelaItem').html())
       };
       this.events = {
-        'change #contasSearchForm .status': 'doSearch'
+        'change #contasSearchForm .status': 'doSearch',
+        'change #contasSearchForm .periodo': 'doSearch'
       };
       Contas.__super__.constructor.apply(this, arguments);
       this.modal = new modals.Contas();
