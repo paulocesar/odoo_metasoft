@@ -37,7 +37,7 @@
     Contas.prototype.renderLancamentos = function(data) {
       var $l;
       this.parcelas = data.parcelas, this.pages = data.pages;
-      $l = this.$el.find('.list-lancamentos');
+      $l = this.$('.list-lancamentos');
       return $l.html(this.subTpls.parcelas({
         parcelas: this.parcelas
       }));

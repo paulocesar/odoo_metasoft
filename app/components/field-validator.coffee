@@ -238,4 +238,4 @@ fieldValidator = {
 }
 
 
-Metasoft.fieldValidator = fieldValidator
+Metasoft.fieldValidator = Metasoft.F = fieldValidator

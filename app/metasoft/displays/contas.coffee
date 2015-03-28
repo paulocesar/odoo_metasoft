@@ -24,7 +24,7 @@ class Contas extends Metasoft.Display
 
     renderLancamentos: (data) =>
         { @parcelas, @pages } = data
-        $l = @$el.find('.list-lancamentos')
+        $l = @$('.list-lancamentos')
         $l.html(@subTpls.parcelas({ @parcelas }))
 
 

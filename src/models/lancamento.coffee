@@ -1,5 +1,27 @@
 { Model, _, A, Context, moment } = require('../core/requires')
 
+today = () -> moment().utc().format('YYYY-MM-DD')
+
+filters = {
+    apagar: (q) ->
+        q.andWhere({ contaTipo: '0', pago: '0' })
+            .andWhere('dataVencimento', '>=', today())
+
+    areceber: (q) ->
+        q.andWhere({ contaTipo: '1', pago: '0' })
+            .andWhere('dataVencimento', '>=', today())
+
+    vencido: (q) ->
+        q.andWhere('pago', '0')
+            .andWhere('dataVencimento', '<', today())
+
+    pago: (q) -> q.andWhere({ contaTipo: '0', pago: '1' })
+
+    recebido: (q) -> q.andWhere({ contaTipo: '1', pago: '1' })
+
+    todos: (q) -> q
+}
+
 class Lancamento extends Model
     save: (data, callback) ->
         parcelas = data.parcelas
@@ -64,6 +86,18 @@ class Lancamento extends Model
             })
         )
 
+    applyFilter: (q, filter) ->
+        { query, status, period, date } = filter
+
+        q.where({ @empresaId })
+
+        status ?= ''
+        status = status.toLowerCase()
+
+        f = filters[status]
+
+        return f(q) if f?
+        return q
 
 module.exports = Lancamento
 Context::lancamento = () -> new Lancamento(@)

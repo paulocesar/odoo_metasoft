@@ -273,6 +273,6 @@
     }
   };
 
-  Metasoft.fieldValidator = fieldValidator;
+  Metasoft.fieldValidator = Metasoft.F = fieldValidator;
 
 }).call(this);

@@ -27,7 +27,7 @@ class CrudDisplay extends Metasoft.Display
             crudList: _.template($("#tpl-display-#{@name}ListItem").html())
         })
 
-        @form = @$el.find('.form-crud')
+        @form = @$('.form-crud')
 
     onShow: () -> @refreshList()
 
@@ -56,13 +56,13 @@ class CrudDisplay extends Metasoft.Display
         @post('crud/remove', { @table, data: { @id } }, @refreshList)
 
     renderItemlist: (@crudItems) =>
-        @$el.find('.crud-list').html(@tpls.crudList({ items: @crudItems }))
+        @$('.crud-list').html(@tpls.crudList({ items: @crudItems }))
         @filterTerms()
         @resetForm()
 
     filterTerms: () =>
-        query = @$el.find('.crud-busca').val()
-        Metasoft.filter(@$el.find('.crud-list'), query)
+        query = @$('.crud-busca').val()
+        Metasoft.filter(@$('.crud-list'), query)
 
     onClickItemList: (ev) ->
         id = $(ev.currentTarget).data('rowid')
@@ -74,7 +74,7 @@ class CrudDisplay extends Metasoft.Display
         @updateButtonsDom()
 
     updateButtonsDom: () ->
-        @$el.find('.new').toggleClass('hidden', !@id?)
-        @$el.find('.remove').toggleClass('hidden', !@id?)
+        @$('.new').toggleClass('hidden', !@id?)
+        @$('.remove').toggleClass('hidden', !@id?)
 
 Metasoft.CrudDisplay = CrudDisplay

@@ -41,7 +41,7 @@
       _.defaults(this.tpls, {
         crudList: _.template($("#tpl-display-" + this.name + "ListItem").html())
       });
-      this.form = this.$el.find('.form-crud');
+      this.form = this.$('.form-crud');
     }
 
     CrudDisplay.prototype.onShow = function() {
@@ -97,7 +97,7 @@
 
     CrudDisplay.prototype.renderItemlist = function(_at_crudItems) {
       this.crudItems = _at_crudItems;
-      this.$el.find('.crud-list').html(this.tpls.crudList({
+      this.$('.crud-list').html(this.tpls.crudList({
         items: this.crudItems
       }));
       this.filterTerms();
@@ -106,8 +106,8 @@
 
     CrudDisplay.prototype.filterTerms = function() {
       var query;
-      query = this.$el.find('.crud-busca').val();
-      return Metasoft.filter(this.$el.find('.crud-list'), query);
+      query = this.$('.crud-busca').val();
+      return Metasoft.filter(this.$('.crud-list'), query);
     };
 
     CrudDisplay.prototype.onClickItemList = function(ev) {
@@ -127,8 +127,8 @@
     };
 
     CrudDisplay.prototype.updateButtonsDom = function() {
-      this.$el.find('.new').toggleClass('hidden', this.id == null);
-      return this.$el.find('.remove').toggleClass('hidden', this.id == null);
+      this.$('.new').toggleClass('hidden', this.id == null);
+      return this.$('.remove').toggleClass('hidden', this.id == null);
     };
 
     return CrudDisplay;
