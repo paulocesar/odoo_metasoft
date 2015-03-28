@@ -44,7 +44,7 @@ Metasoft = {
     ajax: (method, action, data, callback) ->
         @showLoading()
 
-        $[method] "/#{action}/#{@empresaId}", {data: JSON.stringify(data)}, (raw) =>
+        $[method]("/#{action}/#{@empresaId}", {data: JSON.stringify(data)}, (raw) =>
             @hideLoading()
             res = @evalResponse(raw.data)
 
@@ -53,6 +53,10 @@ Metasoft = {
                 return callback(res)
 
             callback(res)
+        ).fail((err) ->
+            alert('Ocorreu um erro no sistema. Entre em contato com a administrção.')
+            location.reload()
+        )
 
     evalResponse: (response) -> ( new Function("return #{response}") )()
 }

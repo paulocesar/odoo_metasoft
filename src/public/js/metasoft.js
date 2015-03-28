@@ -61,7 +61,10 @@
           }
           return callback(res);
         };
-      })(this));
+      })(this)).fail(function(err) {
+        alert('Ocorreu um erro no sistema. Entre em contato com a administrção.');
+        return location.reload();
+      });
     },
     evalResponse: function(response) {
       return (new Function("return " + response))();
