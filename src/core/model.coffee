@@ -3,6 +3,7 @@ moment = require('moment')
 
 class Model
     constructor: (@context) ->
+        @ms = @context
         @db = @context.db
         @empresaId = @context.empresaId
         @login = @context.login
