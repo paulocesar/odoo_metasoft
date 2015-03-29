@@ -39,8 +39,8 @@
       this.lazySearch = _.debounce(this.doSearch, 1000);
     }
 
-    FieldSearch.prototype.setOptions = function(_at_options) {
-      this.options = _at_options;
+    FieldSearch.prototype.setOptions = function(opts) {
+      return _.extend(this.options, opts);
     };
 
     FieldSearch.prototype.doLazySearch = function() {

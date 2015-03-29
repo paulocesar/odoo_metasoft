@@ -72,7 +72,12 @@
         return;
       }
       this.$('.query').val('');
-      return this.search.doSearch();
+      this.search.doSearch();
+      return setTimeout((function(_this) {
+        return function() {
+          return _this.$('.query').focus();
+        };
+      })(this), 100);
     };
 
     DropdownSearch.prototype.noAction = function(ev) {

@@ -21,7 +21,7 @@ class FieldSearch extends Backbone.View
         @options = {}
         @lazySearch = _.debounce(@doSearch, 1000)
 
-    setOptions: (@options) ->
+    setOptions: (opts) -> _.extend(@options, opts)
 
     doLazySearch: () ->
         Metasoft.showLoading()

@@ -7,6 +7,13 @@ jsRoot = @
 todayDate = () -> moment().format('DD/MM/YYYY')
 todayMonth = () -> moment().format('MM/YYYY')
 
+loadMoreHtml = () ->
+    return """
+        <tr style="border: 0px;"><td style='background-color: white; border: 0px;'>
+            <button class='load-more'>Carregar Mais</button>
+        </td></tr>
+    """
+
 class Contas extends Metasoft.Display
     constructor: (opts) ->
         @model = 'lancamento'
@@ -20,9 +27,12 @@ class Contas extends Metasoft.Display
             'change #contasSearchForm .status': 'doSearch'
             'change #contasSearchForm .periodo': 'onChangePeriodo'
             'click .increment, .decrement': 'onClickMoveDate'
+            'click .load-more': 'loadMore'
         }
 
         super
+
+        @limit = 100
 
         @modal = new modals.Contas()
         @modal.on('parcela:save', @doSearch)
@@ -34,14 +44,33 @@ class Contas extends Metasoft.Display
         @$('#contasSearchForm .data').data("DateTimePicker").disable()
         @period = 'qualquer'
 
-    doSearch: () => @search.doSearch()
+    doSearch: () =>
+        @offset = 0
+        @search.setOptions({ @offset, @limit })
+        @search.doSearch()
+
+    loadMore: () =>
+        @offset += @limit
+        @search.setOptions({ @offset })
+        @search.doSearch()
 
     onShow: () -> @doSearch()
 
     renderLancamentos: (data) =>
-        { @parcelas, @pages } = data
+        { parcelas } = data
         $l = @$('.list-lancamentos')
+
+        showLoadMore = parcelas.length >= @limit
+
+        if @offset == 0
+            @parcelas = parcelas
+        else
+            @parcelas = @parcelas.concat(parcelas)
+
         $l.html(@subTpls.parcelas({ @parcelas }))
+
+
+        $l.append(loadMoreHtml()) if showLoadMore
 
     onChangePeriodo: () ->
         $periodField = @$('#contasSearchForm .periodo')

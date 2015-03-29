@@ -73,6 +73,10 @@ class DropdownSearch extends Backbone.View
 
         @$('.query').val('')
         @search.doSearch()
+        setTimeout(
+            () => @$('.query').focus()
+            100
+        )
 
     noAction: (ev) -> ev.stopPropagation()
 
