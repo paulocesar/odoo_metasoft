@@ -68,6 +68,9 @@
     };
 
     DropdownSearch.prototype.onClickDropdown = function() {
+      if (this.$('.dropdown').hasClass('open')) {
+        return;
+      }
       this.$('.query').val('');
       return this.search.doSearch();
     };

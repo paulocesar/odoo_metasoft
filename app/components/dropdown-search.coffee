@@ -68,6 +68,9 @@ class DropdownSearch extends Backbone.View
         @$('.dropdown').data('itemid', '')
 
     onClickDropdown: () ->
+        if @$('.dropdown').hasClass('open')
+            return
+
         @$('.query').val('')
         @search.doSearch()
 
