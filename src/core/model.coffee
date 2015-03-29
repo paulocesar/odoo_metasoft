@@ -9,6 +9,7 @@ class Model
         @schema = @context.schema
 
     datetimeNow: () -> moment().format('YYYY-MM-DD HH:mm:ss')
+    dateNow: () -> moment().format('YYYY-MM-DD')
     formatDateLastMinute: (d) ->
         return moment(d, 'DD/MM/YYYY').format('YYYY-MM-DD 23:59:59')
 

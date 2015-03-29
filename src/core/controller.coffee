@@ -1,7 +1,7 @@
-util = require('util')
 express = require('express')
 _ = require('underscore')
 Context = require('./context')
+log = require('./logger')
 
 rgxHttpMethod = /^(get|post)_[a-zA-Z]+/
 
@@ -62,7 +62,7 @@ class Controller
                 sendError: (err) => res.send({ status: false, data: JSON.stringify(err) })
                 sendDataOrError: (err, data) =>
                     if err?
-                        console.log(util.inspect(err, false, null))
+                        log.logError(err)
                         return res.send({ status: false, data: JSON.stringify(err) })
                     res.json({ success: true, data: JSON.stringify(data) })
             }

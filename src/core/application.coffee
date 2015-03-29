@@ -9,6 +9,8 @@ fs = require('fs')
 _ = require('underscore')
 A = require('async')
 
+log = require('./logger')
+
 config = require('../../config')
 Context = require('./context')
 db = require('knex')(config.database)
@@ -107,6 +109,7 @@ class Application
                     message: err.message
                     error: err
                 })
+                log.logError(err)
             )
 
         @app.use((err, req, res, next) ->
@@ -115,6 +118,7 @@ class Application
                 message: err.message
                 error: {}
             })
+            log.logError(err)
         )
 
 module.exports = (args...) -> new Application(args...)
