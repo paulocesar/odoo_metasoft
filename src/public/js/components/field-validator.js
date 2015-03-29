@@ -233,6 +233,13 @@
         f = $(this);
         return data[f.attr('name')] = f.is(":checked") ? '1' : '0';
       });
+      $(el).find('.dropdown-search').each(function() {
+        var f, name, value;
+        f = $(this);
+        name = f.data('searchname');
+        value = f.data('itemid');
+        return data[name] = value;
+      });
       return data;
     },
     removeError: function(input, message) {

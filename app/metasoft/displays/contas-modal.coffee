@@ -2,7 +2,7 @@ jsRoot = @
 
 { _, ace, Backbone, moment, Metasoft } = jsRoot
 
-{ fieldValidator, money } = Metasoft
+{ fieldValidator, money, DropdownSearch } = Metasoft
 
 createParcela = (numero = 1, valor = 0) -> {
     id: null
@@ -38,6 +38,14 @@ class ContasModal extends Backbone.View
         @$parcelas = @$('table .parcelas')
 
         fieldValidator.apply(@$el)
+
+        @$('.dropdownSearchParceiro').html(DropdownSearch.html('parceiroId'))
+        @dropdownSearch = new DropdownSearch({
+            el: "##{@$el.attr('id')} .dropdownSearchParceiro",
+            name: 'parceiro',
+            model: 'parceiro',
+            action: 'search'
+        })
 
         @$parcelas.on('change', 'input[name="valor"]', @onChangeValorParcelas)
 

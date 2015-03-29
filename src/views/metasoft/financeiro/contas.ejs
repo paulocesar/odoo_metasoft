@@ -128,11 +128,7 @@
 
                 <div class="form-group">
                     <label for="parceiroId" class="col-md-4 control-label">Cliente</label>
-                    <div class="col-md-8"><select name="parceiroId" class="form-control">
-                        {% _.each(Metasoft.contaBancariaById, function (c) { %}
-                            <option value="{%= c.id %}">{%= dictionary.banksById[c.banco] %} / {%= c.agencia %} / {%= c.conta %}</option>
-                        {% }); %}
-                    </select></div>
+                    <div class="col-md-8 dropdownSearchParceiro"></div>
                 </div>
             </div>
             <div class="col-md-5">

@@ -205,6 +205,13 @@ fieldValidator = {
             data[f.attr('name')] = if f.is(":checked") then '1' else '0'
         )
 
+        $(el).find('.dropdown-search').each(() ->
+            f = $(@)
+            name = f.data('searchname')
+            value = f.data('itemid')
+            data[name] = value
+        )
+
         return data
 
     removeError: (input, message) -> errorLabel.remove($(input))
