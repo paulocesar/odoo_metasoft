@@ -69,5 +69,6 @@ describe "#create()", () ->
             (res, cb) ->
                 assert.equal(true, res[0].saldo in [0, 200], "should be 0 or 200")
                 assert.equal(true, res[1].saldo in [0, 200], "should be 0 or 200")
-                cb(null)
+                cb(null, null)
+
         ], done)

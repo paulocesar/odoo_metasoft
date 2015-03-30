@@ -5,6 +5,8 @@ class Transferencia extends Model
         V.demandGoodNumber(transf.loginId, 'loginId')
         V.demandGoodNumber(transf.valor, 'valor')
 
+        transf.data = new Date()
+
         tasks = []
 
         A.parallel({
