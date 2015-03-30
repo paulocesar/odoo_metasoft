@@ -37,6 +37,29 @@ queryFields = [
 ]
 
 class Lancamento extends Model
+    pay: (data, callback) ->
+        id = data.parcelaId
+
+        @db('parcela').where({ id }).exec((err, parcela) =>
+            return callback(err) if err?
+
+            label = 'contaBancariaOrigemId'
+            if parcela.tipoConta
+                label = 'contaBancariaDestinoId'
+
+            transf = {}
+            transf[label] = parcela.contaBancariaId
+            transf.valor = parcela.valor
+            transf.parcelaId = id
+
+            A.parallel({
+                parcela: (cb) =>
+                    @db('parcela').update({ pago: '1' }).where({ id }).exec(cb)
+
+                transferencia: (cb) => @ms.transferencia().create(transf, cb)
+            }, callback)
+        )
+
     save: (data, callback) ->
         parcelas = data.parcelas
         conta = @formatRow('conta', data)
@@ -144,7 +167,6 @@ class Lancamento extends Model
 
     applyDateFilter: (q, date) ->
         date = date.split('/')
-
 
         year = _.last(date)
         month = _.last(_.initial(date))

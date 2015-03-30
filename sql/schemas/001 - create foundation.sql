@@ -235,10 +235,11 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`parcela` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `metasoft`.`transferencia` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `contaBancariaOrigemId` INT UNSIGNED NULL,
-  `contaBancariaDestinoId` INT UNSIGNED NULL,
   `valor` DECIMAL(10,2) NOT NULL,
   `data` DATETIME NOT NULL,
+  `cancelado` TINYINT(1) NOT NULL DEFAULT 0,
+  `contaBancariaOrigemId` INT UNSIGNED NULL,
+  `contaBancariaDestinoId` INT UNSIGNED NULL,
   `loginId` INT UNSIGNED NOT NULL,
   `parcelaId` INT UNSIGNED NULL,
   PRIMARY KEY (`id`),
