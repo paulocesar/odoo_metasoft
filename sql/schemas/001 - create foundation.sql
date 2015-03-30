@@ -235,15 +235,17 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`parcela` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `metasoft`.`transferencia` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `contaBancariaOrigemId` INT UNSIGNED NOT NULL,
-  `contaBancariaDestinoId` INT UNSIGNED NOT NULL,
+  `contaBancariaOrigemId` INT UNSIGNED NULL,
+  `contaBancariaDestinoId` INT UNSIGNED NULL,
   `valor` DECIMAL(10,2) NOT NULL,
   `data` DATETIME NOT NULL,
   `loginId` INT UNSIGNED NOT NULL,
+  `parcelaId` INT UNSIGNED NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_transferencia_contaBancaria1_idx` (`contaBancariaOrigemId` ASC),
   INDEX `fk_transferencia_contaBancaria2_idx` (`contaBancariaDestinoId` ASC),
   INDEX `fk_transferencia_login1_idx` (`loginId` ASC),
+  INDEX `fk_transferencia_parcela1_idx` (`parcelaId` ASC),
   CONSTRAINT `fk_transferencia_contaBancaria1`
     FOREIGN KEY (`contaBancariaOrigemId`)
     REFERENCES `metasoft`.`contaBancaria` (`id`)
@@ -257,6 +259,11 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`transferencia` (
   CONSTRAINT `fk_transferencia_login1`
     FOREIGN KEY (`loginId`)
     REFERENCES `metasoft`.`login` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transferencia_parcela1`
+    FOREIGN KEY (`parcelaId`)
+    REFERENCES `metasoft`.`parcela` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
