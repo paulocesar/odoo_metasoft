@@ -1,17 +1,27 @@
 Parcelas
  - melhorar forma de update (nõa renderizar novamente)
 
-CRUD Produtos
-login - melhorar seguraça de password
-login - busca assincrona para clientes
-em lancamentos - fazer listagem
-em lancamentos - fazer filtros
-em lancamentos - conrrigir salvamento da flag PAGO
-na remocao dos itens verificar relacionamento
+CRUD
+ - na remoção dos itens verificar relacionamento
+ - adicionar sistema assincriono de busca
 
-PENDENCIAS - SB
-Modulo Administrativo
-Modulo RH
-Contrato
-Nota Fiscal
-Transferencia entre bancos
+Contas
+ - vincular a transferencias com flag de PAGO
+
+Contas Bancarias
+ - criar conta local (caixa local)
+
+Transferencias
+ - criar crud (com busca assincrona - ver item CRUD)
+ - vincular a contas
+ - listagem de transferencias
+ - transferencia entre bancos
+
+Login
+ - melhorar proteção de password
+
+PENDENCIAS
+ - Modulo Administrativo
+ - Modulo RH
+ - Contrato
+ - Nota Fiscal
