@@ -1,14 +1,59 @@
 { Model, _, A, Context, moment, V } = require('../core/requires')
 
 class Transferencia extends Model
-    create: (transf, callback) ->
-        V.demandGoodNumber(transf.loginId, 'loginId')
-        V.demandGoodNumber(transf.valor, 'valor')
+    create: (t, callback) ->
+        V.demandGoodNumber(t.loginId, 'loginId')
+        V.demandGoodNumber(t.valor, 'valor')
+        V.demandFunction(callback, 'callback')
 
-        transf.data = new Date()
+        t.data = new Date()
 
         tasks = []
 
+        @getAccounts(t, (err, accs) =>
+            return err if err?
+
+            A.parallel({
+                transference: (cb) => @db('transferencia').insert(t).exec(cb)
+                accounts: (cb) =>
+                    @updateAccountBalance(t.valor, accs.origin, accs.destiny, cb)
+            }, (err, raw) ->
+                return callback(err) if err?
+                t.id =  raw.transference?[0]
+                callback(null, t)
+            )
+        )
+
+    cancel: (id, callback) ->
+        V.demandGoodNumber(id, 'id')
+        V.demandFunction(callback, 'callback')
+
+        @db('transferencia').where({ id }).exec((err, data) =>
+            return callback(err) if err?
+            t = data[0]
+
+            return callback(null, null) unless t
+
+            A.waterfall([
+                (cb) => @getAccounts(t, cb)
+
+                (accs, cb) =>
+                    @updateAccountBalance(t.valor, accs.destiny, accs.origin, cb)
+
+                (res, cb) =>
+                    @db('transferencia').update({ cancelado: '1' })
+                        .where({ id })
+                        .exec(cb)
+
+            ], (err) ->
+                return callback(err) if err?
+
+                t.cancelado = '1'
+                callback(null, t)
+            )
+        )
+
+    getAccounts: (transf, callback) ->
         A.parallel({
             origin: (cb) =>
                 unless transf.contaBancariaOrigemId
@@ -25,23 +70,20 @@ class Transferencia extends Model
                 @db('contaBancaria')
                     .where({ id: transf.contaBancariaDestinoId })
                     .exec(cb)
-        }, (err, accounts) =>
-            return err if err?
-            @makeTransaction(transf, accounts.origin[0], accounts.destiny[0], callback)
+        }, (err, raw) ->
+            return callback(err) if err?
+            callback(null, { origin: raw.origin?[0], destiny: raw.destiny?[0] })
         )
 
-    makeTransaction: (data, orig, dest, callback) ->
+    updateAccountBalance: (value, orig, dest, callback) ->
         A.parallel({
-            transference: (cb) =>
-                return @db('transferencia').insert(data).exec(cb)
-
             orig: (cb) =>
                 unless orig
                     return cb()
 
                 @db.raw(
                     'UPDATE contaBancaria SET saldo = saldo - ? WHERE id = ?'
-                    [data.valor, orig.id]
+                    [value, orig.id]
                 )
                 .exec(cb)
 
@@ -51,7 +93,7 @@ class Transferencia extends Model
 
                 @db.raw(
                     'UPDATE contaBancaria SET saldo = saldo + ? WHERE id = ?'
-                    [data.valor, dest.id]
+                    [value, dest.id]
                 )
                 .exec(cb)
         }, callback)
