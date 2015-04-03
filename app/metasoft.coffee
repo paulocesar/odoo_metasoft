@@ -41,7 +41,11 @@ Metasoft = {
     get: (action, data, cb) -> @ajax('get', action, data, cb)
     post: (action, data, cb) -> @ajax('post', action, data, cb)
 
+    postModel: (model, action, data, cb) ->
+        @post('crud/model', { model, action, data }, cb)
+
     ajax: (method, action, data, callback) ->
+        callback ?= () ->
         @showLoading()
 
         $[method]("/#{action}/#{@empresaId}", {data: JSON.stringify(data)}, (raw) =>

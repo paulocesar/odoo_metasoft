@@ -31,5 +31,6 @@ class Display extends Backbone.View
 
     get: (args...) -> Metasoft.get(args...)
     post: (args...) -> Metasoft.post(args...)
+    postModel: (args...) -> Metasoft.postModel(args...)
 
 Metasoft.Display = Display

@@ -28,6 +28,7 @@ class Contas extends Metasoft.Display
             'change #contasSearchForm .periodo': 'onChangePeriodo'
             'click .increment, .decrement': 'onClickMoveDate'
             'click .load-more': 'loadMore'
+            'click .list-lancamentos input[name="pago"]': 'onClickPago'
         }
 
         super
@@ -120,5 +121,13 @@ class Contas extends Metasoft.Display
 
     onChangeDate: () ->
         alert('changed')
+
+    onClickPago: (ev) ->
+        $checkbox = $(ev.currentTarget)
+        parcelaId = $checkbox.parent('td').parent('tr').data('rowid')
+        isChecked = $checkbox.is(':checked')
+        action = if isChecked then 'pay' else 'cancel'
+
+        @postModel(@model, action, { parcelaId }, @doSearch)
 
 Metasoft.displays.Contas = Contas

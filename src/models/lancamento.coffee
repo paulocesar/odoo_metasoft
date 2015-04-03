@@ -1,4 +1,4 @@
-{ Model, _, A, Context, moment } = require('../core/requires')
+{ Model, _, A, Context, moment, V } = require('../core/requires')
 dict = require('../shared/dictionary')
 
 today = () -> moment().format('YYYY-MM-DD')
@@ -6,11 +6,9 @@ today = () -> moment().format('YYYY-MM-DD')
 filters = {
     apagar: (q) ->
         q.andWhere({ tipoConta: dict.tipoConta.pagar, pago: '0' })
-            .andWhere('dataVencimento', '>=', today())
 
     areceber: (q) ->
         q.andWhere({ tipoConta: dict.tipoConta.receber, pago: '0' })
-            .andWhere('dataVencimento', '>=', today())
 
     vencido: (q) ->
         q.andWhere('pago', '0')
@@ -38,26 +36,74 @@ queryFields = [
 
 class Lancamento extends Model
     pay: (data, callback) ->
+        V.demandGoodNumber(data.parcelaId, 'parcelaId')
         id = data.parcelaId
 
-        @db('parcela').where({ id }).exec((err, parcela) =>
+        parcela = conta = null
+
+        A.waterfall([
+            (cb) => @db('parcela').where({ id, pago: '0' }).exec(cb)
+
+            (parcelas, cb) =>
+                parcela = parcelas?[0]
+                V.demandObject(parcela, 'parcela')
+                @db('conta').where({ id: parcela.contaId }).exec(cb)
+
+            (contas, cb) =>
+                conta = contas?[0]
+                V.demandObject(conta, 'conta')
+
+                label = 'contaBancariaOrigemId'
+                if conta.tipoConta == '0'
+                    label = 'contaBancariaDestinoId'
+
+                transf = {}
+                transf[label] = conta.contaBancariaId
+                transf.valor = parcela.valor
+                transf.parcelaId = id
+                transf.loginId = @login.id
+
+                @ms.transferencia().create(transf, cb)
+
+            (t, cb) =>
+                @db('parcela').update({ pago: '1' })
+                    .where({ id }).exec(cb)
+
+        ], (err) =>
             return callback(err) if err?
 
-            label = 'contaBancariaOrigemId'
-            if parcela.tipoConta
-                label = 'contaBancariaDestinoId'
+            parcela.pago = '1'
+            callback(null, parcela)
+        )
 
-            transf = {}
-            transf[label] = parcela.contaBancariaId
-            transf.valor = parcela.valor
-            transf.parcelaId = id
+    cancel: (data, callback) ->
+        V.demandGoodNumber(data.parcelaId, 'parcelaId')
+        id = data.parcelaId
 
-            A.parallel({
-                parcela: (cb) =>
-                    @db('parcela').update({ pago: '1' }).where({ id }).exec(cb)
+        A.parallel({
+            parcela: (cb) => @db('parcela').where({ id, pago: '1' }).exec(cb)
 
-                transferencia: (cb) => @ms.transferencia().create(transf, cb)
-            }, callback)
+            transferencia: (cb) =>
+                @db('transferencia')
+                    .where({ parcelaId: id, cancelado: '0' })
+                    .exec(cb)
+
+        }, (err, raw) =>
+            return callback(err) if err?
+
+            parcela = raw.parcela?[0]
+
+            if !parcela || parcela.pago == '0'
+                return callback(null, parcela)
+
+            transferencia = raw.transferencia?[0]
+            @ms.transferencia().cancel(transferencia?.id, (err, data) =>
+                return callback(err) if err?
+
+                @db('parcela').update({ pago: '0' })
+                    .where({ id })
+                    .exec(callback)
+            )
         )
 
     save: (data, callback) ->
@@ -68,22 +114,44 @@ class Lancamento extends Model
         conta.loginId = @login.id
         conta.criadoEm = @datetimeNow()
 
-        @db('conta').insert(conta).exec((err, ids) =>
+        contaId = null
+
+        A.waterfall([
+            (cb) => @db('conta').insert(conta).exec(cb)
+
+            (ids, cb) =>
+                contaId = ids[0]
+                conta.id = contaId
+
+                ps = []
+
+                for p in parcelas
+                    p.contaId = contaId
+                    p.empresaId = @empresaId
+                    p.dataVencimento = @formatDateLastMinute(p.dataVencimento)
+                    ps.push(@formatRow('parcela', p))
+
+                @db('parcela').insert(ps).exec(cb)
+
+            (ids, cb) =>
+                @db('parcela').select('*')
+                    .where({ contaId, pago: '1' })
+                    .exec(cb)
+
+            (parcelas, cb) => @createTransactions(parcelas, cb)
+        ], (err) =>
             return callback(err) if err?
-
-            id = ids[0]
-
-            ps = []
-
-
-            for p in parcelas
-                p.contaId = id
-                p.empresaId = @empresaId
-                p.dataVencimento = @formatDateLastMinute(p.dataVencimento)
-                ps.push(@formatRow('parcela', p))
-
-            @db('parcela').insert(ps).exec(callback)
+            callback(null, conta)
         )
+
+    createTransactions: (parcelas, callback) ->
+        return callback(null, null) if _.isEmpty(parcelas)
+
+        tasks = []
+        for p in parcelas
+            tasks.push((cb) => @pay({ parcelaId: p.id }, cb))
+
+        A.series(tasks, callback)
 
     list: (data, callback) ->
         limit = data.limit || 100

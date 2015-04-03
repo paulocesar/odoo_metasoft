@@ -39,7 +39,8 @@
         'change #contasSearchForm .status': 'doSearch',
         'change #contasSearchForm .periodo': 'onChangePeriodo',
         'click .increment, .decrement': 'onClickMoveDate',
-        'click .load-more': 'loadMore'
+        'click .load-more': 'loadMore',
+        'click .list-lancamentos input[name="pago"]': 'onClickPago'
       };
       Contas.__super__.constructor.apply(this, arguments);
       this.limit = 100;
@@ -145,6 +146,17 @@
 
     Contas.prototype.onChangeDate = function() {
       return alert('changed');
+    };
+
+    Contas.prototype.onClickPago = function(ev) {
+      var $checkbox, action, isChecked, parcelaId;
+      $checkbox = $(ev.currentTarget);
+      parcelaId = $checkbox.parent('td').parent('tr').data('rowid');
+      isChecked = $checkbox.is(':checked');
+      action = isChecked ? 'pay' : 'cancel';
+      return this.postModel(this.model, action, {
+        parcelaId: parcelaId
+      }, this.doSearch);
     };
 
     return Contas;

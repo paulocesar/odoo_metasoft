@@ -60,6 +60,12 @@
       return Metasoft.post.apply(Metasoft, args);
     };
 
+    Display.prototype.postModel = function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return Metasoft.postModel.apply(Metasoft, args);
+    };
+
     return Display;
 
   })(Backbone.View);

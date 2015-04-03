@@ -46,7 +46,17 @@
     post: function(action, data, cb) {
       return this.ajax('post', action, data, cb);
     },
+    postModel: function(model, action, data, cb) {
+      return this.post('crud/model', {
+        model: model,
+        action: action,
+        data: data
+      }, cb);
+    },
     ajax: function(method, action, data, callback) {
+      if (callback == null) {
+        callback = function() {};
+      }
       this.showLoading();
       return $[method]("/" + action + "/" + this.empresaId, {
         data: JSON.stringify(data)
