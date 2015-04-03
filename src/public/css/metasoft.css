@@ -125,15 +125,15 @@
 }
 
 .fix-header,
-#display-contas table.table-header {
+table.table-header.base-table-header {
     font-weight: bold;
 }
 
-#display-contas .buttons-container button.btn {
+.buttons-container button.btn {
     text-align: left;
 }
 
-#display-contas table.table-header {
+table.table-header {
     margin-bottom: 0px;
 }
 

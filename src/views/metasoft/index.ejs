@@ -20,15 +20,16 @@
             <img src='/images/loading.gif'> <div>Carregando</div>
         </div>
         <% include layout %>
+        <% include financeiro/contas %>
+        <% include financeiro/transferencias %>
+        <% include administrativo/produtos %>
+        <% include administrativo/produtoCategoria %>
+        <% include parceiros/parceiros %>
         <% include configs/logins %>
         <% include configs/centroCusto %>
         <% include configs/metodoPagamento %>
         <% include configs/imposto %>
-        <% include financeiro/contas %>
-        <% include financeiro/contaBancaria %>
-        <% include administrativo/produtos %>
-        <% include administrativo/produtoCategoria %>
-        <% include parceiros/parceiros %>
+        <% include configs/contaBancaria %>
 
         <script src='/js/validator.js'></script>
         <script src='/js/dictionary.js'></script>
@@ -46,6 +47,7 @@
         <script src='/js/metasoft/displays/contas.js'></script>
         <script src='/js/metasoft/displays/contas-modal.js'></script>
         <script src='/js/metasoft/displays/produtos.js'></script>
+        <script src='/js/metasoft/displays/transferencias.js'></script>
 
         <script src='/js/metasoft/index.js'></script>
     </body>
