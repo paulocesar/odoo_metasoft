@@ -45,10 +45,24 @@ class Application
             @displaysById[name] = display
         )
 
-        $s = $('.btn-subcategory')
-        $s.on('click', () ->
-            $s.removeClass('active')
-            $(@).addClass('active')
+        activate = (el) ->
+            $('.btn-subcategory').removeClass('active')
+            $(el).addClass('active')
+
+        $('.btn-subcategory').on('click', () -> activate($(@)))
+
+        $('.category-menu a').on('click', (ev) ->
+            $c = $(ev.currentTarget)
+            id = $c.attr('href')
+
+            $s = $(".tab-content #{id}.tab-pane a:first")
+            activate($s)
+
+            link = $s.attr('href')
+            page = link.replace('#/page/', '')
+
+            metasoftRouter.navigate(link)
+            metasoftRouter.goToPage(page)
         )
 
 

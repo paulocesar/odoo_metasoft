@@ -47,7 +47,7 @@
 
   Application = (function() {
     function Application() {
-      var $s;
+      var activate;
       this.displaysById = {};
       this.displaysContainer = Metasoft.container.find('#displayContainer');
       _.each(Metasoft.displays, (function(_this) {
@@ -61,10 +61,23 @@
           return _this.displaysById[name] = display;
         };
       })(this));
-      $s = $('.btn-subcategory');
-      $s.on('click', function() {
-        $s.removeClass('active');
-        return $(this).addClass('active');
+      activate = function(el) {
+        $('.btn-subcategory').removeClass('active');
+        return $(el).addClass('active');
+      };
+      $('.btn-subcategory').on('click', function() {
+        return activate($(this));
+      });
+      $('.category-menu a').on('click', function(ev) {
+        var $c, $s, id, link, page;
+        $c = $(ev.currentTarget);
+        id = $c.attr('href');
+        $s = $(".tab-content " + id + ".tab-pane a:first");
+        activate($s);
+        link = $s.attr('href');
+        page = link.replace('#/page/', '');
+        metasoftRouter.navigate(link);
+        return metasoftRouter.goToPage(page);
       });
     }
 
