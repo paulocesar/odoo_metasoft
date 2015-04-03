@@ -10,3 +10,11 @@ class Produtos extends Metasoft.CrudDisplay
         super
 
 Metasoft.displays.Produtos = Produtos
+
+
+class ProdutoCategoria extends Metasoft.CrudDisplay
+    constructor: (opts) ->
+        @table = 'produtoCategoria'
+        super
+
+Metasoft.displays.ProdutoCategoria = ProdutoCategoria

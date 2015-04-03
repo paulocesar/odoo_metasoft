@@ -1,0 +1,41 @@
+<script type='template' id='tpl-display-produtoCategoria' class='tpl'>
+    <div class="row">
+        <div class="col-md-6">
+            <input type='text' class='crud-busca form-control' placeHolder='buscar...'>
+            <div class='row fix-header'>
+                <div class='col-md-12'>Nome</div>
+            </div>
+            <div class='list-container'>
+                <table class="table table-striped table-hover crud-list">
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-horizontal form-crud">
+                <div class="form-group">
+                    <label for="nome" class="col-sm-2 control-label">Nome</label>
+                    <div class="col-sm-10"><input type="text" name="nome" class="form-control not-empty unique"></div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button class="btn btn-success save left margin-right">Salvar</button>
+                        <button class="btn btn-default remove hidden left">Excluir</button>
+                        <button class="btn btn-info new hidden right">Novo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type='template' id='tpl-display-produtoCategoriaListItem'>
+    <tbody>
+        {% _.each(items, function (c) { %}
+            <tr data-rowid='{%= c.id %}' class='clickable'>
+                <td class='col-md-12'>{%= c.nome %}</td>
+            </tr>
+        {% }) %}
+    </tbody>
+</script>
