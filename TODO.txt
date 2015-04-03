@@ -1,12 +1,9 @@
 Parcelas
  - melhorar forma de update (nõa renderizar novamente)
+ - BUG: soma de parcelas as vezes não bate com líquido
 
 CRUD
- - na remoção dos itens verificar relacionamento
  - adicionar sistema assincriono de busca
-
-Contas
- - vincular a transferencias com flag de PAGO
 
 Contas Bancarias
  - criar conta local (caixa local)

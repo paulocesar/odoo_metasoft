@@ -92,7 +92,14 @@
         data: {
           id: this.id
         }
-      }, this.refreshList);
+      }, (function(_this) {
+        return function(res) {
+          if (res.related) {
+            alert('Este item não pode ser removido pois está sendo usado');
+          }
+          return _this.refreshList();
+        };
+      })(this));
     };
 
     CrudDisplay.prototype.renderItemlist = function(_at_crudItems) {

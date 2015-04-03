@@ -53,7 +53,12 @@ class CrudDisplay extends Metasoft.Display
         @post('crud/upsert', { @table, @withEmpresa, data }, @refreshList)
 
     onClickRemove: () =>
-        @post('crud/remove', { @table, data: { @id } }, @refreshList)
+        @post('crud/remove', { @table, data: { @id } }, (res) =>
+            if res.related
+                alert('Este item não pode ser removido pois está sendo usado')
+
+            @refreshList()
+        )
 
     renderItemlist: (@crudItems) =>
         @$('.crud-list').html(@tpls.crudList({ items: @crudItems }))

@@ -1,6 +1,8 @@
 _ = require('underscore')
 moment = require('moment')
 
+rgxEndsWithId = /[\w_\d]+Id$/
+
 class Model
     constructor: (@context) ->
         @ms = @context
@@ -16,5 +18,14 @@ class Model
 
     formatRow: (tableName, obj) -> _.pick(obj, @schema[tableName])
 
+    getParentTables: (tableName) ->
+        _.chain(@schema[tableName])
+            .filter((c) -> rgxEndsWithId.test(c))
+            .map((c) -> c.substring(0, c.length - 2))
+            .value()
+
+    getChildTables: (tableName) ->
+        field = "#{tableName}Id"
+        name for name, cols of @schema when field in cols
 
 module.exports = Model

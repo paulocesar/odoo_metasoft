@@ -1,4 +1,4 @@
-{ Model, _, A, Context } = require('../core/requires')
+{ Model, _, A, V, Context } = require('../core/requires')
 
 class Crud extends Model
     list: (table, withEmpresa, callback) ->
@@ -25,13 +25,16 @@ class Crud extends Model
 
         A.waterfall(tasks, callback)
 
-    list: (table, where, callback) ->
-        @db.select('*')
-            .from(table)
-            .exec(callback)
-
     remove: (table, data, callback) ->
-        @db(table).where('id', data.id).del().exec(callback)
+        V.demandGoodString(table, 'table')
+        V.demandFunction(callback, 'callback')
+        V.demandGoodNumber(data.id, 'id')
+
+        @db(table).where('id', data.id).del().exec((err, data) =>
+            if err?
+                return callback(null, { related: true })
+            return callback(null, { related: false })
+        )
 
 module.exports = Crud
 Context::crud = () -> new Crud(@)
