@@ -5,18 +5,18 @@ today = () -> moment().format('YYYY-MM-DD')
 
 filters = {
     apagar: (q) ->
-        q.andWhere({ tipoConta: dict.tipoConta.pagar, pago: '0' })
+        q.andWhere({ 'parcela.tipoConta': dict.tipoConta.pagar, pago: '0' })
 
     areceber: (q) ->
-        q.andWhere({ tipoConta: dict.tipoConta.receber, pago: '0' })
+        q.andWhere({ 'parcela.tipoConta': dict.tipoConta.receber, pago: '0' })
 
     vencido: (q) ->
         q.andWhere('pago', '0')
             .andWhere('dataVencimento', '<', today())
 
-    pago: (q) -> q.andWhere({ tipoConta: dict.tipoConta.pagar, pago: '1' })
+    pago: (q) -> q.andWhere({ 'parcela.tipoConta': dict.tipoConta.pagar, pago: '1' })
 
-    recebido: (q) -> q.andWhere({ tipoConta: dict.tipoConta.receber, pago: '1' })
+    recebido: (q) -> q.andWhere({ 'parcela.tipoConta': dict.tipoConta.receber, pago: '1' })
 
     todos: (q) -> q
 }
@@ -54,7 +54,7 @@ class Lancamento extends Model
                 V.demandObject(conta, 'conta')
 
                 label = 'contaBancariaOrigemId'
-                if conta.tipoConta == '0'
+                if conta.tipoConta == 0
                     label = 'contaBancariaDestinoId'
 
                 transf = {}
@@ -66,7 +66,8 @@ class Lancamento extends Model
                 @ms.transferencia().create(transf, cb)
 
             (t, cb) =>
-                @db('parcela').update({ pago: '1' })
+                #MUST: replace dataPagamento with a config field
+                @db('parcela').update({ pago: '1', dataPagamento: @datetimeNow() })
                     .where({ id }).exec(cb)
 
         ], (err) =>
@@ -129,6 +130,9 @@ class Lancamento extends Model
                     p.contaId = contaId
                     p.empresaId = @empresaId
                     p.dataVencimento = @formatDateLastMinute(p.dataVencimento)
+                    p.tipoConta = conta.tipoConta
+                    p.contaBancariaId = conta.contaBancariaId
+                    p.metodoPagamentoId = conta.metodoPagamentoId
                     ps.push(@formatRow('parcela', p))
 
                 @db('parcela').insert(ps).exec(cb)
@@ -165,7 +169,7 @@ class Lancamento extends Model
                 'pago'
                 'contaId'
                 'impostoNotaFiscalId'
-                'tipoConta'
+                'parcela.tipoConta'
                 'descricao'
                 'parceiro.nome as parceiroNome'
                 'centroCusto.nome as centroCustoNome'
@@ -174,8 +178,8 @@ class Lancamento extends Model
                 'contaBancaria.conta as contaBanco'
                 'metodoPagamento.nome as metodoPagamentoNome'
                 'centroCustoId'
-                'contaBancariaId'
-                'metodoPagamentoId'
+                'parcela.contaBancariaId'
+                'parcela.metodoPagamentoId'
                 'status'
             )
             .innerJoin('conta', 'conta.id', 'parcela.contaId')

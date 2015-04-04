@@ -65,10 +65,10 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`parceiro` (
   `fornecedor` TINYINT(1) NOT NULL,
   `email` VARCHAR(45) NULL,
   `telefone` VARCHAR(45) NULL,
+  `telefone2` VARCHAR(45) NULL,
   `endereco` VARCHAR(45) NULL,
   `cep` VARCHAR(45) NULL,
-  `cnpj` VARCHAR(45) NULL,
-  `cpf` VARCHAR(45) NULL,
+  `cnpjCpf` VARCHAR(45) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_0a92f17c-c6a2-11e4-844e-9439e5f3523b` (`empresaId` ASC),
   CONSTRAINT `fk_0a92f17c-c6a2-11e4-844e-9439e5f3523b`
@@ -202,17 +202,23 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`impostoNotaFiscal` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `metasoft`.`parcela` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `dataVencimento` DATE NULL,
   `valor` DECIMAL(10,2) NOT NULL,
   `deducao` DECIMAL(10,2) NULL,
+  `tipoConta` TINYINT(1) NOT NULL,
   `contaId` INT UNSIGNED NOT NULL,
   `pago` TINYINT(1) NOT NULL,
   `empresaId` INT UNSIGNED NOT NULL,
   `impostoNotaFiscalId` INT UNSIGNED NULL,
+  `contaBancariaId` INT UNSIGNED NOT NULL,
+  `metodoPagamentoId` INT UNSIGNED NOT NULL,
+  `dataVencimento` DATETIME NULL,
+  `dataPagamento` DATETIME NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_put_entry1_idx` (`contaId` ASC),
   INDEX `fk_parcela_empresa1_idx` (`empresaId` ASC),
   INDEX `fk_parcela_impostoNotaFiscal1_idx` (`impostoNotaFiscalId` ASC),
+  INDEX `fk_parcela_contaBancaria1_idx` (`contaBancariaId` ASC),
+  INDEX `fk_parcela_metodoPagamento1_idx` (`metodoPagamentoId` ASC),
   CONSTRAINT `fk_put_entry1`
     FOREIGN KEY (`contaId`)
     REFERENCES `metasoft`.`conta` (`id`)
@@ -226,6 +232,16 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`parcela` (
   CONSTRAINT `fk_parcela_impostoNotaFiscal1`
     FOREIGN KEY (`impostoNotaFiscalId`)
     REFERENCES `metasoft`.`impostoNotaFiscal` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_parcela_contaBancaria1`
+    FOREIGN KEY (`contaBancariaId`)
+    REFERENCES `metasoft`.`contaBancaria` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_parcela_metodoPagamento1`
+    FOREIGN KEY (`metodoPagamentoId`)
+    REFERENCES `metasoft`.`metodoPagamento` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
