@@ -13,6 +13,7 @@ class Model
 
     datetimeNow: () -> moment().format('YYYY-MM-DD HH:mm:ss')
     dateNow: () -> moment().format('YYYY-MM-DD')
+    formatDate: (d) -> moment(d, 'DD/MM/YYYY').format('YYYY-MM-DD 00:00:00')
     formatDateLastMinute: (d) ->
         return moment(d, 'DD/MM/YYYY').format('YYYY-MM-DD 23:59:59')
 

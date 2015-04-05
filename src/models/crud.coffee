@@ -1,6 +1,9 @@
 { Model, _, A, V, Context } = require('../core/requires')
 
 class Crud extends Model
+    get: (table, id, callback) ->
+        @db(table).where({ id }).exec((err, d) -> callback(err, d?[0]))
+
     list: (table, withEmpresa, callback) ->
         q = @db(table).select('*')
 

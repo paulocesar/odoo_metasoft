@@ -213,6 +213,7 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`parcela` (
   `metodoPagamentoId` INT UNSIGNED NOT NULL,
   `dataVencimento` DATETIME NULL,
   `dataPagamento` DATETIME NULL,
+  `descricao` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_put_entry1_idx` (`contaId` ASC),
   INDEX `fk_parcela_empresa1_idx` (`empresaId` ASC),

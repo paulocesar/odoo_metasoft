@@ -148,6 +148,14 @@ fieldValidator = {
                 f.prop('checked', value)
                 continue
 
+            if f.hasClass('mask-date-day')
+                f.val(moment(value).format('DD/MM/YYYY'))
+                continue
+
+            if f.hasClass('mask-date-month')
+                f.val(moment(value).format('MM/YYYY'))
+                continue
+
             if hasMoneyClass(f)
                 f.addClass(money.getColorCls(value))
                 value = money.format(value)

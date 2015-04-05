@@ -26,6 +26,10 @@
       fieldValidator.apply(this.$el);
     }
 
+    Display.prototype.$f = function(name) {
+      return this.$("[name='" + name + "']");
+    };
+
     Display.prototype.render = function() {
       return this.$el.html(this.template({
         subTpls: this.subTpls

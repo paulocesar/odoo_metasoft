@@ -92,6 +92,76 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade modal-parcela" id="modalParcela" tabindex="-1" role="dialog" aria-labelledby="modalPay" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Parcela</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal form-crud">
+                        <input type="hidden" name="id">
+                        <div class="row form-parcela">
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <label for="metodoPagamentoId" class="col-md-4 control-label">Forma de Pagamento</label>
+                                    <div class="col-md-8"><select name="metodoPagamentoId" class="form-control">
+                                        {% _.each(Metasoft.metodoPagamentoById, function (p) { %}
+                                            <option value="{%= p.id %}">{%= p.nome %}</option>
+                                        {% }); %}
+                                    </select></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="contaBancariaId" class="col-md-4 control-label">Conta Financeira</label>
+                                    <div class="col-md-8"><select name="contaBancariaId" class="form-control">
+                                        {% _.each(Metasoft.contaBancariaById, function (c) { %}
+                                            <option value="{%= c.id %}">{%= dictionary.banksById[c.banco] %} / {%= c.agencia %} / {%= c.conta %}</option>
+                                        {% }); %}
+                                    </select></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="parceiroId" class="col-md-4 control-label">Cliente</label>
+                                    <div class="col-md-8 dropdownSearchParceiro"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="dataVencimento" class="col-md-4 control-label">Vencimento</label>
+                                    <div class="col-md-8"><input type="text" name="dataVencimento" class="form-control not-empty mask-date-day"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dataPagamento" class="col-md-4 control-label">Pagamento</label>
+                                    <div class="col-md-8"><input type="text" name="dataPagamento" class="form-control not-empty mask-date-day"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="valor" class="col-md-4 control-label">Valor</label>
+                                    <div class="col-md-8"><input type="text" name="valor" class="form-control valorLiquido not-zero mask-money-positive"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-conta-bottom">
+                            <div class="col-md-12">
+                                <label for="descricao" class="col-md-12 descricao">Observações</label>
+                                <div class="form-group">
+                                    <div class="col-md-12"><textarea class="form-control" name="descricao" rows="1"></textarea></textarea></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-success save">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 
 <script type='template' id='subtpl-display-contas-form'>
@@ -164,7 +234,6 @@
                             <td class='col-md-2'>Alíquota</td>
                             <td class='col-md-2'>Dedução</td>
                             <td class='col-md-2'>Valor</td>
-                            <td class='col-md-2'>Pago?</td>
                         </tr>
                     </thead>
                 </table>
@@ -208,7 +277,7 @@
 <script type='template' id="subtpl-display-contas-parcelaItemModal">
     {% _.each(parcelas, function (p) { %}
         <tr data-rowid='{%= p.id %}' class='parcela-item' >
-            <td class='col-md-2'>Parcela {%= p.numero %}<input type='hidden' name="id" value="{%= p.id %}"><input type='hidden' name="numero" value="{%= p.numero %}"></td>
+            <td class='col-md-2'>{%= p.descricao %}<input type='hidden' name="id" value="{%= p.id %}"><input type='hidden' name="descricao" value="{%= p.descricao %}"><input type='hidden' name="numero" value="{%= p.numero %}"></td>
             <td class='col-md-2'><input type='text' class='mask-date-day' name="dataVencimento" value="{%= p.dataVencimento %}"></td>
             <td class='col-md-2'>
                 {% if (p.aliquota) { %}
@@ -221,7 +290,6 @@
                 {% } %}
             </td>
             <td class='col-md-2'><input type='text' name="valor" class="mask-money" value="{%= Metasoft.money.format(p.valor) %}"></td>
-            <td class='col-md-2'><input type='checkbox' name="pago" {%= p.pago ? 'checked' :'' %} style='margin-left:25px;'></td>
         </tr>
     {% }) %}
 </script>

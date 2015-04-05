@@ -2,16 +2,17 @@ jsRoot = @
 
 { _, ace, Backbone, moment, Metasoft } = jsRoot
 
-{ fieldValidator, money, DropdownSearch } = Metasoft
+{ fieldValidator, money, DisplayModal, DropdownSearch } = Metasoft
 
 createParcela = (numero = 1, valor = 0) -> {
     id: null
     numero
+    descricao: "Parcela #{numero}"
     valor
     dataVencimento: moment().add(numero-1, 'month').format('DD/MM/YYYY')
 }
 
-class ContasModal extends Backbone.View
+class ContasModal extends DisplayModal
     constructor: (opts) ->
         _.extend(@, opts)
         @el = "#modalContas"
@@ -21,8 +22,6 @@ class ContasModal extends Backbone.View
         }
 
         @events = {
-            'show.bs.modal': 'onShow'
-            'hide.bs.modal': 'onHide'
             'change .valorBruto': 'onChangeValorBruto'
             'change .valorLiquido': 'onChangeValorLiquido'
             'change .quantParcelas': 'onChangeParcelas'

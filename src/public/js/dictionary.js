@@ -25,8 +25,8 @@
       admin: 'Administrador'
     },
     tipoConta: {
-      receber: '0',
-      pagar: '1'
+      receber: 0,
+      pagar: 1
     },
     getParcelaStatus: function(p) {
       return 'pendente';

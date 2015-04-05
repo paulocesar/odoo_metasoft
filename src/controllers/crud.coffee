@@ -1,6 +1,10 @@
 { C, _ } = require('../core/requires')
 
 module.exports = C('crud', {
+    post_get: () ->
+        d = @json()
+        @ms.crud().get(d.table, d.id, @sendDataOrError)
+
     post_list: () ->
         d = @json()
         @ms.crud().list(d.table, d.withEmpresa, @sendDataOrError)

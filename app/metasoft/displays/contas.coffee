@@ -38,6 +38,9 @@ class Contas extends Metasoft.Display
         @modal = new modals.Contas()
         @modal.on('parcela:save', @doSearch)
 
+        @parcelaModal = new modals.Parcela()
+        @parcelaModal.on('lancamento:pay', @onLancamentoPay)
+
         @search = fieldSearch({ el: '#contasSearchForm', @model, action: 'list' })
         @search.on('search:done', @renderLancamentos)
 
@@ -123,11 +126,26 @@ class Contas extends Metasoft.Display
         alert('changed')
 
     onClickPago: (ev) ->
-        $checkbox = $(ev.currentTarget)
-        parcelaId = $checkbox.parent('td').parent('tr').data('rowid')
-        isChecked = $checkbox.is(':checked')
-        action = if isChecked then 'pay' else 'cancel'
+        ev.preventDefault()
 
-        @postModel(@model, action, { parcelaId }, @doSearch)
+        $checkbox = $(ev.currentTarget)
+        id = $checkbox.parent('td').parent('tr').data('rowid')
+        mustPay = $checkbox.is(':checked')
+
+        if mustPay
+            @post('crud/get', { table: 'parcela', id }, (parcela) =>
+                @parcelaModal.setParcela(parcela)
+                @parcelaModal.show('crud')
+            )
+
+            return
+
+        if confirm('Deseja realemente cancelar o pagamento?')
+            $checkbox.prop('checked', false)
+            @postModel('lancamento', 'cancel', { parcelaId: id}, @doSearch)
+
+    onLancamentoPay: (id) ->
+        $(".list-lancamentos tr[data-rowid='#{id}'] input[name='pago']")
+            .prop('checked', true)
 
 Metasoft.displays.Contas = Contas

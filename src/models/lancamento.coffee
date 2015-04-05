@@ -36,17 +36,19 @@ queryFields = [
 
 class Lancamento extends Model
     pay: (data, callback) ->
-        V.demandGoodNumber(data.parcelaId, 'parcelaId')
-        id = data.parcelaId
-
-        parcela = conta = null
+        V.demandGoodObject(data.parcela, 'parcela')
+        parcela = @formatRow('parcela', data.parcela)
+        parcela.dataVencimento = @formatDate(parcela.dataVencimento)
+        parcela.dataPagamento = @formatDateLastMinute(parcela.dataPagamento)
+        id = parcela.id
+        conta = null
 
         A.waterfall([
             (cb) => @db('parcela').where({ id, pago: '0' }).exec(cb)
 
             (parcelas, cb) =>
-                parcela = parcelas?[0]
-                V.demandObject(parcela, 'parcela')
+                V.demandObject(parcelas?[0], 'parcela')
+                _.defaults(parcela, parcelas?[0])
                 @db('conta').where({ id: parcela.contaId }).exec(cb)
 
             (contas, cb) =>
@@ -66,8 +68,9 @@ class Lancamento extends Model
                 @ms.transferencia().create(transf, cb)
 
             (t, cb) =>
-                #MUST: replace dataPagamento with a config field
-                @db('parcela').update({ pago: '1', dataPagamento: @datetimeNow() })
+                parcela.pago = '1'
+
+                @db('parcela').update(_.omit(parcela, 'id'))
                     .where({ id }).exec(cb)
 
         ], (err) =>
@@ -136,13 +139,6 @@ class Lancamento extends Model
                     ps.push(@formatRow('parcela', p))
 
                 @db('parcela').insert(ps).exec(cb)
-
-            (ids, cb) =>
-                @db('parcela').select('*')
-                    .where({ contaId, pago: '1' })
-                    .exec(cb)
-
-            (parcelas, cb) => @createTransactions(parcelas, cb)
         ], (err) =>
             return callback(err) if err?
             callback(null, conta)
@@ -170,7 +166,7 @@ class Lancamento extends Model
                 'contaId'
                 'impostoNotaFiscalId'
                 'parcela.tipoConta'
-                'descricao'
+                'parcela.descricao'
                 'parceiro.nome as parceiroNome'
                 'centroCusto.nome as centroCustoNome'
                 'contaBancaria.banco as banco'

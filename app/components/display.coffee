@@ -17,6 +17,8 @@ class Display extends Backbone.View
         @render()
         fieldValidator.apply(@$el)
 
+    $f: (name) -> @$("[name='#{name}']")
+
     render: () -> @$el.html(@template({ @subTpls }))
 
     addToGrid: () -> @category? || @subCategory?

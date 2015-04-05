@@ -46,6 +46,8 @@
       this.limit = 100;
       this.modal = new modals.Contas();
       this.modal.on('parcela:save', this.doSearch);
+      this.parcelaModal = new modals.Parcela();
+      this.parcelaModal.on('lancamento:pay', this.onLancamentoPay);
       this.search = fieldSearch({
         el: '#contasSearchForm',
         model: this.model,
@@ -149,14 +151,33 @@
     };
 
     Contas.prototype.onClickPago = function(ev) {
-      var $checkbox, action, isChecked, parcelaId;
+      var $checkbox, id, mustPay;
+      ev.preventDefault();
       $checkbox = $(ev.currentTarget);
-      parcelaId = $checkbox.parent('td').parent('tr').data('rowid');
-      isChecked = $checkbox.is(':checked');
-      action = isChecked ? 'pay' : 'cancel';
-      return this.postModel(this.model, action, {
-        parcelaId: parcelaId
-      }, this.doSearch);
+      id = $checkbox.parent('td').parent('tr').data('rowid');
+      mustPay = $checkbox.is(':checked');
+      if (mustPay) {
+        this.post('crud/get', {
+          table: 'parcela',
+          id: id
+        }, (function(_this) {
+          return function(parcela) {
+            _this.parcelaModal.setParcela(parcela);
+            return _this.parcelaModal.show('crud');
+          };
+        })(this));
+        return;
+      }
+      if (confirm('Deseja realemente cancelar o pagamento?')) {
+        $checkbox.prop('checked', false);
+        return this.postModel('lancamento', 'cancel', {
+          parcelaId: id
+        }, this.doSearch);
+      }
+    };
+
+    Contas.prototype.onLancamentoPay = function(id) {
+      return $(".list-lancamentos tr[data-rowid='" + id + "'] input[name='pago']").prop('checked', true);
     };
 
     return Contas;
