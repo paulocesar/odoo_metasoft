@@ -1,13 +1,35 @@
 <script type='template' id='tpl-display-transferencias' class='tpl'>
     <div class="row">
         <div class="col-md-4 buttons-container">
-            <button
-                class="btn btn-default btn-block"
-                data-toggle="modal"
-                data-target=".modal-transferencia-crud"
-            >
-                Adicionar
-            </button>
+            <div class='row'>
+                <div class="col-md-6">
+                    <button
+                        class="btn btn-default btn-block"
+                        data-toggle="modal"
+                        data-target=".modal-transferencia-crud"
+                    >
+                        Adicionar
+                    </button>
+                </div>
+                <div class='col-md-6'>
+                    <button class="btn btn-default btn-block">
+                        Importar
+                    </button>
+                </div>
+            </div>
+            <table class="table table-striped table-hover table-header" style='margin-right: 15px;'>
+                <thead>
+                    <tr>
+                        <td class='col-md-2'>Contas</td>
+                    </tr>
+                </thead>
+            </table>
+            <div class="list-container">
+                <table class="table table-striped table-hover">
+                    <tbody class='list-lancamentos'>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="col-md-8">
             <div class='row' id="contasSearchForm">
@@ -32,12 +54,9 @@
             <table class="table table-striped table-hover table-header" style='margin-right: 15px;'>
                 <thead>
                     <tr>
-                        <td class='col-md-2'>Vencimento</td>
-                        <td class='col-md-2'>Admissão</td>
-                        <td class='col-md-2'>Centro de Custo</td>
-                        <td class='col-md-3'>Cliente/Fornecedor</td>
-                        <td class='col-md-2'>Valor</td>
-                        <td class='col-md-1'>Pago?</td>
+                        <td class='col-md-4'>Data</td>
+                        <td class='col-md-4'>Descrição</td>
+                        <td class='col-md-4'>Valor</td>
                     </tr>
                 </thead>
             </table>
