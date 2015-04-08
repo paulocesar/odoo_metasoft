@@ -142,7 +142,7 @@ class Contas extends Metasoft.Display
 
         if confirm('Deseja realemente cancelar o pagamento?')
             $checkbox.prop('checked', false)
-            @postModel('lancamento', 'cancel', { parcelaId: id }, () => @doSearch)
+            @postModel('lancamento', 'cancel', { parcelaId: id }, @doSearch)
 
     onLancamentoPay: (id) ->
         $(".list-lancamentos tr[data-rowid='#{id}'] input[name='pago']")

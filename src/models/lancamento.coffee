@@ -62,12 +62,13 @@ class Lancamento extends Model
                 transf = {}
                 transf[label] = conta.contaBancariaId
                 transf.valor = parcela.valor
-                transf.parcelaId = id
+                transf.descricao = parcela.descricao
                 transf.loginId = @login.id
 
                 @ms.transferencia().create(transf, cb)
 
             (t, cb) =>
+                parcela.transferenciaId = t.id
                 parcela.pago = '1'
 
                 @db('parcela').update(_.omit(parcela, 'id'))
@@ -75,8 +76,6 @@ class Lancamento extends Model
 
         ], (err) =>
             return callback(err) if err?
-
-            parcela.pago = '1'
             callback(null, parcela)
         )
 
@@ -84,23 +83,28 @@ class Lancamento extends Model
         V.demandGoodNumber(data.parcelaId, 'parcelaId')
         id = data.parcelaId
 
-        A.parallel({
-            parcela: (cb) => @db('parcela').where({ id, pago: '1' }).exec(cb)
+        parcela = null
 
-            transferencia: (cb) =>
+        A.waterfall([
+            (cb) => @db('parcela').where({ id, pago: '1' }).exec(cb)
+
+            (p, cb) =>
+                parcela = p?[0]
+                V.demandObject(parcela, 'parcela')
+
                 @db('transferencia')
-                    .where({ parcelaId: id, cancelado: '0' })
+                    .where({ id: parcela.transferenciaId, cancelado: '0' })
                     .exec(cb)
 
-        }, (err, raw) =>
+        ], (err, t) =>
             return callback(err) if err?
 
-            parcela = raw.parcela?[0]
+            transferencia = t?[0]
+            V.demandObject(transferencia, 'transferencia')
 
             if !parcela || parcela.pago == '0'
                 return callback(null, parcela)
 
-            transferencia = raw.transferencia?[0]
             @ms.transferencia().cancel(transferencia?.id, (err, data) =>
                 return callback(err) if err?
 

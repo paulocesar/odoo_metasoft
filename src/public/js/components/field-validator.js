@@ -174,11 +174,11 @@
           continue;
         }
         if (f.hasClass('mask-date-day')) {
-          f.val(moment(value).format('DD/MM/YYYY'));
+          f.val(moment(value).utc().format('DD/MM/YYYY'));
           continue;
         }
         if (f.hasClass('mask-date-month')) {
-          f.val(moment(value).format('MM/YYYY'));
+          f.val(moment(value).utc().format('MM/YYYY'));
           continue;
         }
         if (hasMoneyClass(f)) {

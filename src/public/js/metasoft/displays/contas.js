@@ -172,11 +172,7 @@
         $checkbox.prop('checked', false);
         return this.postModel('lancamento', 'cancel', {
           parcelaId: id
-        }, (function(_this) {
-          return function() {
-            return _this.doSearch;
-          };
-        })(this));
+        }, this.doSearch);
       }
     };
 
