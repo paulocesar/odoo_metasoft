@@ -41,6 +41,9 @@ Metasoft = {
     get: (action, data, cb) -> @ajax('get', action, data, cb)
     post: (action, data, cb) -> @ajax('post', action, data, cb)
 
+    postCrudList: (table, withEmpresa, cb) ->
+        @post('crud/list', { table, withEmpresa }, cb)
+
     postModel: (model, action, data, cb) ->
         @post('crud/model', { model, action, data }, cb)
 

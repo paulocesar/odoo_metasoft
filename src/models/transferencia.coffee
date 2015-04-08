@@ -1,6 +1,9 @@
 { Model, _, A, Context, moment, V } = require('../core/requires')
 
 class Transferencia extends Model
+    list: (data, callback) ->
+
+
     create: (t, callback) ->
         V.demandGoodNumber(t.loginId, 'loginId')
         V.demandGoodNumber(t.valor, 'valor')

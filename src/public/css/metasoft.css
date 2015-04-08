@@ -112,7 +112,7 @@
     border: 1px solid #E8E8E8;
 }
 
-.list-container tr.clickable {
+.clickable {
     cursor: pointer;
 }
 
