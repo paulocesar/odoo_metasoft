@@ -206,9 +206,8 @@ class Lancamento extends Model
 
         q.where('parcela.empresaId', @empresaId)
 
-        q = @applyDateFilter(q, data) if data
-        q = @applyQueryFilter(q, query) if query
-
+        q = @applyDateFilter(q, data, 'dataVencimento') if data
+        q = @applyQueryFilter(q, query, queryFields) if query
 
         status ?= ''
         status = status.toLowerCase()
@@ -216,39 +215,6 @@ class Lancamento extends Model
         f = filters[status]
 
         return f(q) if f?
-        return q
-
-    applyQueryFilter: (q, query) ->
-        query = query.trim().replace('"', '')
-        return q unless query
-
-        queries = query.split(" ")
-        words = []
-
-        for word in queries when word
-            words.push(word)
-
-        return q if _.isEmpty(words)
-
-        for w in words
-            expression = ("#{f} like \"%#{w}%\"" for f in queryFields)
-            expression = "(#{expression.join(' OR ')})"
-            q = q.whereRaw(expression)
-
-        return q
-
-    applyDateFilter: (q, date) ->
-        date = date.split('/')
-
-        year = _.last(date)
-        month = _.last(_.initial(date))
-
-        q = q.whereRaw('YEAR(dataVencimento) = ?', [year])
-                .whereRaw('MONTH(dataVencimento) = ?', [month])
-
-        if date.length == 3
-            q = q.whereRaw('DAY(dataVencimento) = ?', [date[0]])
-
         return q
 
 module.exports = Lancamento

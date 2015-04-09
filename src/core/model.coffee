@@ -29,4 +29,37 @@ class Model
         field = "#{tableName}Id"
         name for name, cols of @schema when field in cols
 
+    applyQueryFilter: (q, query, fields) ->
+        query = query.trim().replace('"', '')
+        return q unless query
+
+        queries = query.split(" ")
+        words = []
+
+        for word in queries when word
+            words.push(word)
+
+        return q if _.isEmpty(words)
+
+        for w in words
+            expression = ("#{f} like \"%#{w}%\"" for f in fields)
+            expression = "(#{expression.join(' OR ')})"
+            q = q.whereRaw(expression)
+
+        return q
+
+    applyDateFilter: (q, date, field) ->
+        date = date.split('/')
+
+        year = _.last(date)
+        month = _.last(_.initial(date))
+
+        q = q.whereRaw("YEAR(#{field}) = ?", [year])
+                .whereRaw("MONTH(#{field}) = ?", [month])
+
+        if date.length == 3
+            q = q.whereRaw("DAY(#{field}) = ?", [date[0]])
+
+        return q
+
 module.exports = Model

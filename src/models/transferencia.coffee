@@ -2,7 +2,19 @@
 
 class Transferencia extends Model
     list: (data, callback) ->
+        { contaBancariaId, query, data, periodo } = data
+        V.demandGoodNumber(contaBancariaId, 'contaBancariaId')
 
+        q = @db('transferencia')
+            .where(() ->
+                @where('contaBancariaOrigemId', contaBancariaId)
+                    .orWhere('contaBancariaDestinoId', contaBancariaId)
+            )
+
+        q = @applyDateFilter(q, data, 'data') if data
+        q = @applyQueryFilter(q, query, [ 'descricao' ]) if query
+
+        q.exec(callback)
 
     create: (t, callback) ->
         V.demandGoodNumber(t.loginId, 'loginId')
