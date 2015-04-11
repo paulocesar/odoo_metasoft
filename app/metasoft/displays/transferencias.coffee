@@ -4,6 +4,26 @@ jsRoot = @
 
 { fieldValidator, fieldSearch, DateNavigator } = Metasoft
 
+class TransferenciaModal extends Metasoft.DisplayModal
+    constructor: (opts) ->
+        @el = '#modalTransferencia'
+
+        @events = {
+            'click .save': 'onClickSave'
+        }
+
+        super
+
+        @tplTransfModal = _.template($('#tpl-transferencia-crud').html())
+        @render()
+
+    onClickSave: () -> alert('funcionalidade em desenvolvimento')
+
+    render: () ->
+        contas = Metasoft.contaBancariaById
+        @$('.modal-body').html(@tplTransfModal({ contas }))
+        fieldValidator.apply(@$el)
+
 class Transferencias extends Metasoft.Display
     constructor: (opts) ->
         @model = 'transferencia'
@@ -26,6 +46,8 @@ class Transferencias extends Metasoft.Display
             period: 'dia'
         })
         @dateNavigator.on('date:change', @doSearch)
+
+        @transferenciaModal = new TransferenciaModal()
 
         @reset()
 
