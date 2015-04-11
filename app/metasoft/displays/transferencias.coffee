@@ -15,6 +15,7 @@ class Transferencias extends Metasoft.Display
         super
 
         @tplAcctounts = _.template($('#tpl-transferencia-contas').html())
+        @tplTransf = _.template($('#tpl-transferencia-listItem').html())
 
         @search = fieldSearch({ el: '#transfereciaSearchForm', @model, action: 'list' })
         @search.on('search:done', @renderTransferencias)
@@ -37,7 +38,8 @@ class Transferencias extends Metasoft.Display
 
     doSearch: () => @search.doSearch()
 
-    renderTransferencias: (data) => console.log(data)
+    renderTransferencias: (transferencias) =>
+        @$('.list-transferencias').html(@tplTransf({ @contaBancariaId, transferencias }))
 
     renderAccounts: (contas) =>
         @$('.list-transferencia-contas').html(@tplAcctounts({ contas }))

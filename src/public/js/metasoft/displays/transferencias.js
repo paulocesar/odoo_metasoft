@@ -26,6 +26,7 @@
       };
       Transferencias.__super__.constructor.apply(this, arguments);
       this.tplAcctounts = _.template($('#tpl-transferencia-contas').html());
+      this.tplTransf = _.template($('#tpl-transferencia-listItem').html());
       this.search = fieldSearch({
         el: '#transfereciaSearchForm',
         model: this.model,
@@ -64,8 +65,11 @@
       return this.search.doSearch();
     };
 
-    Transferencias.prototype.renderTransferencias = function(data) {
-      return console.log(data);
+    Transferencias.prototype.renderTransferencias = function(transferencias) {
+      return this.$('.list-transferencias').html(this.tplTransf({
+        contaBancariaId: this.contaBancariaId,
+        transferencias: transferencias
+      }));
     };
 
     Transferencias.prototype.renderAccounts = function(contas) {
