@@ -57,7 +57,7 @@
     };
 
     CrudDisplay.prototype.refreshList = function() {
-      this.$f('.query').val('');
+      this.$('.query').val('');
       return this.search.doSearch();
     };
 

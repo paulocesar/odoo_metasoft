@@ -39,7 +39,7 @@ class CrudDisplay extends Metasoft.Display
     onShow: () -> @refreshList()
 
     refreshList: () =>
-        @$f('.query').val('')
+        @$('.query').val('')
         @search.doSearch()
 
     isValid: () -> true
