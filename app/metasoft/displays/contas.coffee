@@ -2,10 +2,7 @@ jsRoot = @
 
 { _, Metasoft, moment } = jsRoot
 
-{ F, modals, fieldSearch } = Metasoft
-
-todayDate = () -> moment().format('DD/MM/YYYY')
-todayMonth = () -> moment().format('MM/YYYY')
+{ F, modals, fieldSearch, DateNavigator } = Metasoft
 
 loadMoreHtml = () ->
     return """
@@ -44,9 +41,12 @@ class Contas extends Metasoft.Display
         @search = fieldSearch({ el: '#contasSearchForm', @model, action: 'list' })
         @search.on('search:done', @renderLancamentos)
 
-        @$('#contasSearchForm .data').on('dp.change', @doSearch)
-        @$('#contasSearchForm .data').data("DateTimePicker").disable()
-        @period = 'qualquer'
+        @dateNavigator = new DateNavigator({
+            el: '#contasSearchForm .date-navigator'
+            period: 'qualquer'
+        })
+        @dateNavigator.on('date:change', @doSearch)
+
 
     doSearch: () =>
         @offset = 0
@@ -78,52 +78,11 @@ class Contas extends Metasoft.Display
 
     onChangePeriodo: () ->
         $periodField = @$('#contasSearchForm .periodo')
-        @period = $periodField.val()
+        period = $periodField.val()
 
-        $dateField = @$('#contasSearchForm .data')
-        d = $dateField.data("DateTimePicker")
-
-        if @period == 'qualquer'
-            d.disable()
-            $dateField.val('')
-
-        if @period == 'mes'
-            d.enable()
-            d.viewMode('months')
-            d.format('MM/YYYY')
-            d.date(todayMonth())
-
-        if @period == 'dia'
-            d.enable()
-            d.viewMode('days')
-            d.format('DD/MM/YYYY')
-            d.date(todayDate())
-
-        @doSearch()
-
-    onClickMoveDate: (ev) ->
-        return if @period == 'qualquer'
-
-        $el = $(ev.currentTarget)
-        mustDecrement = $el.hasClass('decrement')
-        $date = @$('#contasSearchForm .data')
-        date = $date.val()
-        type = 'days'
-        format = 'DD/MM/YYYY'
-
-        if @period == 'mes'
-            type = 'months'
-            format = 'MM/YYYY'
-
-        increment = 1
-        increment = -1 if mustDecrement
-
-        $date.val(moment(date, format).add(increment, type).format(format))
-
-        @doSearch()
-
-    onChangeDate: () ->
-        alert('changed')
+        if period != @dateNavigator.period
+            @dateNavigator.setPeriod(period)
+            @doSearch()
 
     onClickPago: (ev) ->
         ev.preventDefault()

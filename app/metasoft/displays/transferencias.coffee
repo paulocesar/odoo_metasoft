@@ -2,7 +2,7 @@ jsRoot = @
 
 { _, Metasoft, moment } = jsRoot
 
-{ fieldValidator, fieldSearch } = Metasoft
+{ fieldValidator, fieldSearch, DateNavigator } = Metasoft
 
 class Transferencias extends Metasoft.Display
     constructor: (opts) ->
@@ -10,6 +10,7 @@ class Transferencias extends Metasoft.Display
 
         @events = {
             'click tr.conta': 'onClickConta'
+            'change #transfereciaSearchForm .periodo': 'onChangePeriodo'
         }
 
         super
@@ -20,7 +21,21 @@ class Transferencias extends Metasoft.Display
         @search = fieldSearch({ el: '#transfereciaSearchForm', @model, action: 'list' })
         @search.on('search:done', @renderTransferencias)
 
+        @dateNavigator = new DateNavigator({
+            el: '#transfereciaSearchForm .date-navigator'
+            period: 'dia'
+        })
+        @dateNavigator.on('date:change', @doSearch)
+
         @reset()
+
+    onChangePeriodo: () ->
+        $periodField = @$('#transfereciaSearchForm .periodo')
+        period = $periodField.val()
+
+        if period != @dateNavigator.period
+            @dateNavigator.setPeriod(period)
+            @doSearch()
 
     doSearch: () => @search.doSearch()
 
