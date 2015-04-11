@@ -39,7 +39,7 @@ class Contas extends Metasoft.Display
         @modal.on('parcela:save', @doSearch)
 
         @parcelaModal = new modals.Parcela()
-        @parcelaModal.on('lancamento:pay', @onLancamentoPay)
+        @parcelaModal.on('lancamento:pay', @doSearch)
 
         @search = fieldSearch({ el: '#contasSearchForm', @model, action: 'list' })
         @search.on('search:done', @renderLancamentos)
@@ -143,9 +143,5 @@ class Contas extends Metasoft.Display
         if confirm('Deseja realemente cancelar o pagamento?')
             $checkbox.prop('checked', false)
             @postModel('lancamento', 'cancel', { parcelaId: id }, @doSearch)
-
-    onLancamentoPay: (id) ->
-        $(".list-lancamentos tr[data-rowid='#{id}'] input[name='pago']")
-            .prop('checked', true)
 
 Metasoft.displays.Contas = Contas

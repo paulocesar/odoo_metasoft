@@ -46,12 +46,6 @@
     post: function(action, data, cb) {
       return this.ajax('post', action, data, cb);
     },
-    postCrudList: function(table, withEmpresa, cb) {
-      return this.post('crud/list', {
-        table: table,
-        withEmpresa: withEmpresa
-      }, cb);
-    },
     postModel: function(model, action, data, cb) {
       return this.post('crud/model', {
         model: model,

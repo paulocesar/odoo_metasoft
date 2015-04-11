@@ -47,7 +47,7 @@
       this.modal = new modals.Contas();
       this.modal.on('parcela:save', this.doSearch);
       this.parcelaModal = new modals.Parcela();
-      this.parcelaModal.on('lancamento:pay', this.onLancamentoPay);
+      this.parcelaModal.on('lancamento:pay', this.doSearch);
       this.search = fieldSearch({
         el: '#contasSearchForm',
         model: this.model,
@@ -174,10 +174,6 @@
           parcelaId: id
         }, this.doSearch);
       }
-    };
-
-    Contas.prototype.onLancamentoPay = function(id) {
-      return $(".list-lancamentos tr[data-rowid='" + id + "'] input[name='pago']").prop('checked', true);
     };
 
     return Contas;
