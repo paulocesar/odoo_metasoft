@@ -39,5 +39,19 @@ class Crud extends Model
             return callback(null, { related: false })
         )
 
+    # Não deve ser usada frequentemente pois pode gerar joins desnecessarios
+    # ou conflito no nome das colunas (apesar de realizar uma busca efetiva)
+    search: (data, callback) ->
+        V.demandFunction(callback, 'callback')
+        { table, withEmpresa, query } = data
+
+        V.demandGoodString(table, 'table')
+
+        q = @db(table).select('*')
+        q.where('empresaId', @empresaId) if withEmpresa
+        @applyQueryFilter(q, query, table) if query
+
+        q.exec(callback)
+
 module.exports = Crud
 Context::crud = () -> new Crud(@)

@@ -76,8 +76,7 @@
         activate($s);
         link = $s.attr('href');
         page = link.replace('#/page/', '');
-        metasoftRouter.navigate(link);
-        return metasoftRouter.goToPage(page);
+        return metasoftRouter.navigate(link);
       });
     }
 

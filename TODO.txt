@@ -3,15 +3,12 @@ Parcelas
  - BUG: soma de parcelas as vezes não bate com líquido
 
 CRUD
- - adicionar sistema assincriono de busca
+ - adicionar LoadMore
 
 Contas Bancarias
  - criar conta local (caixa local)
 
 Transferencias
- - criar crud (com busca assincrona - ver item CRUD)
- - vincular a contas
- - listagem de transferencias
  - transferencia entre bancos
 
 Login

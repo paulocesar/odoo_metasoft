@@ -33,4 +33,5 @@ class FieldSearch extends Backbone.View
 
     onSearchResult: (@items) => @trigger('search:done', @items)
 
-    getData: () -> F.getValues(@$el)
+    getData: () ->
+        _.defaults(F.getValues(@$el), { query: @$('.query').val() })

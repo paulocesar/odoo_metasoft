@@ -62,7 +62,6 @@ class Application
             page = link.replace('#/page/', '')
 
             metasoftRouter.navigate(link)
-            metasoftRouter.goToPage(page)
         )
 
 

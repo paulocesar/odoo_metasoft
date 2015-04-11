@@ -29,7 +29,7 @@ class Model
         field = "#{tableName}Id"
         name for name, cols of @schema when field in cols
 
-    applyQueryFilter: (q, query, fields) ->
+    applyQueryFilter: (q, query, fieldsOrTable) ->
         query = query.trim().replace('"', '')
         return q unless query
 
@@ -41,10 +41,30 @@ class Model
 
         return q if _.isEmpty(words)
 
+
+        fields = fieldsOrTable
+
+        if _.isString(fieldsOrTable)
+            fields = []
+            for f in (@schema[fieldsOrTable] || [])
+                fields.push("#{fieldsOrTable}.#{f}")
+
+            q = @innerJoinParents(q, fieldsOrTable, fields)
+
         for w in words
             expression = ("#{f} like \"%#{w}%\"" for f in fields)
             expression = "(#{expression.join(' OR ')})"
             q = q.whereRaw(expression)
+
+        return q
+
+    innerJoinParents: (q, table, fields) ->
+        searchFields = _.filter(@schema[table], (f) -> !rgxEndsWithId.test(f))
+        parents = @getParentTables(table)
+
+        for p in _.omit(parents, 'empresa')
+            q = q.innerJoin("#{p}", "#{p}.id", "#{table}.#{p}Id")
+            fields.push("#{p}.#{f}") for f in @schema[p]
 
         return q
 

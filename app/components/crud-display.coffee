@@ -2,7 +2,7 @@ jsRoot = @
 
 { _, Metasoft } = jsRoot
 
-{ fieldValidator } = Metasoft
+{ fieldValidator, fieldSearch } = Metasoft
 
 class CrudDisplay extends Metasoft.Display
     constructor: (opts) ->
@@ -16,7 +16,6 @@ class CrudDisplay extends Metasoft.Display
             'click .save': 'onClickSave'
             'click .new': 'onClickReset'
             'click .remove': 'onClickRemove'
-            'keyup .crud-busca': 'filterTerms'
         })
 
         @crudItems = []
@@ -27,12 +26,21 @@ class CrudDisplay extends Metasoft.Display
             crudList: _.template($("#tpl-display-#{@name}ListItem").html())
         })
 
+        @search = fieldSearch({
+            el: "#display-#{@name} .crud-search"
+            model: 'crud'
+            action: 'search'
+        })
+        @search.setOptions({ @table, @withEmpresa })
+        @search.on('search:done', @renderItemlist)
+
         @form = @$('.form-crud')
 
     onShow: () -> @refreshList()
 
     refreshList: () =>
-        @post('crud/list', { @table, @withEmpresa }, @renderItemlist)
+        @$f('.query').val('')
+        @search.doSearch()
 
     isValid: () -> true
 
@@ -60,14 +68,10 @@ class CrudDisplay extends Metasoft.Display
             @refreshList()
         )
 
-    renderItemlist: (@crudItems) =>
+    renderItemlist: (list) =>
+        @crudItems = list if list
         @$('.crud-list').html(@tpls.crudList({ items: @crudItems }))
-        @filterTerms()
         @resetForm()
-
-    filterTerms: () =>
-        query = @$('.crud-busca').val()
-        Metasoft.filter(@$('.crud-list'), query)
 
     onClickItemList: (ev) ->
         id = $(ev.currentTarget).data('rowid')

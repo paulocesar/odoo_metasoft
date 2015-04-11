@@ -64,7 +64,9 @@
     };
 
     FieldSearch.prototype.getData = function() {
-      return F.getValues(this.$el);
+      return _.defaults(F.getValues(this.$el), {
+        query: this.$('.query').val()
+      });
     };
 
     return FieldSearch;
