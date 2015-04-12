@@ -66,7 +66,6 @@ class Transferencias extends Metasoft.Display
         @post('crud/list', data, (contas) =>
             @renderAccounts(contas)
             @setSelectedAccount(contas[0].id)
-            @doSearch()
         )
 
     onClickConta: (ev) ->
@@ -89,6 +88,11 @@ class Transferencias extends Metasoft.Display
         })
 
     setSelectedAccount: (@contaBancariaId) ->
+        id = @contaBancariaId
+        @$(".list-transferencia-contas tr").removeClass('active')
+        @$(".list-transferencia-contas tr[data-rowid='#{id}']").addClass('active')
+
         @search.setOptions({ @contaBancariaId })
+        @search.doSearch()
 
 Metasoft.displays.Transferencias = Transferencias

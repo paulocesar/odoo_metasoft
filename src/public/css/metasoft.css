@@ -149,3 +149,7 @@ table.table-header {
 #display-contas .parcelas .mask-money {
     width: 110px;
 }
+
+.list-transferencia-contas tr.active {
+    font-weight: bold;
+}

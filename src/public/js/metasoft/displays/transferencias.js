@@ -96,8 +96,7 @@
       return this.post('crud/list', data, (function(_this) {
         return function(contas) {
           _this.renderAccounts(contas);
-          _this.setSelectedAccount(contas[0].id);
-          return _this.doSearch();
+          return _this.setSelectedAccount(contas[0].id);
         };
       })(this));
     };
@@ -134,10 +133,15 @@
     };
 
     Transferencias.prototype.setSelectedAccount = function(_at_contaBancariaId) {
+      var id;
       this.contaBancariaId = _at_contaBancariaId;
-      return this.search.setOptions({
+      id = this.contaBancariaId;
+      this.$(".list-transferencia-contas tr").removeClass('active');
+      this.$(".list-transferencia-contas tr[data-rowid='" + id + "']").addClass('active');
+      this.search.setOptions({
         contaBancariaId: this.contaBancariaId
       });
+      return this.search.doSearch();
     };
 
     return Transferencias;
