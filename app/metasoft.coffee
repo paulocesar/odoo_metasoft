@@ -38,12 +38,6 @@ Metasoft = {
     showLoading: () -> @$loader.show()
     hideLoading: () -> @$loader.hide()
 
-    refreshStaticData: (cb) ->
-        cb ?= () -> null
-        @get('metasoft/refreshStaticData', {}, (data) =>
-            _.extend(@, data)
-        )
-
     get: (action, data, cb) -> @ajax('get', action, data, cb)
     post: (action, data, cb) -> @ajax('post', action, data, cb)
 
@@ -69,6 +63,29 @@ Metasoft = {
         )
 
     evalResponse: (response) -> ( new Function("return #{response}") )()
+
+    refreshStaticData: (cb) ->
+        cb ?= () -> null
+        @get('metasoft/refreshStaticData', {}, (data) =>
+            _.extend(@, data)
+            @refreshStaticSelects()
+        )
+
+    refreshStaticSelects: () ->
+        fields = ['centroCusto', 'produtoCategoria', 'metodoPagamento']
+        for field in fields
+            items = @["#{field}ById"]
+            items =  _.sortBy(_.values(items), (i) -> i.nome)
+            @fieldValidator.buildSelect("#{field}Id", items)
+
+        items = _.sortBy(_.values(@contaBancariaById), (i) -> i.banco)
+        tpl = "<option value='{%= id %}'>{%= banco %} / {%= agencia %} / {%= conta %}</option>"
+        @fieldValidator.buildSelect("contaBancariaId", items, tpl)
+        @fieldValidator.buildSelect("contaBancariaOrigemId", items, tpl)
+        @fieldValidator.buildSelect("contaBancariaDestinoId", items, tpl)
+
+        f = $("select[name='contaBancariaOrigemId'], select[name='contaBancariaDestinoId']")
+        f.prepend('<option value="">(conta externa)</option>')
 }
 
 

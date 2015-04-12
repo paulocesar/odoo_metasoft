@@ -73,6 +73,7 @@ app.metasoftRouter = metasoftRouter
 metasoftRouter.navigate('page/contas')
 metasoftRouter.goToPage('contas')
 
+Metasoft.refreshStaticSelects()
 Metasoft.fieldValidator.apply($('body'))
 
 Metasoft.hideLoading()

@@ -285,6 +285,22 @@
         }
       });
       return unique && valid;
+    },
+    buildSelect: function(name, items, template) {
+      var html, item, tpl, _i, _len;
+      if (template == null) {
+        template = "<option value='{%= id %}'>{%= nome %}</option>";
+      }
+      tpl = _.template(template);
+      if (!_.isArray(items)) {
+        items = _.values(items);
+      }
+      html = '';
+      for (_i = 0, _len = items.length; _i < _len; _i++) {
+        item = items[_i];
+        html += tpl(item);
+      }
+      return $("select[name='" + name + "']").html(html);
     }
   };
 

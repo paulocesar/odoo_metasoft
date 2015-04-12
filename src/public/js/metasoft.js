@@ -40,18 +40,6 @@
     hideLoading: function() {
       return this.$loader.hide();
     },
-    refreshStaticData: function(cb) {
-      if (cb == null) {
-        cb = function() {
-          return null;
-        };
-      }
-      return this.get('metasoft/refreshStaticData', {}, (function(_this) {
-        return function(data) {
-          return _.extend(_this, data);
-        };
-      })(this));
-    },
     get: function(action, data, cb) {
       return this.ajax('get', action, data, cb);
     },
@@ -90,6 +78,40 @@
     },
     evalResponse: function(response) {
       return (new Function("return " + response))();
+    },
+    refreshStaticData: function(cb) {
+      if (cb == null) {
+        cb = function() {
+          return null;
+        };
+      }
+      return this.get('metasoft/refreshStaticData', {}, (function(_this) {
+        return function(data) {
+          _.extend(_this, data);
+          return _this.refreshStaticSelects();
+        };
+      })(this));
+    },
+    refreshStaticSelects: function() {
+      var f, field, fields, items, tpl, _i, _len;
+      fields = ['centroCusto', 'produtoCategoria', 'metodoPagamento'];
+      for (_i = 0, _len = fields.length; _i < _len; _i++) {
+        field = fields[_i];
+        items = this[field + "ById"];
+        items = _.sortBy(_.values(items), function(i) {
+          return i.nome;
+        });
+        this.fieldValidator.buildSelect(field + "Id", items);
+      }
+      items = _.sortBy(_.values(this.contaBancariaById), function(i) {
+        return i.banco;
+      });
+      tpl = "<option value='{%= id %}'>{%= banco %} / {%= agencia %} / {%= conta %}</option>";
+      this.fieldValidator.buildSelect("contaBancariaId", items, tpl);
+      this.fieldValidator.buildSelect("contaBancariaOrigemId", items, tpl);
+      this.fieldValidator.buildSelect("contaBancariaDestinoId", items, tpl);
+      f = $("select[name='contaBancariaOrigemId'], select[name='contaBancariaDestinoId']");
+      return f.prepend('<option value="">(conta externa)</option>');
     }
   };
 

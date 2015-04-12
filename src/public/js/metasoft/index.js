@@ -94,6 +94,8 @@
 
   metasoftRouter.goToPage('contas');
 
+  Metasoft.refreshStaticSelects();
+
   Metasoft.fieldValidator.apply($('body'));
 
   Metasoft.hideLoading();

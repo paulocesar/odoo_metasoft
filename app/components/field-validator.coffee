@@ -225,7 +225,6 @@ fieldValidator = {
     removeError: (input, message) -> errorLabel.remove($(input))
     addError: (input, message) -> errorLabel.apply($(input), message)
 
-
     isValidAndUnique: (el, items, id, highlightInvalid = false) ->
         valid = @isValid(el, highlightInvalid)
 
@@ -250,6 +249,19 @@ fieldValidator = {
         )
 
         return unique && valid
+
+    buildSelect: (name, items, template) ->
+        template ?= "<option value='{%= id %}'>{%= nome %}</option>"
+        tpl = _.template(template)
+
+        unless _.isArray(items)
+            items = _.values(items)
+
+        html = ''
+        for item in items
+            html += tpl(item)
+
+        $("select[name='#{name}']").html(html)
 }
 
 
