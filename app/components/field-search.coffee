@@ -11,6 +11,8 @@ class FieldSearch extends Backbone.View
         V.demandGoodString(@model, 'model')
         V.demandGoodString(@action, 'action')
 
+        @lastQuery = ''
+
         @events = {
             'keyup input.query': 'doLazySearch'
             'change input.query': 'doLazySearch'
@@ -24,11 +26,19 @@ class FieldSearch extends Backbone.View
     setOptions: (opts) -> _.extend(@options, opts)
 
     doLazySearch: () ->
+        data = @getData()
+
+        if @lastQuery == data.query
+            return
+
         Metasoft.showLoading()
         @lazySearch()
 
     doSearch: () ->
-        data = { @model, @action, data: _.extend(@getData(), @options) }
+        formData = _.extend(@getData(), @options)
+        @lastQuery =  formData.query
+        data = { @model, @action, data: formData }
+
         Metasoft.post('crud/model', data, @onSearchResult)
 
     onSearchResult: (@items) => @trigger('search:done', @items)

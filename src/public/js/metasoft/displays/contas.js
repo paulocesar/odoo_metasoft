@@ -64,10 +64,7 @@
 
     Contas.prototype.loadMore = function() {
       this.offset += this.limit;
-      this.search.setOptions({
-        offset: this.offset
-      });
-      return this.search.doSearch();
+      return this.doSearch();
     };
 
     Contas.prototype.onShow = function() {
@@ -80,10 +77,9 @@
       $l = this.$('.list-lancamentos');
       showLoadMore = parcelas.length >= this.limit;
       if (this.offset === 0) {
-        this.parcelas = parcelas;
-      } else {
-        this.parcelas = this.parcelas.concat(parcelas);
+        this.parcelas = [];
       }
+      this.parcelas = this.parcelas.concat(parcelas);
       $l.html(this.subTpls.parcelas({
         parcelas: this.parcelas
       }));

@@ -55,8 +55,7 @@ class Contas extends Metasoft.Display
 
     loadMore: () =>
         @offset += @limit
-        @search.setOptions({ @offset })
-        @search.doSearch()
+        @doSearch()
 
     onShow: () -> @doSearch()
 
@@ -67,9 +66,9 @@ class Contas extends Metasoft.Display
         showLoadMore = parcelas.length >= @limit
 
         if @offset == 0
-            @parcelas = parcelas
-        else
-            @parcelas = @parcelas.concat(parcelas)
+            @parcelas = []
+
+        @parcelas = @parcelas.concat(parcelas)
 
         $l.html(@subTpls.parcelas({ @parcelas }))
 

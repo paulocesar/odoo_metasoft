@@ -4,18 +4,28 @@ jsRoot = @
 
 { fieldValidator, fieldSearch } = Metasoft
 
+
+loadMoreHtml = () ->
+    return """
+        <tr style="border: 0px;"><td style='background-color: white; border: 0px;'>
+            <button class='load-more btn btn-default'>Carregar Mais</button>
+        </td></tr>
+    """
+
 class CrudDisplay extends Metasoft.Display
     constructor: (opts) ->
         @tpls ?= {}
         @events ?= {}
 
         @withEmpresa ?= true
+        @limit ?= 100
 
         _.defaults(@events, {
             'click .crud-list tr': 'onClickItemList'
             'click .save': 'onClickSave'
             'click .new': 'onClickReset'
             'click .remove': 'onClickRemove'
+            'click .load-more': 'loadMore'
         })
 
         @crudItems = []
@@ -31,16 +41,25 @@ class CrudDisplay extends Metasoft.Display
             model: 'crud'
             action: 'search'
         })
-        @search.setOptions({ @table, @withEmpresa })
+        @search.setOptions({ @table, @withEmpresa, @limit })
         @search.on('search:done', @renderItemlist)
 
         @form = @$('.form-crud')
+
+    doSearch: () =>
+        @search.setOptions({ @offset })
+        @search.doSearch()
+
+    loadMore: () =>
+        @offset += @limit
+        @doSearch()
 
     onShow: () -> @refreshList()
 
     refreshList: () =>
         @$('.query').val('')
-        @search.doSearch()
+        @offset = 0
+        @doSearch()
 
     isValid: () -> true
 
@@ -69,8 +88,17 @@ class CrudDisplay extends Metasoft.Display
         )
 
     renderItemlist: (list) =>
-        @crudItems = list if list
-        @$('.crud-list').html(@tpls.crudList({ items: @crudItems }))
+        @crudItems = [] unless @offset
+        hasMore = false
+
+        if list
+            @crudItems = @crudItems.concat(list)
+            hasMore = list.length >= @limit
+
+        $l = @$('.crud-list')
+        $l.html(@tpls.crudList({ items: @crudItems }))
+        $l.append(loadMoreHtml()) if hasMore
+
         @resetForm()
 
     onClickItemList: (ev) ->

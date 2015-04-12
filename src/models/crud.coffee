@@ -43,7 +43,10 @@ class Crud extends Model
     # ou conflito no nome das colunas (apesar de realizar uma busca efetiva)
     search: (data, callback) ->
         V.demandFunction(callback, 'callback')
-        { table, withEmpresa, query } = data
+        { table, withEmpresa, limit, offset, query } = data
+
+        limit ?= 100
+        offset ?= 0
 
         V.demandGoodString(table, 'table')
 
@@ -51,7 +54,7 @@ class Crud extends Model
         q.where('empresaId', @empresaId) if withEmpresa
         @applyQueryFilter(q, query, table) if query
 
-        q.exec(callback)
+        q.limit(limit).offset(offset).exec(callback)
 
 module.exports = Crud
 Context::crud = () -> new Crud(@)

@@ -30,6 +30,7 @@
       _.extend(this, opts);
       V.demandGoodString(this.model, 'model');
       V.demandGoodString(this.action, 'action');
+      this.lastQuery = '';
       this.events = {
         'keyup input.query': 'doLazySearch',
         'change input.query': 'doLazySearch'
@@ -44,16 +45,23 @@
     };
 
     FieldSearch.prototype.doLazySearch = function() {
+      var data;
+      data = this.getData();
+      if (this.lastQuery === data.query) {
+        return;
+      }
       Metasoft.showLoading();
       return this.lazySearch();
     };
 
     FieldSearch.prototype.doSearch = function() {
-      var data;
+      var data, formData;
+      formData = _.extend(this.getData(), this.options);
+      this.lastQuery = formData.query;
       data = {
         model: this.model,
         action: this.action,
-        data: _.extend(this.getData(), this.options)
+        data: formData
       };
       return Metasoft.post('crud/model', data, this.onSearchResult);
     };
