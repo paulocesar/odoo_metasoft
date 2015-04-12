@@ -77,14 +77,20 @@ class CrudDisplay extends Metasoft.Display
 
         data = fieldValidator.getValues(@form)
         data.id = @id if @id?
-        @post('crud/upsert', { @table, @withEmpresa, data }, @refreshList)
+        @post('crud/upsert', { @table, @withEmpresa, data }, () =>
+            @refreshList()
+            Metasoft.refreshStaticData() if @refreshStaticData
+        )
 
     onClickRemove: () =>
         @post('crud/remove', { @table, data: { @id } }, (res) =>
             if res.related
                 alert('Este item não pode ser removido pois está sendo usado')
+            else
+                field = "#{@table}ById"
 
             @refreshList()
+            Metasoft.refreshStaticData() if @refreshStaticData
         )
 
     renderItemlist: (list) =>

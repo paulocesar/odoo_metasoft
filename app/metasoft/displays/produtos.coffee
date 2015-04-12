@@ -15,6 +15,7 @@ Metasoft.displays.Produtos = Produtos
 class ProdutoCategoria extends Metasoft.CrudDisplay
     constructor: (opts) ->
         @table = 'produtoCategoria'
+        @refreshStaticData = true
         super
 
 Metasoft.displays.ProdutoCategoria = ProdutoCategoria

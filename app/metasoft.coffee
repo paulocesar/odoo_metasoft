@@ -38,6 +38,12 @@ Metasoft = {
     showLoading: () -> @$loader.show()
     hideLoading: () -> @$loader.hide()
 
+    refreshStaticData: (cb) ->
+        cb ?= () -> null
+        @get('metasoft/refreshStaticData', {}, (data) =>
+            _.extend(@, data)
+        )
+
     get: (action, data, cb) -> @ajax('get', action, data, cb)
     post: (action, data, cb) -> @ajax('post', action, data, cb)
 

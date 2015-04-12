@@ -24,6 +24,8 @@ module.exports = C('metasoft', configs, {
             @res.render('metasoft/index', renderContent)
         )
 
+    get_refreshStaticData: () -> @getBasicItems(@sendDataOrError)
+
     getBasicItems: (callback) ->
         A.parallel({
             empresa: (cb) =>

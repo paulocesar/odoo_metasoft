@@ -29,6 +29,7 @@
 
     function ProdutoCategoria(opts) {
       this.table = 'produtoCategoria';
+      this.refreshStaticData = true;
       ProdutoCategoria.__super__.constructor.apply(this, arguments);
     }
 

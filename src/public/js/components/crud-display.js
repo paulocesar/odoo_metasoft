@@ -113,7 +113,14 @@
         table: this.table,
         withEmpresa: this.withEmpresa,
         data: data
-      }, this.refreshList);
+      }, (function(_this) {
+        return function() {
+          _this.refreshList();
+          if (_this.refreshStaticData) {
+            return Metasoft.refreshStaticData();
+          }
+        };
+      })(this));
     };
 
     CrudDisplay.prototype.onClickRemove = function() {
@@ -124,10 +131,16 @@
         }
       }, (function(_this) {
         return function(res) {
+          var field;
           if (res.related) {
             alert('Este item não pode ser removido pois está sendo usado');
+          } else {
+            field = _this.table + "ById";
           }
-          return _this.refreshList();
+          _this.refreshList();
+          if (_this.refreshStaticData) {
+            return Metasoft.refreshStaticData();
+          }
         };
       })(this));
     };

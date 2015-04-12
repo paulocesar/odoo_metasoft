@@ -15,6 +15,7 @@
 
     function CentroCusto(opts) {
       this.table = 'centroCusto';
+      this.refreshStaticData = true;
       CentroCusto.__super__.constructor.apply(this, arguments);
     }
 
@@ -29,6 +30,7 @@
 
     function MetodoPagamento(opts) {
       this.table = 'metodoPagamento';
+      this.refreshStaticData = true;
       MetodoPagamento.__super__.constructor.apply(this, arguments);
     }
 
@@ -71,6 +73,7 @@
 
     function ContaBancaria(opts) {
       this.table = 'contaBancaria';
+      this.refreshStaticData = true;
       ContaBancaria.__super__.constructor.apply(this, arguments);
     }
 

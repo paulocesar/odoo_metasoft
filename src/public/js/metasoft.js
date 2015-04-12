@@ -40,6 +40,18 @@
     hideLoading: function() {
       return this.$loader.hide();
     },
+    refreshStaticData: function(cb) {
+      if (cb == null) {
+        cb = function() {
+          return null;
+        };
+      }
+      return this.get('metasoft/refreshStaticData', {}, (function(_this) {
+        return function(data) {
+          return _.extend(_this, data);
+        };
+      })(this));
+    },
     get: function(action, data, cb) {
       return this.ajax('get', action, data, cb);
     },
