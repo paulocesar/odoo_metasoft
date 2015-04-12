@@ -5,13 +5,13 @@ Parcelas
 CRUD
  - adicionar LoadMore
  - !!! BUG: is unique não está funcionando !!!
+ - o login também deve ser unique por causa de outras empresass
 
 Contas Bancarias
  - criar conta local (caixa local)
 
 Transferencias
- - transferencia entre bancos
- - inserir campo de data de transferencia
+ - inserir campo de data de transferencia (não pode ser data futura)
 
 Login
  - melhorar proteção de password
