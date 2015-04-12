@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`impostoNotaFiscal` (
   `criadoEm` DATETIME NOT NULL,
   `imposto` VARCHAR(45) NOT NULL,
   `taxa` DECIMAL(5,5) NOT NULL,
-  `valor` DECIMAL(10,2) NOT NULL,
+  `deducao` DECIMAL(10,2) NOT NULL,
   `tipoConta` TINYINT(1) NULL,
   `funcTaxa` TEXT NULL,
   PRIMARY KEY (`id`),
@@ -195,40 +195,6 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`impostoNotaFiscal` (
   CONSTRAINT `fk_0a93be5e-c6a2-11e4-844e-9439e5f3523b`
     FOREIGN KEY (`loginId`)
     REFERENCES `metasoft`.`login` (`id`));
-
-
--- -----------------------------------------------------
--- Table `metasoft`.`transferencia`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `metasoft`.`transferencia` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `valor` DECIMAL(10,2) NOT NULL,
-  `data` DATETIME NOT NULL,
-  `cancelado` TINYINT(1) NOT NULL DEFAULT 0,
-  `contaBancariaOrigemId` INT UNSIGNED NULL,
-  `contaBancariaDestinoId` INT UNSIGNED NULL,
-  `loginId` INT UNSIGNED NOT NULL,
-  `descricao` VARCHAR(255) NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_transferencia_contaBancaria1_idx` (`contaBancariaOrigemId` ASC),
-  INDEX `fk_transferencia_contaBancaria2_idx` (`contaBancariaDestinoId` ASC),
-  INDEX `fk_transferencia_login1_idx` (`loginId` ASC),
-  CONSTRAINT `fk_transferencia_contaBancaria1`
-    FOREIGN KEY (`contaBancariaOrigemId`)
-    REFERENCES `metasoft`.`contaBancaria` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transferencia_contaBancaria2`
-    FOREIGN KEY (`contaBancariaDestinoId`)
-    REFERENCES `metasoft`.`contaBancaria` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transferencia_login1`
-    FOREIGN KEY (`loginId`)
-    REFERENCES `metasoft`.`login` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -248,14 +214,12 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`parcela` (
   `dataVencimento` DATETIME NULL,
   `dataPagamento` DATETIME NULL,
   `descricao` VARCHAR(255) NULL,
-  `transferenciaId` INT UNSIGNED NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_put_entry1_idx` (`contaId` ASC),
   INDEX `fk_parcela_empresa1_idx` (`empresaId` ASC),
   INDEX `fk_parcela_impostoNotaFiscal1_idx` (`impostoNotaFiscalId` ASC),
   INDEX `fk_parcela_contaBancaria1_idx` (`contaBancariaId` ASC),
   INDEX `fk_parcela_metodoPagamento1_idx` (`metodoPagamentoId` ASC),
-  INDEX `fk_parcela_transferencia1_idx` (`transferenciaId` ASC),
   CONSTRAINT `fk_put_entry1`
     FOREIGN KEY (`contaId`)
     REFERENCES `metasoft`.`conta` (`id`)
@@ -280,12 +244,47 @@ CREATE TABLE IF NOT EXISTS `metasoft`.`parcela` (
     FOREIGN KEY (`metodoPagamentoId`)
     REFERENCES `metasoft`.`metodoPagamento` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_parcela_transferencia1`
-    FOREIGN KEY (`transferenciaId`)
-    REFERENCES `metasoft`.`transferencia` (`id`)
-    ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `metasoft`.`transferencia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `metasoft`.`transferencia` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `valor` DECIMAL(10,2) NOT NULL,
+  `data` DATETIME NOT NULL,
+  `cancelado` TINYINT(1) NOT NULL DEFAULT 0,
+  `contaBancariaOrigemId` INT UNSIGNED NULL,
+  `contaBancariaDestinoId` INT UNSIGNED NULL,
+  `loginId` INT UNSIGNED NOT NULL,
+  `parcelaId` INT UNSIGNED NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_transferencia_contaBancaria1_idx` (`contaBancariaOrigemId` ASC),
+  INDEX `fk_transferencia_contaBancaria2_idx` (`contaBancariaDestinoId` ASC),
+  INDEX `fk_transferencia_login1_idx` (`loginId` ASC),
+  INDEX `fk_transferencia_parcela1_idx` (`parcelaId` ASC),
+  CONSTRAINT `fk_transferencia_contaBancaria1`
+    FOREIGN KEY (`contaBancariaOrigemId`)
+    REFERENCES `metasoft`.`contaBancaria` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transferencia_contaBancaria2`
+    FOREIGN KEY (`contaBancariaDestinoId`)
+    REFERENCES `metasoft`.`contaBancaria` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transferencia_login1`
+    FOREIGN KEY (`loginId`)
+    REFERENCES `metasoft`.`login` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transferencia_parcela1`
+    FOREIGN KEY (`parcelaId`)
+    REFERENCES `metasoft`.`parcela` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
