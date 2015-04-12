@@ -106,12 +106,20 @@
       items = _.sortBy(_.values(this.contaBancariaById), function(i) {
         return i.banco;
       });
-      tpl = "<option value='{%= id %}'>{%= banco %} / {%= agencia %} / {%= conta %}</option>";
+      tpl = "<option value='{%= id %}'>{%= Metasoft.formatContaBancaria(id) %}</option>";
       this.fieldValidator.buildSelect("contaBancariaId", items, tpl);
       this.fieldValidator.buildSelect("contaBancariaOrigemId", items, tpl);
       this.fieldValidator.buildSelect("contaBancariaDestinoId", items, tpl);
       f = $("select[name='contaBancariaOrigemId'], select[name='contaBancariaDestinoId']");
       return f.prepend('<option value="">(conta externa)</option>');
+    },
+    formatContaBancaria: function(contaId) {
+      var c;
+      c = this.contaBancariaById[contaId];
+      if (!c) {
+        return "";
+      }
+      return c.banco + " / " + c.agencia + " / " + c.conta;
     }
   };
 

@@ -79,13 +79,18 @@ Metasoft = {
             @fieldValidator.buildSelect("#{field}Id", items)
 
         items = _.sortBy(_.values(@contaBancariaById), (i) -> i.banco)
-        tpl = "<option value='{%= id %}'>{%= banco %} / {%= agencia %} / {%= conta %}</option>"
+        tpl = "<option value='{%= id %}'>{%= Metasoft.formatContaBancaria(id) %}</option>"
         @fieldValidator.buildSelect("contaBancariaId", items, tpl)
         @fieldValidator.buildSelect("contaBancariaOrigemId", items, tpl)
         @fieldValidator.buildSelect("contaBancariaDestinoId", items, tpl)
 
         f = $("select[name='contaBancariaOrigemId'], select[name='contaBancariaDestinoId']")
         f.prepend('<option value="">(conta externa)</option>')
+
+    formatContaBancaria: (contaId) ->
+        c = @contaBancariaById[contaId]
+        return "" unless c
+        return "#{c.banco} / #{c.agencia} / #{c.conta}"
 }
 
 

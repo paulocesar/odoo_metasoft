@@ -10,6 +10,7 @@ class TransferenciaModal extends Metasoft.DisplayModal
 
         @events = {
             'click .save': 'onClickSave'
+            'change select': 'onSelectChange'
         }
 
         super
@@ -17,7 +18,31 @@ class TransferenciaModal extends Metasoft.DisplayModal
         @tplTransfModal = _.template($('#tpl-transferencia-crud').html())
         @render()
 
-    onClickSave: () -> alert('funcionalidade em desenvolvimento')
+    onShow: () ->
+        fieldValidator.reset(@$el)
+        @$f('data').val(moment().format('DD/MM/YYYY'))
+
+    onSelectChange: () ->
+        fieldValidator.removeError(@$f('contaBancariaDestinoId'))
+
+    onClickSave: () ->
+        data = fieldValidator.getValues(@$el)
+        if data.contaBancariaOrigemId == data.contaBancariaDestinoId
+            return fieldValidator.addError(
+                @$f('contaBancariaDestinoId')
+                "Não pode ser igual à conta origem."
+            )
+
+        unless fieldValidator.isValid(@$el, true)
+            return
+
+        btns = @$('button')
+        btns.attr('disabled','disabled')
+        @postModel('transferencia', 'createSeparate', data, () =>
+            btns.removeAttr('disabled')
+            @hide()
+            @trigger('save')
+        )
 
     render: () ->
         contas = Metasoft.contaBancariaById
@@ -48,6 +73,10 @@ class Transferencias extends Metasoft.Display
         @dateNavigator.on('date:change', @doSearch)
 
         @transferenciaModal = new TransferenciaModal()
+        @transferenciaModal.on('save', () =>
+            @refreshContaBancaria()
+            @doSearch()
+        )
 
         @reset()
 
@@ -61,7 +90,9 @@ class Transferencias extends Metasoft.Display
 
     doSearch: () => @search.doSearch()
 
-    onShow: () =>
+    onShow: () => @refreshContaBancaria()
+
+    refreshContaBancaria: () =>
         data = { table: 'contaBancaria',  withEmpresa: true }
         @post('crud/list', data, (contas) =>
             @renderAccounts(contas)

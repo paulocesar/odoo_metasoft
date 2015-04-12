@@ -4,12 +4,14 @@ Parcelas
 
 CRUD
  - adicionar LoadMore
+ - !!! BUG: is unique não está funcionando !!!
 
 Contas Bancarias
  - criar conta local (caixa local)
 
 Transferencias
  - transferencia entre bancos
+ - inserir campo de data de transferencia
 
 Login
  - melhorar proteção de password

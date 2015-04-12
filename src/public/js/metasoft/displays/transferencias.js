@@ -17,15 +17,41 @@
     function TransferenciaModal(opts) {
       this.el = '#modalTransferencia';
       this.events = {
-        'click .save': 'onClickSave'
+        'click .save': 'onClickSave',
+        'change select': 'onSelectChange'
       };
       TransferenciaModal.__super__.constructor.apply(this, arguments);
       this.tplTransfModal = _.template($('#tpl-transferencia-crud').html());
       this.render();
     }
 
+    TransferenciaModal.prototype.onShow = function() {
+      fieldValidator.reset(this.$el);
+      return this.$f('data').val(moment().format('DD/MM/YYYY'));
+    };
+
+    TransferenciaModal.prototype.onSelectChange = function() {
+      return fieldValidator.removeError(this.$f('contaBancariaDestinoId'));
+    };
+
     TransferenciaModal.prototype.onClickSave = function() {
-      return alert('funcionalidade em desenvolvimento');
+      var btns, data;
+      data = fieldValidator.getValues(this.$el);
+      if (data.contaBancariaOrigemId === data.contaBancariaDestinoId) {
+        return fieldValidator.addError(this.$f('contaBancariaDestinoId'), "Não pode ser igual à conta origem.");
+      }
+      if (!fieldValidator.isValid(this.$el, true)) {
+        return;
+      }
+      btns = this.$('button');
+      btns.attr('disabled', 'disabled');
+      return this.postModel('transferencia', 'createSeparate', data, (function(_this) {
+        return function() {
+          btns.removeAttr('disabled');
+          _this.hide();
+          return _this.trigger('save');
+        };
+      })(this));
     };
 
     TransferenciaModal.prototype.render = function() {
@@ -48,6 +74,7 @@
       this.renderAccounts = __bind(this.renderAccounts, this);
       this.renderTransferencias = __bind(this.renderTransferencias, this);
       this.doSearch = __bind(this.doSearch, this);
+      this.refreshContaBancaria = __bind(this.refreshContaBancaria, this);
       this.onShow = __bind(this.onShow, this);
       this.doSearch = __bind(this.doSearch, this);
       this.model = 'transferencia';
@@ -70,6 +97,12 @@
       });
       this.dateNavigator.on('date:change', this.doSearch);
       this.transferenciaModal = new TransferenciaModal();
+      this.transferenciaModal.on('save', (function(_this) {
+        return function() {
+          _this.refreshContaBancaria();
+          return _this.doSearch();
+        };
+      })(this));
       this.reset();
     }
 
@@ -88,6 +121,10 @@
     };
 
     Transferencias.prototype.onShow = function() {
+      return this.refreshContaBancaria();
+    };
+
+    Transferencias.prototype.refreshContaBancaria = function() {
       var data;
       data = {
         table: 'contaBancaria',

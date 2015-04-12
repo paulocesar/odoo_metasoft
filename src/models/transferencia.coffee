@@ -16,11 +16,18 @@ class Transferencia extends Model
 
         q.exec(callback)
 
+    createSeparate: (data, callback) ->
+        data.loginId = @login.id
+        for k, v of data when !v
+            data[k] = null
+        @create(data, callback)
+
     create: (t, callback) ->
         V.demandGoodNumber(t.loginId, 'loginId')
         V.demandGoodNumber(t.valor, 'valor')
         V.demandFunction(callback, 'callback')
 
+        # TODO: specify only if it's no set
         t.data = new Date()
 
         tasks = []
