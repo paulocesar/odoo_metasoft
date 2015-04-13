@@ -3,7 +3,6 @@ Parcelas
  - BUG: soma de parcelas as vezes não bate com líquido
 
 CRUD
- - adicionar LoadMore
  - !!! BUG: is unique não está funcionando !!!
  - o login também deve ser unique por causa de outras empresass
 
