@@ -63,13 +63,12 @@ class Lancamento extends Model
                 transf[label] = conta.contaBancariaId
                 transf.valor = parcela.valor
                 transf.data = parcela.dataPagamento
-                transf.descricao = parcela.descricao
+                transf.parcelaId = parcela.id
                 transf.loginId = @login.id
 
                 @ms.transferencia().create(transf, cb)
 
             (t, cb) =>
-                parcela.transferenciaId = t.id
                 parcela.pago = '1'
 
                 @db('parcela').update(_.omit(parcela, 'id'))
@@ -94,7 +93,7 @@ class Lancamento extends Model
                 V.demandObject(parcela, 'parcela')
 
                 @db('transferencia')
-                    .where({ id: parcela.transferenciaId, cancelado: '0' })
+                    .where({ parcelaId: parcela.id, cancelado: '0' })
                     .exec(cb)
 
         ], (err, t) =>

@@ -31,7 +31,7 @@
         <div class="col-md-8">
             <div class='row' id="transfereciaSearchForm">
                 <div class='col-md-5'>
-                    <input type='text' class='form-control query' name='query' placeHolder="buscar..." />
+                    <!--input type='text' class='form-control query' name='query' placeHolder="buscar..." /-->
                 </div>
 
                 <div class='col-md-3'>
@@ -125,9 +125,12 @@
 <script type='text/template' id='tpl-transferencia-listItem'>
     {% _.each(transferencias, function (t) { %}
         {% var contaId = contaBancariaId == t.contaBancariaOrigemId ? t.contaBancariaDestinoId : t.contaBancariaOrigemId %}
+        {% var desc = []; %}
+        {% if (t.contaDescricao) { desc.push(t.contaDescricao); } %}
+        {% if (t.parcelaDescricao) { desc.push(t.parcelaDescricao); } %}
         <tr class='conta clickable {%= contaBancariaId == t.contaBancariaOrigemId ? "invert-money-color" : "" %}' data-rowid='{%= t.id %}'>
             <td class='col-md-3'>{%= moment(t.data).utc().format('DD/MM/YYYY') %} {%= t.cancelado ? 'CANCELADO' : '' %}</td>
-            <td class='col-md-3'>{%= t.descricao %}</td>
+            <td class='col-md-3'>{%= desc.join('. ') %}</td>
             <td class='col-md-3'>{%= Metasoft.formatContaBancaria(contaId) %}</td>
             <td class='money col-md-3'>{%= Metasoft.money.html(t.valor) %}</td>
         </tr>

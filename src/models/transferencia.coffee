@@ -6,13 +6,25 @@ class Transferencia extends Model
         V.demandGoodNumber(contaBancariaId, 'contaBancariaId')
 
         q = @db('transferencia')
+            .select(
+                'contaBancariaOrigemId'
+                'contaBancariaDestinoId'
+                'cancelado'
+                'transferencia.data as data'
+                'transferencia.loginId as loginId'
+                'transferencia.valor as valor'
+                'conta.descricao as contaDescricao'
+                'parcela.descricao as parcelaDescricao'
+            )
             .where(() ->
                 @where('contaBancariaOrigemId', contaBancariaId)
                     .orWhere('contaBancariaDestinoId', contaBancariaId)
             )
+            .leftJoin('parcela', 'parcela.id', 'transferencia.parcelaId')
+            .leftJoin('conta', 'conta.id', 'parcela.contaId')
 
-        q = @applyDateFilter(q, data, 'data') if data
-        q = @applyQueryFilter(q, query, [ 'descricao' ]) if query
+        if data
+            q = @applyDateFilter(q, data, 'data')
 
         q.exec(callback)
 
