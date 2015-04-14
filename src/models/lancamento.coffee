@@ -62,6 +62,7 @@ class Lancamento extends Model
                 transf = {}
                 transf[label] = conta.contaBancariaId
                 transf.valor = parcela.valor
+                transf.data = parcela.dataPagamento
                 transf.descricao = parcela.descricao
                 transf.loginId = @login.id
 

@@ -47,6 +47,16 @@ validators = {
     }
 }
 
+setDataInterval = ($el) ->
+    $el.each(() ->
+        f = $(@)
+        if f.hasClass('only-date-future')
+            f.data("DateTimePicker").minDate(moment())
+
+        if f.hasClass('only-date-past')
+            f.data("DateTimePicker").maxDate(moment())
+    )
+
 masks = {
     'mask-money': ($el) -> money.applyMask($el)
     'mask-money-positive': ($el) -> money.applyMask($el, { allowNegative: false })
@@ -89,11 +99,15 @@ masks = {
             format: 'DD/MM/YYYY'
         })
 
+        setDataInterval($el)
+
     'mask-date-month': ($el) ->
         $el.datetimepicker({
             viewMode: 'months'
             format: 'MM/YYYY'
         })
+
+        setDataInterval($el)
 }
 
 buildValidatorFunc = (v) ->

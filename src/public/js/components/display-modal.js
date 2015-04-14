@@ -49,9 +49,7 @@
 
     DisplayModal.prototype.onHide = function() {};
 
-    DisplayModal.prototype.onClickBackdrop = function() {
-      return alert('backdrop');
-    };
+    DisplayModal.prototype.onClickBackdrop = function() {};
 
     DisplayModal.prototype.get = function() {
       var args;

@@ -20,15 +20,15 @@ class Transferencia extends Model
         data.loginId = @login.id
         for k, v of data when !v
             data[k] = null
+
+        data.data = @formatDate(data.data)
         @create(data, callback)
 
     create: (t, callback) ->
         V.demandGoodNumber(t.loginId, 'loginId')
         V.demandGoodNumber(t.valor, 'valor')
+        V.demandGoodString(t.data, 'data')
         V.demandFunction(callback, 'callback')
-
-        # TODO: specify only if it's no set
-        t.data = new Date()
 
         tasks = []
 

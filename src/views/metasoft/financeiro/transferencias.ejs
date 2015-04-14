@@ -102,10 +102,10 @@
                 </select>
             </div>
         </div>
-        <!--div class="form-group">
+        <div class="form-group">
             <label for="data" class="col-md-4 control-label">Data</label>
-            <div class="col-md-8"><input type="text" name="data" class="form-control mask-date-day not-empty"></div>
-        </div-->
+            <div class="col-md-8"><input type="text" name="data" class="form-control mask-date-day not-empty only-date-past"></div>
+        </div>
         <div class="form-group">
             <label for="valor" class="col-md-4 control-label">Valor</label>
             <div class="col-md-8"><input type="text" name="valor" class="form-control valorLiquido not-zero mask-money-positive"></div>
@@ -126,7 +126,7 @@
     {% _.each(transferencias, function (t) { %}
         {% var contaId = contaBancariaId == t.contaBancariaOrigemId ? t.contaBancariaDestinoId : t.contaBancariaOrigemId %}
         <tr class='conta clickable {%= contaBancariaId == t.contaBancariaOrigemId ? "invert-money-color" : "" %}' data-rowid='{%= t.id %}'>
-            <td class='col-md-3'>{%= moment(t.data).format('DD/MM/YYYY') %} {%= t.cancelado ? 'CANCELADO' : '' %}</td>
+            <td class='col-md-3'>{%= moment(t.data).utc().format('DD/MM/YYYY') %} {%= t.cancelado ? 'CANCELADO' : '' %}</td>
             <td class='col-md-3'>{%= t.descricao %}</td>
             <td class='col-md-3'>{%= Metasoft.formatContaBancaria(contaId) %}</td>
             <td class='money col-md-3'>{%= Metasoft.money.html(t.valor) %}</td>

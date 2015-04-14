@@ -155,10 +155,9 @@
       this.$parcelas.html(this.subTpls.parcelas({
         parcelas: this.parcelas
       }));
-      this.$parcelas.find('tr').each(function() {
+      return this.$parcelas.find('tr').each(function() {
         return fieldValidator.apply($(this));
       });
-      return this.$parcelas.find('.mask-date-day').data("DateTimePicker").minDate(moment());
     };
 
     ContasModal.prototype.onShow = function(ev) {

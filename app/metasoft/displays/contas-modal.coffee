@@ -130,10 +130,6 @@ class ContasModal extends DisplayModal
         @$parcelas.html(@subTpls.parcelas({ @parcelas }))
         @$parcelas.find('tr').each(() -> fieldValidator.apply($(@)))
 
-        @$parcelas.find('.mask-date-day')
-            .data("DateTimePicker")
-            .minDate(moment())
-
     onShow: (ev) ->
         @resetFormData()
 

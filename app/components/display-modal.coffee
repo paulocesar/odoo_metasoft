@@ -33,7 +33,7 @@ class DisplayModal extends Backbone.View
 
     onShow: () ->
     onHide: () ->
-    onClickBackdrop: () -> alert('backdrop')
+    onClickBackdrop: () ->
 
     get: (args...) -> Metasoft.get(args...)
     post: (args...) -> Metasoft.post(args...)
