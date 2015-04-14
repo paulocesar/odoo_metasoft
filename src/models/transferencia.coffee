@@ -26,7 +26,7 @@ class Transferencia extends Model
         if data
             q = @applyDateFilter(q, data, 'data')
 
-        q.exec(callback)
+        q.orderBy('data').exec(callback)
 
     createSeparate: (data, callback) ->
         data.loginId = @login.id
