@@ -7,10 +7,11 @@ Contas Bancarias
 
 Lançamentos
  - CORRIGIR UTC DE DATAPAGAMENTO PARA TRANSFERENCIA
- - visualizar/editar e cancelar lançamento -> parcela
+ - visualizar/editar e cancelar lançamento -> parcela -> transferencia
 
 Transferencia
  - Está podendo clicar na transferencia e gera um erro
+ - cancelar transferencia avulsa
 
 Login
  - melhorar proteção de password
