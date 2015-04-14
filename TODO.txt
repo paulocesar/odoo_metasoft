@@ -5,8 +5,12 @@ Parcelas
 Contas Bancarias
  - criar conta local (caixa local)
 
-Transferencias
- - inserir campo de data de transferencia (não pode ser data futura)
+Lançamentos
+ - CORRIGIR UTC DE DATAPAGAMENTO PARA TRANSFERENCIA
+ - visualizar/editar e cancelar lançamento -> parcela
+
+Transferencia
+ - Está podendo clicar na transferencia e gera um erro
 
 Login
  - melhorar proteção de password
