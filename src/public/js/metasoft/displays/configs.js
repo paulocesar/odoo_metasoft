@@ -59,6 +59,7 @@
 
     function Logins(opts) {
       this.table = 'login';
+      this.uniqueWithEmpresa = false;
       Logins.__super__.constructor.apply(this, arguments);
     }
 

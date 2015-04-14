@@ -34,6 +34,9 @@
       if (this.withEmpresa == null) {
         this.withEmpresa = true;
       }
+      if (this.uniqueWithEmpresa == null) {
+        this.uniqueWithEmpresa = this.withEmpresa;
+      }
       if (this.limit == null) {
         this.limit = 100;
       }
@@ -101,26 +104,48 @@
 
     CrudDisplay.prototype.onClickSave = function() {
       var data, valid;
-      valid = fieldValidator.isValidAndUnique(this.form, this.crudItems, this.id, true);
+      valid = fieldValidator.isValid(this.form, true);
       if (!(valid && this.isValid())) {
         return;
       }
-      data = fieldValidator.getValues(this.form);
-      if (this.id != null) {
-        data.id = this.id;
-      }
-      return this.post('crud/upsert', {
+      data = {
         table: this.table,
-        withEmpresa: this.withEmpresa,
-        data: data
-      }, (function(_this) {
-        return function() {
-          _this.refreshList();
-          if (_this.refreshStaticData) {
-            return Metasoft.refreshStaticData();
+        id: this.id,
+        withEmpresa: this.uniqueWithEmpresa,
+        data: fieldValidator.getUniqueValues(this.form)
+      };
+      this.lockButtons();
+      return this.post('crud/duplicatedFields', data, (function(_this) {
+        return function(duplicatedFields) {
+          if (!_.isEmpty(duplicatedFields)) {
+            _this.unlockButtons();
+            return _this.highlightDuplicatedFields(duplicatedFields);
           }
+          data = fieldValidator.getValues(_this.form);
+          if (_this.id != null) {
+            data.id = _this.id;
+          }
+          return _this.post('crud/upsert', {
+            table: _this.table,
+            withEmpresa: _this.withEmpresa,
+            data: data
+          }, function() {
+            _this.refreshList();
+            if (_this.refreshStaticData) {
+              Metasoft.refreshStaticData();
+            }
+            return _this.unlockButtons();
+          });
         };
       })(this));
+    };
+
+    CrudDisplay.prototype.highlightDuplicatedFields = function(fields) {
+      var f, _i, _len;
+      for (_i = 0, _len = fields.length; _i < _len; _i++) {
+        f = fields[_i];
+        fieldValidator.addError(this.$f(f), 'Valor já existe');
+      }
     };
 
     CrudDisplay.prototype.onClickRemove = function() {

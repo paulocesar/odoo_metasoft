@@ -12,6 +12,42 @@ class Crud extends Model
 
         q.exec(callback)
 
+    duplicatedFields: (raw, callback) ->
+        { table, withEmpresa, data, id } = raw
+        V.demandGoodString(table, 'table')
+        V.demandHash(data, 'data')
+
+        q = @db(table)
+
+        if withEmpresa
+            q.where('empresaId', @empresaId)
+
+        if id
+            q.where('id', '<>', id)
+
+        q.where(() ->
+            me = this
+            for field, value of data
+                me = me.orWhere(field, value)
+        )
+
+        q.exec((err, rows) ->
+            return callback(err) if err?
+
+            duplicatedFields = []
+
+            for field, value of data
+
+                for r in rows
+                    v1 = "#{r[field]}".toLowerCase()
+                    v2 = "#{value}".toLowerCase()
+                    if v1 == v2
+                        duplicatedFields.push(field)
+                        break
+
+            callback(null, duplicatedFields)
+        )
+
     upsert: (table, data, callback) ->
         content = @formatRow(table, _.omit(data, 'id'))
         q = @db(table)

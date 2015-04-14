@@ -5,6 +5,9 @@ module.exports = C('crud', {
         d = @json()
         @ms.crud().get(d.table, d.id, @sendDataOrError)
 
+    post_duplicatedFields: () ->
+        @ms.crud().duplicatedFields(@json(), @sendDataOrError)
+
     post_list: () ->
         d = @json()
         @ms.crud().list(d.table, d.withEmpresa, @sendDataOrError)

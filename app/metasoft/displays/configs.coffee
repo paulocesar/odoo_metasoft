@@ -31,7 +31,7 @@ Metasoft.displays.Imposto = Imposto
 class Logins extends Metasoft.CrudDisplay
     constructor: (opts) ->
         @table = 'login'
-
+        @uniqueWithEmpresa = false
         super
 
 Metasoft.displays.Logins = Logins

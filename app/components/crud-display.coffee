@@ -18,6 +18,7 @@ class CrudDisplay extends Metasoft.Display
         @events ?= {}
 
         @withEmpresa ?= true
+        @uniqueWithEmpresa ?= @withEmpresa
         @limit ?= 100
 
         _.defaults(@events, {
@@ -71,16 +72,37 @@ class CrudDisplay extends Metasoft.Display
         @updateButtonsDom()
 
     onClickSave: () =>
-        valid = fieldValidator.isValidAndUnique(@form, @crudItems, @id, true)
+        valid = fieldValidator.isValid(@form, true)
         unless valid && @isValid()
             return
 
-        data = fieldValidator.getValues(@form)
-        data.id = @id if @id?
-        @post('crud/upsert', { @table, @withEmpresa, data }, () =>
-            @refreshList()
-            Metasoft.refreshStaticData() if @refreshStaticData
+        data = {
+            @table
+            @id
+            withEmpresa: @uniqueWithEmpresa
+            data: fieldValidator.getUniqueValues(@form)
+        }
+
+        @lockButtons()
+
+        @post('crud/duplicatedFields', data, (duplicatedFields) =>
+            unless _.isEmpty(duplicatedFields)
+                @unlockButtons()
+                return @highlightDuplicatedFields(duplicatedFields)
+
+            data = fieldValidator.getValues(@form)
+            data.id = @id if @id?
+            @post('crud/upsert', { @table, @withEmpresa, data }, () =>
+                @refreshList()
+                Metasoft.refreshStaticData() if @refreshStaticData
+                @unlockButtons()
+            )
         )
+
+    highlightDuplicatedFields: (fields) ->
+        for f in fields
+            fieldValidator.addError(@$f(f), 'Valor já existe')
+        return
 
     onClickRemove: () =>
         @post('crud/remove', { @table, data: { @id } }, (res) =>

@@ -227,6 +227,20 @@
       }
       return isValid;
     },
+    getUniqueValues: function(el) {
+      var data;
+      data = {};
+      $(el).find('input.unique').each(function() {
+        var f, val;
+        f = $(this);
+        val = hasMoneyClass(f) ? f.maskMoney('unmasked')[0] : f.val();
+        if (_.isString(val)) {
+          val = $.trim(val);
+        }
+        return data[f.attr('name')] = val;
+      });
+      return data;
+    },
     getValues: function(el) {
       var data;
       data = {};
@@ -234,6 +248,9 @@
         var f, val;
         f = $(this);
         val = hasMoneyClass(f) ? f.maskMoney('unmasked')[0] : f.val();
+        if (_.isString(val)) {
+          val = $.trim(val);
+        }
         return data[f.attr('name')] = val;
       });
       $(el).find('input[type="checkbox"]').each(function() {
@@ -246,45 +263,18 @@
         f = $(this);
         name = f.data('searchname');
         value = f.data('itemid');
+        if (_.isString(value)) {
+          value = $.trim(value);
+        }
         return data[name] = value;
       });
       return data;
     },
-    removeError: function(input, message) {
+    removeError: function(input) {
       return errorLabel.remove($(input));
     },
     addError: function(input, message) {
       return errorLabel.apply($(input), message);
-    },
-    isValidAndUnique: function(el, items, id, highlightInvalid) {
-      var form, unique, valid;
-      if (highlightInvalid == null) {
-        highlightInvalid = false;
-      }
-      valid = this.isValid(el, highlightInvalid);
-      form = $(el);
-      unique = true;
-      if (id) {
-        items = _.filter(items, function(i) {
-          return i.id !== id;
-        });
-      }
-      form.find('.unique').each(function() {
-        var f, name, sameVal, val;
-        f = $(this);
-        name = f.attr('name');
-        val = $.trim(f.val()).toLowerCase();
-        sameVal = function(d) {
-          return $.trim("" + d[name]).toLowerCase() === val;
-        };
-        if (!_.isEmpty(_.filter(items, sameVal))) {
-          unique = false;
-          if (highlightInvalid) {
-            errorLabel.apply(f, "Valor já existe");
-          }
-        }
-      });
-      return unique && valid;
     },
     buildSelect: function(name, items, template) {
       var html, item, tpl, _i, _len;

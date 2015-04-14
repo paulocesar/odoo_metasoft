@@ -52,6 +52,14 @@
 
     Display.prototype.onHide = function() {};
 
+    Display.prototype.lockButtons = function() {
+      return this.$('button').attr('disabled', 'disabled');
+    };
+
+    Display.prototype.unlockButtons = function() {
+      return this.$('button').removeAttr('disabled');
+    };
+
     Display.prototype.get = function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];

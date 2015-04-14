@@ -2,10 +2,6 @@ Parcelas
  - melhorar forma de update (nõa renderizar novamente)
  - BUG: soma de parcelas as vezes não bate com líquido
 
-CRUD
- - !!! BUG: is unique não está funcionando !!!
- - o login também deve ser unique por causa de outras empresass
-
 Contas Bancarias
  - criar conta local (caixa local)
 

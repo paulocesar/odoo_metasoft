@@ -199,12 +199,25 @@ fieldValidator = {
 
         return isValid
 
+    getUniqueValues: (el) ->
+        data = {}
+
+        $(el).find('input.unique').each(() ->
+            f = $(@)
+            val = if hasMoneyClass(f) then f.maskMoney('unmasked')[0] else f.val()
+            val = $.trim(val) if _.isString(val)
+            data[f.attr('name')] = val
+        )
+
+        return data
+
     getValues: (el) ->
         data = {}
 
         $(el).find('input, textarea, select').each(() ->
             f = $(@)
             val = if hasMoneyClass(f) then f.maskMoney('unmasked')[0] else f.val()
+            val = $.trim(val) if _.isString(val)
             data[f.attr('name')] = val
         )
 
@@ -217,38 +230,14 @@ fieldValidator = {
             f = $(@)
             name = f.data('searchname')
             value = f.data('itemid')
+            value = $.trim(value) if _.isString(value)
             data[name] = value
         )
 
         return data
 
-    removeError: (input, message) -> errorLabel.remove($(input))
+    removeError: (input) -> errorLabel.remove($(input))
     addError: (input, message) -> errorLabel.apply($(input), message)
-
-    isValidAndUnique: (el, items, id, highlightInvalid = false) ->
-        valid = @isValid(el, highlightInvalid)
-
-        form = $(el)
-        unique = true
-
-        if id
-            items = _.filter(items, (i) -> i.id != id)
-
-        form.find('.unique').each(() ->
-            f = $(@)
-            name = f.attr('name')
-            val = $.trim(f.val()).toLowerCase()
-
-            sameVal = (d) -> $.trim("#{d[name]}").toLowerCase() == val
-
-            unless _.isEmpty(_.filter(items, sameVal))
-                unique = false
-
-                errorLabel.apply(f, "Valor já existe") if highlightInvalid
-                return
-        )
-
-        return unique && valid
 
     buildSelect: (name, items, template) ->
         template ?= "<option value='{%= id %}'>{%= nome %}</option>"
