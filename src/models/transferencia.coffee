@@ -16,6 +16,7 @@ class Transferencia extends Model
                 'conta.descricao as contaDescricao'
                 'parcela.descricao as parcelaDescricao'
                 'transferencia.parcelaId as parcelaId'
+                'parceiro.nome as parceiro'
             )
             .where(() ->
                 @where('contaBancariaOrigemId', contaBancariaId)
@@ -23,6 +24,7 @@ class Transferencia extends Model
             )
             .leftJoin('parcela', 'parcela.id', 'transferencia.parcelaId')
             .leftJoin('conta', 'conta.id', 'parcela.contaId')
+            .leftJoin('parceiro', 'parceiro.id', 'conta.parceiroId')
 
         if data
             q = @applyDateFilter(q, data, 'data')
@@ -43,10 +45,12 @@ class Transferencia extends Model
                     continue
 
                 descricao = []
-                descricao.push(t.contaDescricao) if t.contaDescricao
-                descricao.push(t.parcelaDescricao) if t.parcelaDescricao
 
-                t.descricao = descricao.join(' ')
+                for field in ['parceiro', 'contaDescricao', 'parcelaDescricao']
+                    data =  t[field]
+                    descricao.push(data) if data
+
+                t.descricao = descricao.join('. ')
 
             callback(null, transferencias)
         )
