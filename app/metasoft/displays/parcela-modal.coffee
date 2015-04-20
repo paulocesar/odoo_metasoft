@@ -29,7 +29,7 @@ class ParcelaModal extends DisplayModal
 
     onShow: () ->
         @setMoneyColorCls()
-        @parcela.dataPagamento ?= moment()
+        @parcela.dataPagamento ?= Metasoft.now()
         fieldValidator.fill(@$el, @parcela)
 
     onClickSave: () ->

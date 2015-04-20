@@ -12,6 +12,9 @@
     displays: {},
     modals: {},
     components: {},
+    now: function() {
+      return moment().format('YYYY-MM-DDTHH:mm:ss.000') + 'Z';
+    },
     init: function(appName) {
       this.appName = appName;
       $('body').append("<div id='" + appName + "'></div>");

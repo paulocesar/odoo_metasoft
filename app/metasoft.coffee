@@ -14,6 +14,8 @@ Metasoft = {
 
     components: {}
 
+    now: () -> moment().format('YYYY-MM-DDTHH:mm:ss.000') + 'Z'
+
     init: (appName) ->
         @appName = appName
         $('body').append("<div id='#{appName}'></div>")

@@ -1,13 +1,20 @@
 <script type='template' id='tpl-layout' class='tpl'>
-<div class="container">
+<div>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
 
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">{%= Metasoft.empresa.nome %}</a>
+                <a class="navbar-brand" href="#"></a>
             </div>
 
             <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav category-menu" role="tablist">
+                    <li role="presentation" class='active'><a href="#financeiro" aria-controls="profile" role="tab" data-toggle="tab">Financeiro</a></li>
+                    <li role="presentation"><a href="#vendas" aria-controls="profile" role="tab" data-toggle="tab">Vendas</a></li>
+                    <li role="presentation"><a href="#parceiros" aria-controls="profile" role="tab" data-toggle="tab">Parceiros</a></li>
+                    <!-- li role="presentation"><a href="#contabilidade" aria-controls="messages" role="tab" data-toggle="tab">Contábil</a></li -->
+                    <li role="presentation"><a href="#configuracoes" aria-controls="settings" role="tab" data-toggle="tab">Configurações</a></li>
+                </ul>
                 <form class="navbar-form navbar-right">
                     <div class="form-group">
                         <label class="label-control">{%= Metasoft.login.nome %}</label>
@@ -20,46 +27,39 @@
         </div>
     </nav>
 
-    <div role="tabpanel">
+    <div class='subcategory-menu'>
+        <div role="tabpanel">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active subcategory" id="financeiro">
+                    <a class='btn-subcategory active' href='#/page/contas'>Lançamentos</a>
+                    <a class='btn-subcategory' href='#/page/transferencias'>Movimentações</a>
+                </div>
 
-    <ul class="nav nav-tabs category-menu" role="tablist">
-        <li role="presentation" class='active'><a href="#financeiro" aria-controls="profile" role="tab" data-toggle="tab">Financeiro</a></li>
-        <li role="presentation"><a href="#vendas" aria-controls="profile" role="tab" data-toggle="tab">vendas</a></li>
-        <li role="presentation"><a href="#parceiros" aria-controls="profile" role="tab" data-toggle="tab">Parceiros</a></li>
-        <!-- li role="presentation"><a href="#contabilidade" aria-controls="messages" role="tab" data-toggle="tab">Contábil</a></li -->
-        <li role="presentation"><a href="#configuracoes" aria-controls="settings" role="tab" data-toggle="tab">Configurações</a></li>
-    </ul>
 
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active subcategory" id="financeiro">
-            <a class='btn-subcategory active' href='#/page/contas'>Lançamentos</a>
-            <a class='btn-subcategory' href='#/page/transferencias'>Movimentações</a>
+                <div role="tabpanel" class="tab-pane subcategory" id="vendas">
+                    <a class='btn-subcategory' href='#/page/produtos'>Produtos</a>
+                    <a class='btn-subcategory' href='#/page/produtoCategoria'>Categorias</a>
+                </div>
+
+
+                <div role="tabpanel" class="tab-pane subcategory" id="parceiros">
+                    <a class='btn-subcategory' href='#/page/parceiros'>Clientes / Fornecedores</a>
+                </div>
+
+
+                <div role="tabpanel" class="tab-pane subcategory" id="contabilidade">&nbsp;</div>
+
+
+                <div role="tabpanel" class="tab-pane subcategory" id="configuracoes">
+                    <a class='btn-subcategory' href='#/page/centroCusto'>Centros de Custo</a>
+                    <a class='btn-subcategory' href='#/page/contaBancaria'>Contas Financeiras</a>
+                    <a class='btn-subcategory' href='#/page/metodoPagamento'>Formas de Pagamento</a>
+                    <!-- a class='btn-subcategory' href='#/page/imposto'>Impostos</a -->
+                    <a class='btn-subcategory' href='#/page/logins'>Usuários</a>
+                </div>
+            </div>
+
         </div>
-
-
-        <div role="tabpanel" class="tab-pane subcategory" id="vendas">
-            <a class='btn-subcategory' href='#/page/produtos'>Produtos</a>
-            <a class='btn-subcategory' href='#/page/produtoCategoria'>Categorias</a>
-        </div>
-
-
-        <div role="tabpanel" class="tab-pane subcategory" id="parceiros">
-            <a class='btn-subcategory' href='#/page/parceiros'>Clientes / Fornecedores</a>
-        </div>
-
-
-        <div role="tabpanel" class="tab-pane subcategory" id="contabilidade">&nbsp;</div>
-
-
-        <div role="tabpanel" class="tab-pane subcategory" id="configuracoes">
-            <a class='btn-subcategory' href='#/page/centroCusto'>Centros de Custo</a>
-            <a class='btn-subcategory' href='#/page/contaBancaria'>Contas Financeiras</a>
-            <a class='btn-subcategory' href='#/page/metodoPagamento'>Formas de Pagamento</a>
-            <!-- a class='btn-subcategory' href='#/page/imposto'>Impostos</a -->
-            <a class='btn-subcategory' href='#/page/logins'>Usuários</a>
-        </div>
-    </div>
-
     </div>
 
     <div class="col-md-12" id="displayContainer">

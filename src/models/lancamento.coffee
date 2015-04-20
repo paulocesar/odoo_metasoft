@@ -39,7 +39,7 @@ class Lancamento extends Model
         V.demandGoodObject(data.parcela, 'parcela')
         parcela = @formatRow('parcela', data.parcela)
         parcela.dataVencimento = @formatDate(parcela.dataVencimento)
-        parcela.dataPagamento = @formatDateLastMinute(parcela.dataPagamento)
+        parcela.dataPagamento = @formatDate(parcela.dataPagamento)
         id = parcela.id
         conta = null
 

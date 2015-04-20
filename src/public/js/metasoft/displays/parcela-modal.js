@@ -35,7 +35,7 @@
       var _base;
       this.setMoneyColorCls();
       if ((_base = this.parcela).dataPagamento == null) {
-        _base.dataPagamento = moment();
+        _base.dataPagamento = Metasoft.now();
       }
       return fieldValidator.fill(this.$el, this.parcela);
     };
