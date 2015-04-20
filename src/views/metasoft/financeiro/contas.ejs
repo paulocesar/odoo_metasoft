@@ -1,34 +1,40 @@
 <script type='template' id='tpl-display-contas' class='tpl'>
     <div class="row">
-        <div class="col-md-2 buttons-container">
-            <button
-                class="btn btn-default btn-block"
-                data-toggle="modal"
-                data-target=".modal-conta-crud"
-                data-contaid=''
-                data-contatipo='receber'
-            >
-                <span class="glyphicon glyphicon-plus-sign"></span>
-                A Receber
-            </button>
-
-            <button
-                class="btn btn-default btn-block"
-                data-toggle="modal"
-                data-target=".modal-conta-crud"
-                data-contaid=''
-                data-contatipo='pagar'
-            >
-                <span class="glyphicon glyphicon-plus-sign"></span>
-                A Pagar
-            </button>
-        </div>
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class='row' id="contasSearchForm">
+                <div class='col-md-2'>
+                    <div class="btn-group buttons-container">
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            Menu <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#"
+                                    data-toggle="modal"
+                                    data-target=".modal-conta-crud"
+                                    data-contaid=''
+                                    data-contatipo='receber'
+                                >
+                                    Nova Conta a Receber
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    data-toggle="modal"
+                                    data-target=".modal-conta-crud"
+                                    data-contaid=''
+                                    data-contatipo='pagar'
+                                >
+                                    Nova Conta a Pagar
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 <div class='col-md-3'>
                     <input type='text' class='form-control query' name='query' placeHolder="buscar..." />
                 </div>
-                <div class='col-md-3'>
+                <div class='col-md-2'>
                     <select class='status form-control' name="status">
                         <option value="vencido" selected>Vencidos</option>
                         <option value="apagar">A Pagar</option>
@@ -39,7 +45,7 @@
                     </select>
                 </div>
 
-                <div class='col-md-3'>
+                <div class='col-md-2'>
                     <select class='periodo form-control' name="periodo">
                         <option value="qualquer" selected>Qualquer período</option>
                         <option value="mes">Meses</option>

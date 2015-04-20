@@ -10,6 +10,11 @@
     margin-bottom: 0px;
 }
 
+.btn-info {
+    background-color: #1697DA;
+    border-color: #1697DA;
+}
+
 /*******************
     MENU
 ********************/
