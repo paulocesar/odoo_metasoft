@@ -15,6 +15,7 @@ class Transferencia extends Model
                 'transferencia.valor as valor'
                 'conta.descricao as contaDescricao'
                 'parcela.descricao as parcelaDescricao'
+                'transferencia.parcelaId as parcelaId'
             )
             .where(() ->
                 @where('contaBancariaOrigemId', contaBancariaId)
@@ -26,7 +27,29 @@ class Transferencia extends Model
         if data
             q = @applyDateFilter(q, data, 'data')
 
-        q.orderBy('data').exec(callback)
+        q.orderBy('data').exec((err, transferencias) ->
+            return callback(err) if err?
+
+            for t in transferencias
+
+                contaReferenciaId = t.contaBancariaDestinoId
+                if contaReferenciaId == contaBancariaId
+                    contaReferenciaId = t.contaBancariaOrigemId
+
+                t.contaReferenciaId = contaReferenciaId
+
+                unless t.parcelaId
+                    t.descricao = 'Transferência Avulsa'
+                    continue
+
+                descricao = []
+                descricao.push(t.contaDescricao) if t.contaDescricao
+                descricao.push(t.parcelaDescricao) if t.parcelaDescricao
+
+                t.descricao = descricao.join(' ')
+
+            callback(null, transferencias)
+        )
 
     createSeparate: (data, callback) ->
         data.loginId = @login.id

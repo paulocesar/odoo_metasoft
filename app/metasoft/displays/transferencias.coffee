@@ -55,6 +55,7 @@ class Transferencias extends Metasoft.Display
 
         @events = {
             'click tr.conta': 'onClickConta'
+            'click tr.transferencia': 'onClickTransferencia'
             'change #transfereciaSearchForm .periodo': 'onChangePeriodo'
         }
 
@@ -102,6 +103,9 @@ class Transferencias extends Metasoft.Display
     onClickConta: (ev) ->
         contaBancariaId = $(ev.currentTarget).data('rowid')
         @setSelectedAccount(contaBancariaId)
+
+    onClickTransferencia: (ev) ->
+        ev.preventDefault()
 
     doSearch: () => @search.doSearch()
 

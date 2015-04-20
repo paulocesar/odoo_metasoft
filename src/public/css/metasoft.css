@@ -16,6 +16,21 @@
 }
 
 /*******************
+    BASE
+********************/
+
+i.cancelado:after {
+    content: "Cancelado";
+    text-transform: uppercase;
+    color: red;
+    font-size: 9px;
+    font-weight: bold;
+    vertical-align: top;
+    float: right;
+    margin-top: 2px;
+}
+
+/*******************
     MENU
 ********************/
 

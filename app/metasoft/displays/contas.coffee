@@ -26,6 +26,7 @@ class Contas extends Metasoft.Display
             'click .increment, .decrement': 'onClickMoveDate'
             'click .load-more': 'loadMore'
             'click .list-lancamentos input[name="pago"]': 'onClickPago'
+            'click .parcela.clickable': 'onClickParcela'
         }
 
         super
@@ -85,6 +86,7 @@ class Contas extends Metasoft.Display
 
     onClickPago: (ev) ->
         ev.preventDefault()
+        ev.stopPropagation()
 
         $checkbox = $(ev.currentTarget)
         id = $checkbox.parent('td').parent('tr').data('rowid')
@@ -101,5 +103,8 @@ class Contas extends Metasoft.Display
         if confirm('Deseja realemente cancelar o pagamento?')
             $checkbox.prop('checked', false)
             @postModel('lancamento', 'cancel', { parcelaId: id }, @doSearch)
+
+    onClickParcela: (ev) ->
+        ev.preventDefault()
 
 Metasoft.displays.Contas = Contas

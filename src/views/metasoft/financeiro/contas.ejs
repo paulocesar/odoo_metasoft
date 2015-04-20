@@ -262,7 +262,7 @@
 
 <script type='template' id="subtpl-display-contas-parcelaItem">
     {% _.each(parcelas, function (p) { %}
-        <tr data-rowid='{%= p.id %}' class='parcela-item {%= p.tipoConta == 1 ? "invert-money-color" : "" %}' >
+        <tr data-rowid='{%= p.id %}' class='parcela clickable {%= p.tipoConta == 1 ? "invert-money-color" : "" %}' >
             {% var dv = moment(p.dataVencimento).utc(); %}
             {% var dataCls = dv.diff(moment(), 'days') <= 0 && !p.pago ? 'red' : ''; %}
             <td class='col-md-2 {%= dataCls %}'>{%= dv.format('DD/MM/YYYY') %}</td>

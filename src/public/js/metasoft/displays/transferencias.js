@@ -80,6 +80,7 @@
       this.model = 'transferencia';
       this.events = {
         'click tr.conta': 'onClickConta',
+        'click tr.transferencia': 'onClickTransferencia',
         'change #transfereciaSearchForm .periodo': 'onChangePeriodo'
       };
       Transferencias.__super__.constructor.apply(this, arguments);
@@ -142,6 +143,10 @@
       var contaBancariaId;
       contaBancariaId = $(ev.currentTarget).data('rowid');
       return this.setSelectedAccount(contaBancariaId);
+    };
+
+    Transferencias.prototype.onClickTransferencia = function(ev) {
+      return ev.preventDefault();
     };
 
     Transferencias.prototype.doSearch = function() {

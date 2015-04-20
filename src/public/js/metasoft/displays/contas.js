@@ -32,7 +32,8 @@
         'change #contasSearchForm .periodo': 'onChangePeriodo',
         'click .increment, .decrement': 'onClickMoveDate',
         'click .load-more': 'loadMore',
-        'click .list-lancamentos input[name="pago"]': 'onClickPago'
+        'click .list-lancamentos input[name="pago"]': 'onClickPago',
+        'click .parcela.clickable': 'onClickParcela'
       };
       Contas.__super__.constructor.apply(this, arguments);
       this.limit = 100;
@@ -101,6 +102,7 @@
     Contas.prototype.onClickPago = function(ev) {
       var $checkbox, id, mustPay;
       ev.preventDefault();
+      ev.stopPropagation();
       $checkbox = $(ev.currentTarget);
       id = $checkbox.parent('td').parent('tr').data('rowid');
       mustPay = $checkbox.is(':checked');
@@ -122,6 +124,10 @@
           parcelaId: id
         }, this.doSearch);
       }
+    };
+
+    Contas.prototype.onClickParcela = function(ev) {
+      return ev.preventDefault();
     };
 
     return Contas;
