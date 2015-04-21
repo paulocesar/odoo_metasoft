@@ -25,7 +25,8 @@ queryFields = [
     'dataVencimento',
     'valor',
     'criadoEm',
-    'descricao',
+    'parcela.descricao',
+    'conta.descricao'
     'parceiro.nome',
     'centroCusto.nome',
     'metodoPagamento.nome',
