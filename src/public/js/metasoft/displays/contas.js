@@ -127,7 +127,8 @@
     };
 
     Contas.prototype.onClickParcela = function(ev) {
-      return ev.preventDefault();
+      ev.preventDefault();
+      debugger;
     };
 
     return Contas;

@@ -12,7 +12,6 @@
                                 <a href="#"
                                     data-toggle="modal"
                                     data-target=".modal-conta-crud"
-                                    data-contaid=''
                                     data-contatipo='receber'
                                 >
                                     Nova Conta a Receber
@@ -22,7 +21,6 @@
                                 <a href="#"
                                     data-toggle="modal"
                                     data-target=".modal-conta-crud"
-                                    data-contaid=''
                                     data-contatipo='pagar'
                                 >
                                     Nova Conta a Pagar
@@ -262,7 +260,14 @@
 
 <script type='template' id="subtpl-display-contas-parcelaItem">
     {% _.each(parcelas, function (p) { %}
-        <tr data-rowid='{%= p.id %}' class='parcela clickable {%= p.tipoConta == 1 ? "invert-money-color" : "" %}' >
+        {% var mustPay = p.tipoConta == 1; %}
+        <tr
+            data-toggle="modal"
+            data-target=".modal-conta-crud"
+            data-rowid='{%= p.id %}'
+            data-contatipo='{%= mustPay ? "pagar" : "receber" %}'
+            class='parcela clickable {%= mustPay ? "invert-money-color" : "" %}'
+        >
             {% var dv = moment(p.dataVencimento).utc(); %}
             {% var dataCls = dv.diff(moment(), 'days') <= 0 && !p.pago ? 'red' : ''; %}
             <td class='col-md-2 {%= dataCls %}'>{%= dv.format('DD/MM/YYYY') %}</td>

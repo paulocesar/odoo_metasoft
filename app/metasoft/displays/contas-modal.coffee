@@ -134,24 +134,33 @@ class ContasModal extends DisplayModal
         @resetFormData()
 
         $btn = $(ev.relatedTarget)
+        @contaId = $btn.data('rowid')
         @tipoConta = $btn.data('contatipo')
-        contaId = $btn.data('contaid')
+        @isPagar = @tipoConta == 'pagar'
+        @isReceber = !@tipoConta
         @parcelas = []
 
         title = 'Conta a Receber'
         @$('.modal-dialog').removeClass('invert-money-color')
 
-        if @tipoConta == 'pagar'
+        if @isPagar
             title = 'Conta a Pagar'
             @$('.modal-dialog').addClass('invert-money-color')
 
-        unless contaId
+        unless @contaId
             title = "Nova #{title}"
             @parcelas.push(createParcela())
+            @$('.modal-title').html(title)
+            @renderModalParcelas()
+            return
 
         @$('.modal-title').html(title)
 
-        @renderModalParcelas()
+        @post('conta/detail', { id: @contaId }, (res) =>
+            @setFormData(res)
+            @renderModalParcelas()
+        )
+
 
     resetFormData: () ->
         fieldValidator.reset(@$formTop)
@@ -171,6 +180,9 @@ class ContasModal extends DisplayModal
         data.tipoConta = if @tipoConta == 'pagar' then '1' else '0'
 
         return data
+
+    setFormData: (d) ->
+        fieldValidator.fill(@$formTop, _.omit(d, 'parcelas'))
 
     onHide: (ev) -> @$('.modal-dialog').removeClass('invert-money-color')
 

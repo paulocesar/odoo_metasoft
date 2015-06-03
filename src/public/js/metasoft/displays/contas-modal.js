@@ -161,24 +161,36 @@
     };
 
     ContasModal.prototype.onShow = function(ev) {
-      var $btn, contaId, title;
+      var $btn, title;
       this.resetFormData();
       $btn = $(ev.relatedTarget);
+      this.contaId = $btn.data('rowid');
       this.tipoConta = $btn.data('contatipo');
-      contaId = $btn.data('contaid');
+      this.isPagar = this.tipoConta === 'pagar';
+      this.isReceber = !this.tipoConta;
       this.parcelas = [];
       title = 'Conta a Receber';
       this.$('.modal-dialog').removeClass('invert-money-color');
-      if (this.tipoConta === 'pagar') {
+      if (this.isPagar) {
         title = 'Conta a Pagar';
         this.$('.modal-dialog').addClass('invert-money-color');
       }
-      if (!contaId) {
+      if (!this.contaId) {
         title = "Nova " + title;
         this.parcelas.push(createParcela());
+        this.$('.modal-title').html(title);
+        this.renderModalParcelas();
+        return;
       }
       this.$('.modal-title').html(title);
-      return this.renderModalParcelas();
+      return this.post('conta/detail', {
+        id: this.contaId
+      }, (function(_this) {
+        return function(res) {
+          _this.setFormData(res);
+          return _this.renderModalParcelas();
+        };
+      })(this));
     };
 
     ContasModal.prototype.resetFormData = function() {
@@ -197,6 +209,10 @@
       });
       data.tipoConta = this.tipoConta === 'pagar' ? '1' : '0';
       return data;
+    };
+
+    ContasModal.prototype.setFormData = function(d) {
+      return fieldValidator.fill(this.$formTop, _.omit(d, 'parcelas'));
     };
 
     ContasModal.prototype.onHide = function(ev) {

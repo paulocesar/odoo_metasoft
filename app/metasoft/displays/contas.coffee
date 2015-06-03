@@ -106,5 +106,6 @@ class Contas extends Metasoft.Display
 
     onClickParcela: (ev) ->
         ev.preventDefault()
+        debugger
 
 Metasoft.displays.Contas = Contas
