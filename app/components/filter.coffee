@@ -8,13 +8,12 @@ rgxUnwatedChars = /[,.$-]/g
 
 sanitizeString = (str) ->
     return $.trim(str)
-        .toLowerCase()
         .replace(rgxWhitespace, ' ')
         .replace(rgxTag, '')
         .replace(rgxUnwatedChars, '')
 
 Metasoft.filter = (el, query = '') ->
-    terms = sanitizeString(query).split(' ')
+    terms = sanitizeString(query).toLowerCase().split(' ')
     terms = _.filter(terms, (t) -> t != '')
 
     if _.isEmpty(terms)
